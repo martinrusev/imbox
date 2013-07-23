@@ -9,6 +9,12 @@ Installation
 	pip install mailbox
 
 
+or 
+
+	git clone git@github.com:martinrusev/mailbox.git
+	python setup.py install
+
+
 Usage 
 =====
 
