@@ -5,7 +5,7 @@ version = '0.3'
 setup(
 	name='mailbox',
 	version=version,
-	description="Python library for readin IMAP mailboxes and parsing emails",
+	description="Python library for reading IMAP mailboxes and parsing emails",
 	long_description= open('README.md').read(),
 	keywords='email, IMAP, parsing emails',
 	author='Martin Rusev',

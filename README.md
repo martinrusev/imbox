@@ -1,4 +1,4 @@
-Mailbox
+Mailbox - IMAP for humans
 =======
 
 Python library for reading IMAP mailboxes and converting the email content to human readable data
@@ -28,6 +28,8 @@ Usage
 	all_messages = mailbox.get_all()
 
 
+	for message in all_messages:
+		........
 
 	# Every message is converted to a dictionary with the following keys:
 
