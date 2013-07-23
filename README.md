@@ -1,7 +1,7 @@
 Mailbox
 =======
 
-Small Python library for reading IMAP email boxes and parsing the content to JSON
+Python library for reading IMAP email boxes
 
 
 Usage 
@@ -15,8 +15,14 @@ Usage
 				  password='password',
 				  ssl=True)
 
-	unread = mailbox.get_unread()
 
-	for message in unread:
-		print message.json()
+	# Gets all unread messages
+	unread_messages = mailbox.get_unread()
+
+	# Gets all messages 
+	all_messages = mailbox.get_all()
+
+
+
+
 
