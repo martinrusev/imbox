@@ -9,7 +9,6 @@ class MailBox(object):
 		self.connection = server.connect(username, password)
 
 
-
 	def parse_email(self, raw_email):
 
 		email_message = email.message_from_string(raw_email)
@@ -32,16 +31,31 @@ class MailBox(object):
 			'maintype': maintype
 		}
 
-
-	def get_unread(self):
-
-		result, data = self.connection.uid('search', None, "ALL") # search and return uids instead
-		latest_email_uid = data[0].split()[-1]
-		result, data = self.connection.uid('fetch', latest_email_uid, '(RFC822)')
+	def fetch_by_uid(self, uid):
+		message, data = self.connection.uid('fetch', uid, '(RFC822)')
 
 		raw_email = data[0][1]
 
-		print self.parse_email(raw_email)
+		email_metadata = self.parse_email(raw_email)
 
-	
-		return {}
+		return email_metadata
+
+	def fetch_list(self, data):
+		uid_list = data[0].split()
+
+		messages_list = []
+		for uid in uid_list:
+			messages_list.append(self.fetch_by_uid(uid))
+			
+
+	def get_all(self):
+		message, data = self.connection.uid('search', None, "ALL")
+
+		return self.fetch_list(data)
+
+
+	def get_unread(self):
+		message, data = self.connection.uid('search', None, "UNSEEN")
+
+		return self.fetch_list(data)
+		
