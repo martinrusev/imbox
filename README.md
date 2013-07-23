@@ -1,4 +1,4 @@
-Mailbox - IMAP for humans
+Mailbox - Python IMAP for Humans
 =======
 
 Python library for reading IMAP mailboxes and converting the email content to human readable data
