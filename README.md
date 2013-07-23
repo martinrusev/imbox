@@ -1,7 +1,12 @@
 Mailbox
 =======
 
-Python library for reading IMAP email boxes
+Python library for reading IMAP mailboxes and converting the email content to human readable data
+
+Installation
+============
+
+	pip install mailbox
 
 
 Usage 
