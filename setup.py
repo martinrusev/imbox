@@ -1,12 +1,17 @@
 from setuptools import setup
+import os
 
-version = '0.3.1'
+version = '0.3.3'
+
+
+def read(filename):
+    return open(os.path.join(os.path.dirname(__file__), filename)).read()
 
 setup(
 	name='mailbox',
 	version=version,
-	description="Python library for reading IMAP mailboxes and parsing emails",
-	long_description= open('README.md').read(),
+	description="Python IMAP for Humans",
+	long_description= read('README.md'),
 	keywords='email, IMAP, parsing emails',
 	author='Martin Rusev',
 	author_email='martinrusev@live.com',
