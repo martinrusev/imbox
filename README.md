@@ -63,7 +63,11 @@ Usage
 		
 	}
 
+TODO
+======
 
+Replace the dictionaries with objects and generators
+Add logging and exceptions 
 
 
 
