@@ -56,7 +56,7 @@ class MailBox(object):
 					'Value': header_value})
 
 		return {
-			'MesssageID': message_id,
+			'MessageID': message_id,
 			'From': from_dict,
 			'To': to_dict, 
 			'Subject': subject,
