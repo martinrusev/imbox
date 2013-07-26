@@ -1,5 +1,18 @@
 import email
 from mailbox.imap import ImapTransport
+from mailbox.parser import get_mail_addresses, decode_mail_header
+
+
+class Struct(object):
+	def __init__(self, **entries):
+		self.__dict__.update(entries)
+
+	def keys(self):
+		return self.__dict__.keys()
+
+	def __repr__(self):
+		return str(self.__dict__)
+
 
 class MailBox(object):
 
@@ -10,10 +23,9 @@ class MailBox(object):
 
 
 	def parse_email(self, raw_email):
+		parsed_email = {}
 
 		email_message = email.message_from_string(raw_email)
-		
-
 		maintype = email_message.get_content_maintype()
 
 		text_body = []
@@ -25,70 +37,61 @@ class MailBox(object):
 		elif maintype == 'text':
 			text_body.append(email_message.get_payload(decode=True))
 
+		parsed_email['text_body'] = text_body
+
 		email_dict = dict(email_message.items())
 
-		from_dict = {}
-		from_ = email.utils.parseaddr(email_dict['From'])
-		if len(from_) == 2:
-			from_dict = {'Name': from_[0], 'Email': from_[1]}
+		parsed_email['sent_from'] = get_mail_addresses(email_message, 'from')
+		parsed_email['sent_to'] = get_mail_addresses(email_message, 'to')
 
-		to_dict = {}
-		to_ =  email.utils.parseaddr(email_dict['To'])
-		if len(to_) == 2:
-			to_dict = {'Name': to_[0], 'Email': to_[1]}
+		value_headers_keys = ['Subject', 'Date','Message-ID']
+		key_value_header_keys = ['Received-SPF', 
+								'MIME-Version',
+								'X-Spam-Status',
+								'X-Spam-Score',
+								'Content-Type']
 
-		subject = email_dict.get('Subject', None)
-		date = email_dict.get('Date', None)
-		message_id = email_dict.get('Message-ID', None)
+		parsed_email['headers'] = []
+		for key, value in email_dict.iteritems():
+			
+			if key in value_headers_keys:
+				valid_key_name = key.lower()
+				parsed_email[valid_key_name] = decode_mail_header(value)
+			
+			if key in key_value_header_keys:
+				parsed_email['headers'].append({'Name': key,
+					'Value': value})
 
-		# Get the headers
-		headers = []
-		headers_keys = ['Received-SPF', 
-						'MIME-Version',
-						'X-Spam-Status',
-						'X-Spam-Score']
-
-		for key in headers_keys:
-			header_value = email_dict.get(key)
-
-			if header_value:
-				headers.append({'Name': key,
-					'Value': header_value})
-
-		return {
-			'MesssageID': message_id,
-			'From': from_dict,
-			'To': to_dict, 
-			'Subject': subject,
-			'Date': date,
-			'TextBody': text_body,
-			'Headers': headers
-		}
+		return Struct(**parsed_email)
 
 	def fetch_by_uid(self, uid):
-		message, data = self.connection.uid('fetch', uid, '(RFC822)')
-
+		message, data = self.connection.uid('fetch', uid, '(BODY.PEEK[])') # Don't mark the messages as read
 		raw_email = data[0][1]
 
-		email_metadata = self.parse_email(raw_email)
+		email_object = self.parse_email(raw_email)
 
-		return email_metadata
+		return email_object
 
 	def fetch_list(self, data):
 		uid_list = data[0].split()
 
-		messages_list = []
 		for uid in uid_list:
-			messages_list.append(self.fetch_by_uid(uid))
-			
+			yield self.fetch_by_uid(uid)
 
-	def get_all(self):
-		message, data = self.connection.uid('search', None, "ALL")
+	def messages(self, *args, **kwargs):
+
+		query = "ALL"
+
+		# Parse keyword arguments 
+		unread = kwargs.get('unread', False)
+		folder = kwargs.get('folder', False)
+		sent_from = kwargs.get('sent_from', False)
+		sent_to = kwargs.get('sent_to', False)
+
+		if unread != False:
+			query = "UNSEEN"
+
+		message, data = self.connection.uid('search', None, query)
 
 		return self.fetch_list(data)
-
-
-	def get_unread(self):
-		message, data = self.connection.uid('search', None, "UNSEEN")
-
-		return self.fetch_list(data)
+		
