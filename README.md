@@ -77,7 +77,12 @@ Usage
 		'subject': u 'Hello John, How are you today'
 		}
 
+TODO
+======
 
+- Replace the dictionaries with objects and generators
+- Add logging and exceptions 
+- Implement smarter header parsing
 
 
 

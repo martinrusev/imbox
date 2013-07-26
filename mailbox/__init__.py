@@ -44,6 +44,7 @@ class MailBox(object):
 		parsed_email['sent_from'] = get_mail_addresses(email_message, 'from')
 		parsed_email['sent_to'] = get_mail_addresses(email_message, 'to')
 
+
 		value_headers_keys = ['Subject', 'Date','Message-ID']
 		key_value_header_keys = ['Received-SPF', 
 								'MIME-Version',
