@@ -57,7 +57,7 @@ Usage
 		'headers': 
 			[{
 				'Name': 'Received-SPF',
-				'Value': 'pass (google.com: domain of martinrusev@zoho.com designates 72.5.230.95 as permitted sender) client-ip=72.5.230.95;'
+				'Value': 'pass (google.com: domain of ......;'
 			}, 
 			{
 				'Name': 'MIME-Version',
