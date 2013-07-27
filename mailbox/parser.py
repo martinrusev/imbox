@@ -7,27 +7,26 @@ def decode_mail_header(value, default_charset='us-ascii'):
 	try:
 		headers=email.header.decode_header(value)
 	except email.errors.HeaderParseError:
-		return value.encode('us-ascii', 'replace').decode('us-ascii')
+		return value.encode(default_charset, 'replace').decode(default_charset)
 	else:
-		for i, (text, charset) in enumerate(headers):
+		for index, (text, charset) in enumerate(headers):
 			try:
-				headers[i]=text.decode(charset or 'us-ascii', 'replace')
+				headers[index]=text.decode(charset or default_charset, 'replace')
 			except LookupError:
 				# if the charset is unknown, force default 
-				headers[i]=text.decode(default_charset, 'replace')
+				headers[index]=text.decode(default_charset, 'replace')
 
 		return u"".join(headers)
 
 
 def get_mail_addresses(message, header_name):
 	"""
-	retrieve all email addresses from one message header
-
+	Retrieve all email addresses from one message header.
 	""" 
-	addresses = email.utils.getaddresses(h for h in message.get_all(header_name, []))
+	addresses = email.utils.getaddresses(header for header in message.get_all(header_name, []))
 
-	for i, (address_name, address) in enumerate(addresses):
-		addresses[i]={'name': decode_mail_header(address_name), 'email': address}
+	for index, (address_name, address_email) in enumerate(addresses):
+		addresses[index]={'name': decode_mail_header(address_name), 'email': address_email}
 
 	return addresses
 	
