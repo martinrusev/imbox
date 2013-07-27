@@ -1,4 +1,3 @@
-import email
 from imaplib import IMAP4, IMAP4_SSL
 
 
@@ -23,7 +22,7 @@ class ImapTransport(object):
 
 	def connect(self, username, password):
 		self.server = self.transport(self.hostname, self.port)
-		typ, msg = self.server.login(username, password)
+		self.server.login(username, password)
 
 		self.server.select()
 
