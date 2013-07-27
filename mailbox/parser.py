@@ -1,5 +1,4 @@
 import email
-from email.header import decode_header
 
 def decode_mail_header(value, default_charset='us-ascii'):
 	"""
