@@ -23,22 +23,36 @@ class MailBox(object):
 
 
 	def parse_email(self, raw_email):
-		parsed_email = {}
-
 		email_message = email.message_from_string(raw_email)
 		maintype = email_message.get_content_maintype()
+		parsed_email = {}
+		body = {}
+		plain = []
+		html = []
+		attachments = []
 
-		text_body = []
-		
 		if maintype == 'multipart':
-			for part in email_message.walk():       
-				if part.get_content_type() == "text/plain":
-					text_body.append(part.get_payload(decode=True))
+			for part in email_message.walk():
+				content = part.get_payload(decode=True)
+				content_type = part.get_content_type()
+				content_disposition = part.get('Content-Disposition')
+				if content_type == "text/plain" and not content_disposition:
+					plain.append(content)
+				elif content_type == "text/html" and not content_disposition:
+					html.append(content)
+				elif content_disposition:
+					attachments.append(part.get_filename())
 		elif maintype == 'text':
-			text_body.append(email_message.get_payload(decode=True))
+			plain.append(email_message.get_payload(decode=True))
 
-		parsed_email['text_body'] = text_body
+		if plain:
+			body['plain'] = plain
+		elif html:
+			body['html'] = html
+		if attachments:
+			parsed_email['attachments'] = attachments
 
+		parsed_email['body'] = body
 		email_dict = dict(email_message.items())
 
 		parsed_email['sent_from'] = get_mail_addresses(email_message, 'from')
