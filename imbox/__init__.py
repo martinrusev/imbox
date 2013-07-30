@@ -1,8 +1,8 @@
 import email
 import re
 import StringIO
-from mailbox.imap import ImapTransport
-from mailbox.parser import get_mail_addresses, decode_mail_header
+from imbox.imap import ImapTransport
+from imbox.parser import get_mail_addresses, decode_mail_header
 
 
 class Struct(object):
@@ -16,7 +16,7 @@ class Struct(object):
 		return str(self.__dict__)
 
 
-class MailBox(object):
+class Imbox(object):
 
 	def __init__(self, hostname, username=None, password=None, ssl=True):
 

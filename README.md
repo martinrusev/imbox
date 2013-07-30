@@ -1,4 +1,4 @@
-Mailbox - Python IMAP for Humans
+Imbox - Python IMAP for Humans
 =======
 
 Python library for reading IMAP mailboxes and converting the email content to human readable data
@@ -6,12 +6,12 @@ Python library for reading IMAP mailboxes and converting the email content to hu
 Installation
 ============
 
-	pip install mailbox
+	pip install imbox
 
 
 or 
 
-	git clone git@github.com:martinrusev/mailbox.git
+	git clone git@github.com:martinrusev/imbox.git
 	python setup.py install
 
 
@@ -19,18 +19,18 @@ Usage
 =====
 
 
-	from mailbox import MailBox
+	from imbox import Imbox
 
-	mailbox = MailBox('imap.gmail.com',
+	imbox = Imbox('imap.gmail.com',
 				  username='username', 
 				  password='password',
 				  ssl=True)
 	
 	# Gets all messages 
-	all_messages = mailbox.messages()
+	all_messages = imbox.messages()
 	
 	# Unread messages 
-	unread_messages = mailbox.messages(unread=True)
+	unread_messages = imbox.messages(unread=True)
 
 
 	for message in all_messages:
