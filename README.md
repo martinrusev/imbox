@@ -17,7 +17,7 @@ or
 
 Usage 
 =====
-	```python
+
 
 	from imbox import Imbox
 
@@ -87,7 +87,7 @@ Usage
 		}],
 		'subject': u 'Hello John, How are you today'
 		}
-	```
+	
 
 
 
