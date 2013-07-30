@@ -1,11 +1,12 @@
 import email
+from email.header import decode_header
 
 def decode_mail_header(value, default_charset='us-ascii'):
 	"""
 	Decode a header value into a unicode string. 
 	"""
 	try:
-		headers=email.header.decode_header(value)
+		headers=decode_header(value)
 	except email.errors.HeaderParseError:
 		return value.encode(default_charset, 'replace').decode(default_charset)
 	else:

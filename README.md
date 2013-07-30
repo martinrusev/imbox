@@ -43,7 +43,9 @@ Usage
 		message.headers
 		message.message-id
 		message.date
-		message.text_body
+		message.body.plain
+		message.body.html
+		message.attachments
 
 	# To check all available keys
 		print message.keys()
@@ -63,7 +65,16 @@ Usage
 				'Name': 'MIME-Version',
 				'Value': '1.0'
 			}],
-		'text_body': ['ASCII'],
+		'body': {
+			'plain: ['ASCII'],
+			'html': ['HTML BODY']
+		},
+		'attachments':  [{
+			'content': <StringIO.StringIO instance at 0x7f8e8445fa70>, 
+			'filename': "avatar.png",
+			'content-type': 'image/png',
+			'size': 80264
+		}],
 		'date': u 'Fri, 26 Jul 2013 10:56:26 +0300',
 		'message-id': u '51F22BAA.1040606',
 		'sent_from': [{
@@ -76,13 +87,6 @@ Usage
 		}],
 		'subject': u 'Hello John, How are you today'
 		}
-
-TODO
-======
-
-- Replace the dictionaries with objects and generators
-- Add logging and exceptions 
-- Implement smarter header parsing
 
 
 
