@@ -25,9 +25,16 @@ class Imbox(object):
 
 	def messages(self, *args, **kwargs):
 
+		# Check for folder argument
+		folder = kwargs.get('folder', False)
+		
+		if folder:
+			self.connection.select(folder)
+
 		query = build_search_query(**kwargs)
 
 		message, data = self.connection.uid('search', None, query)
+
 
 		return self.fetch_list(data)
 		

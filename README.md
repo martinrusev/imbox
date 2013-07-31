@@ -44,6 +44,9 @@ messages_from = imbox.mesages(date__lt='31-July-2013')
 # Messages received after specific date
 messages_from = imbox.mesages(date__gt='30-July-2013')
 
+# Messages from a specific folder 
+messages_folder = imbox.messages(folder='Social')
+
 
 
 for message in all_messages:
