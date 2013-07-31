@@ -1,7 +1,7 @@
 Imbox - Python IMAP for Humans
 =======
 
-Python library for reading IMAP mailboxes and converting the email content to human readable data
+Python library for reading IMAP mailboxes and converting email content to machine readable data
 
 Installation
 ============
@@ -31,6 +31,12 @@ all_messages = imbox.messages()
 
 # Unread messages 
 unread_messages = imbox.messages(unread=True)
+
+# Messages sent FROM
+messages_from = imbox.mesages(sent_from='martin@amon.cx')
+
+# Messages sent TO
+messages_from = imbox.mesages(sent_to='martin@amon.cx')
 
 
 for message in all_messages:
