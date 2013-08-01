@@ -14,7 +14,7 @@ class Imbox(object):
 		message, data = self.connection.uid('fetch', uid, '(BODY.PEEK[])') # Don't mark the messages as read, save bandwidth with PEEK
 		raw_email = data[0][1]
 
-		email_object = parse_email(raw_email)
+		email_object = parse_email(uid, raw_email)
 
 		return email_object
 
