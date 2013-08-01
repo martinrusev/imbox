@@ -105,7 +105,7 @@ def parse_email(raw_email):
 	if len(attachments) > 0:
 		parsed_email['attachments'] = attachments
 
-	parsed_email['body'] = body
+	parsed_email['body'] = Struct(**body)
 	email_dict = dict(email_message.items())
 
 	parsed_email['sent_from'] = get_mail_addresses(email_message, 'from')
