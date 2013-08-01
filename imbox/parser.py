@@ -3,6 +3,7 @@ import StringIO
 import email
 from email.header import decode_header
 from .imap_utf7 import decode as decode_utf7
+from .imap_utf7 import encode as encode_utf7
 
 
 class Struct(object):
