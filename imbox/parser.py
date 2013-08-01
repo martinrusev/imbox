@@ -2,6 +2,7 @@ import re
 import StringIO
 import email
 from email.header import decode_header
+from .imap_utf7 import decode as decode_utf7
 
 
 class Struct(object):
@@ -130,3 +131,19 @@ def parse_email(raw_email):
 				'Value': value})
 
 	return Struct(**parsed_email)
+
+
+# Stealed code ;)
+# Originally from: http://pymotw.com/2/imaplib/
+
+list_response_pattern = re.compile(r'\((?P<flags>.*?)\) "(?P<delimiter>.*)" (?P<name>.*)')
+
+def parse_list_response(line):
+	flags, delimiter, mailbox_name = list_response_pattern.match(line).groups()
+	mailbox_name = mailbox_name.strip('"')
+	return (flags, delimiter, mailbox_name)
+
+def parse_folders(folders):
+	metadata = map(parse_list_response, folders)
+	folders = map(decode_utf7, [f[2] for f in metadata])
+	return folders

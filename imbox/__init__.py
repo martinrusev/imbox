@@ -1,5 +1,6 @@
 from imbox.imap import ImapTransport
 from imbox.parser import parse_email
+from imbox.parser import parse_folders
 from imbox.query import build_search_query
 
 class Imbox(object):
@@ -37,4 +38,10 @@ class Imbox(object):
 
 
 		return self.fetch_list(data)
-		
+
+	@property
+	def folders(self):
+		response = self.connection.list()
+		status, folders = response[0], response[1]
+		folders = parse_folders(folders)
+		return folders
