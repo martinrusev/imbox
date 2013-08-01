@@ -1,6 +1,9 @@
 Imbox - Python IMAP for Humans
 =======
 
+[![Circle CI](https://circleci.com/gh/martinrusev/imbox/tree/master.png?circle-token=6d644013ad6c82223a952f018526aec416eeddc4)](https://circleci.com/gh/martinrusev/imbox)
+
+
 Python library for reading IMAP mailboxes and converting email content to machine readable data
 
 Installation
