@@ -29,9 +29,9 @@ class Imbox(object):
 
 		# Check for folder argument
 		folder = kwargs.get('folder', False)
-		folder = encode_utf7(folder) # Non-english folders name support
-		
+			
 		if folder:
+			folder = encode_utf7(folder) # Non-english folders name support
 			self.connection.select(folder)
 
 		query = build_search_query(**kwargs)
