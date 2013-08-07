@@ -114,5 +114,5 @@ Roadmap
 * Search mailboxes
 * Manage labels
 * Delete emails 
-
+* Compose emails
 
