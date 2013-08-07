@@ -1,5 +1,7 @@
 from imbox.imap import ImapTransport
 from imbox.parser import parse_email
+from imbox.parser import parse_folders
+from imbox.parser import encode_utf7
 from imbox.query import build_search_query
 
 class Imbox(object):
@@ -9,11 +11,21 @@ class Imbox(object):
 		server = ImapTransport(hostname, ssl=ssl)
 		self.connection = server.connect(username, password)
 
-	def fetch_by_uid(self, uid):
+	def select_folder(self, name):
+		folder = encode_utf7(name)
+		self.connection.select(folder)
+
+	def fetch_by_uid(self, uid, **kwargs):
+
+		# Check for folder argument
+		folder = kwargs.get('folder', False)
+		if folder:
+			self.select_folder(folder)
+
 		message, data = self.connection.uid('fetch', uid, '(BODY.PEEK[])') # Don't mark the messages as read, save bandwidth with PEEK
 		raw_email = data[0][1]
 
-		email_object = parse_email(raw_email)
+		email_object = parse_email(uid, raw_email)
 
 		return email_object
 
@@ -27,9 +39,8 @@ class Imbox(object):
 
 		# Check for folder argument
 		folder = kwargs.get('folder', False)
-		
 		if folder:
-			self.connection.select(folder)
+			self.select_folder(folder)
 
 		query = build_search_query(**kwargs)
 
@@ -37,4 +48,10 @@ class Imbox(object):
 
 
 		return self.fetch_list(data)
-		
+
+	@property
+	def folders(self):
+		response = self.connection.list()
+		status, folders = response[0], response[1]
+		folders = parse_folders(folders)
+		return folders

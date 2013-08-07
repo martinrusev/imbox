@@ -2,6 +2,8 @@ import re
 import StringIO
 import email
 from email.header import decode_header
+from .imap_utf7 import decode as decode_utf7
+from .imap_utf7 import encode as encode_utf7
 
 
 class Struct(object):
@@ -74,11 +76,12 @@ def parse_attachment(message_part):
 
 	return None	
 
-def parse_email(raw_email):
+def parse_email(uid, raw_email):
 	email_message = email.message_from_string(raw_email)
 	maintype = email_message.get_content_maintype()
 	parsed_email = {}
 	
+	parsed_email['uid'] = uid
 	body = {
 		"plain": [],
 		"html": []
@@ -104,7 +107,7 @@ def parse_email(raw_email):
 	if len(attachments) > 0:
 		parsed_email['attachments'] = attachments
 
-	parsed_email['body'] = body
+	parsed_email['body'] = Struct(**body)
 	email_dict = dict(email_message.items())
 
 	parsed_email['sent_from'] = get_mail_addresses(email_message, 'from')
@@ -130,3 +133,19 @@ def parse_email(raw_email):
 				'Value': value})
 
 	return Struct(**parsed_email)
+
+
+# Stealed code ;)
+# Originally from: http://pymotw.com/2/imaplib/
+
+list_response_pattern = re.compile(r'\((?P<flags>.*?)\) "(?P<delimiter>.*)" (?P<name>.*)')
+
+def parse_list_response(line):
+	flags, delimiter, mailbox_name = list_response_pattern.match(line).groups()
+	mailbox_name = mailbox_name.strip('"')
+	return (flags, delimiter, mailbox_name)
+
+def parse_folders(folders):
+	metadata = map(parse_list_response, folders)
+	folders = map(decode_utf7, [f[2] for f in metadata])
+	return folders
