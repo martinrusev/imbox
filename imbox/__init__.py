@@ -11,7 +11,17 @@ class Imbox(object):
 		server = ImapTransport(hostname, ssl=ssl)
 		self.connection = server.connect(username, password)
 
-	def fetch_by_uid(self, uid):
+	def select_folder(self, name):
+		folder = encode_utf7(name)
+		self.connection.select(folder)
+
+	def fetch_by_uid(self, uid, **kwargs):
+
+		# Check for folder argument
+		folder = kwargs.get('folder', False)
+		if folder:
+			self.select_folder(folder)
+
 		message, data = self.connection.uid('fetch', uid, '(BODY.PEEK[])') # Don't mark the messages as read, save bandwidth with PEEK
 		raw_email = data[0][1]
 
@@ -29,10 +39,8 @@ class Imbox(object):
 
 		# Check for folder argument
 		folder = kwargs.get('folder', False)
-			
 		if folder:
-			folder = encode_utf7(folder) # Non-english folders name support
-			self.connection.select(folder)
+			self.select_folder(folder)
 
 		query = build_search_query(**kwargs)
 
