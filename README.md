@@ -111,8 +111,8 @@ for message in all_messages:
 Roadmap 
 ========
 
-Search mailboxes
-Manage labels
-Delete emails 
+* Search mailboxes
+* Manage labels
+* Delete emails 
 
 
