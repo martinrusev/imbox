@@ -36,16 +36,16 @@ all_messages = imbox.messages()
 unread_messages = imbox.messages(unread=True)
 
 # Messages sent FROM
-messages_from = imbox.mesages(sent_from='martin@amon.cx')
+messages_from = imbox.messages(sent_from='martin@amon.cx')
 
 # Messages sent TO
-messages_from = imbox.mesages(sent_to='martin@amon.cx')
+messages_from = imbox.messages(sent_to='martin@amon.cx')
 
 # Messages received before specific date
-messages_from = imbox.mesages(date__lt='31-July-2013')
+messages_from = imbox.messages(date__lt='31-July-2013')
 
 # Messages received after specific date
-messages_from = imbox.mesages(date__gt='30-July-2013')
+messages_from = imbox.messages(date__gt='30-July-2013')
 
 # Messages from a specific folder 
 messages_folder = imbox.messages(folder='Social')
