@@ -110,7 +110,8 @@ for message in all_messages:
 
 Roadmap 
 ========
-
+* Lazy email fetching
+* Improved attachement handling
 * Search mailboxes
 * Manage labels
 * Delete emails 
