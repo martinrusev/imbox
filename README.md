@@ -108,5 +108,11 @@ for message in all_messages:
 	}
 ```
 
+Roadmap 
+========
+
+Search mailboxes
+Manage labels
+Delete emails 
 
 
