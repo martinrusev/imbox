@@ -4,37 +4,65 @@ from imbox.query import build_search_query
 
 class Imbox(object):
 
-	def __init__(self, hostname, username=None, password=None, ssl=True):
+    def __init__(self, hostname, username=None, password=None, ssl=True):
 
-		server = ImapTransport(hostname, ssl=ssl)
-		self.connection = server.connect(username, password)
+        self.server = ImapTransport(hostname, ssl=ssl)
+        self.username = username
+        self.password = password
 
-	def fetch_by_uid(self, uid):
-		message, data = self.connection.uid('fetch', uid, '(BODY.PEEK[])') # Don't mark the messages as read, save bandwidth with PEEK
-		raw_email = data[0][1]
+    def __enter__(self):
+        self.connect()
 
-		email_object = parse_email(raw_email)
+    def __exit__(self, type, value, traceback):
+        self.logout()
 
-		return email_object
+    def connect(self):
+        username = self.username
+        password = self.password
+        self.connection = self.server.connect(username, password)
 
-	def fetch_list(self, data):
-		uid_list = data[0].split()
+    def logout(self):
+        self.connection.logout()
 
-		for uid in uid_list:
-			yield self.fetch_by_uid(uid)
+    def query_uids(self, **kwargs):
+        query = build_search_query(**kwargs)
 
-	def messages(self, *args, **kwargs):
+        message, data = self.connection.uid('search', None, query)
+        return data[0].split()
 
-		# Check for folder argument
-		folder = kwargs.get('folder', False)
-		
-		if folder:
-			self.connection.select(folder)
+    def fetch_by_uid(self, uid):
+        message, data = self.connection.uid('fetch', uid, '(BODY.PEEK[])') # Don't mark the messages as read, save bandwidth with PEEK
+        raw_email = data[0][1]
 
-		query = build_search_query(**kwargs)
+        email_object = parse_email(raw_email)
 
-		message, data = self.connection.uid('search', None, query)
+        return email_object
 
+    def fetch_list(self, **kwargs):
+        uid_list = self.query_uids(**kwargs)
 
-		return self.fetch_list(data)
-		
+        for uid in uid_list:
+            yield (uid, self.fetch_by_uid(uid))
+
+    def mark_seen(self, uid):
+        self.connection.uid('STORE', uid, '+FLAGS', '\\Seen')
+
+    def delete(self, uid):
+        mov, data = self.connection.uid('STORE', uid, '+FLAGS', '(\\Deleted)')
+        self.connection.expunge()
+
+    def copy(self, uid, destination_folder):
+        return self.connection.uid('COPY', uid, destination_folder)
+
+    def move(self, uid, destination_folder):
+        if self.copy(uid, destination_folder):
+            self.delete(uid)
+
+    def messages(self, *args, **kwargs):
+        folder = kwargs.get('folder', False)
+        
+        if folder:
+            self.connection.select(folder)
+
+        return self.fetch_list(**kwargs)
+        
