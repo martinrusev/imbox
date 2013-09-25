@@ -32,11 +32,21 @@ class Imbox(object):
         return data[0].split()
 
     def fetch_by_uid(self, uid):
-        message, data = self.connection.uid('fetch', uid, '(BODY.PEEK[])') # Don't mark the messages as read, save bandwidth with PEEK
+        message, data = self.connection.uid('fetch', uid, '(X-GM-MSGID X-GM-THRID UID FLAGS BODY.PEEK[])') # Don't mark the messages as read, save bandwidth with PEEK
         raw_email = data[0][1]
 
-        email_object = parse_email(raw_email)
+        import re
+        pattern = re.compile("^(\d+) \(X-GM-THRID (?P<gthrid>\d+) X-GM-MSGID (?P<gmsgid>\d+) UID (?P<uid>\d+) FLAGS \((?P<flags>[^\)]*)\)")
+        self.maildata = {}
+        headers = data[0][0]
+        groups = pattern.match(headers).groups()
+        self.maildata['GTHRID'] = groups[1]
+        self.maildata['GMSGID'] = groups[2]
+        self.maildata['UID'] = groups[3]
+        self.maildata['FLAGS'] = groups[4]
+        self.maildata['data'] = raw_email
 
+        email_object = parse_email(self.maildata)
         return email_object
 
     def fetch_list(self, **kwargs):
@@ -62,7 +72,6 @@ class Imbox(object):
     def messages(self, *args, **kwargs):
         folder = kwargs.get('folder', False)
         read_only = kwargs.get('readonly', True)
-        print folder
         
         if folder:
             self.connection.select(folder, readonly=read_only)
