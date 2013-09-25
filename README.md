@@ -1,7 +1,7 @@
 Imbox - Python IMAP for Humans
 =======
 
-[![Circle CI](https://circleci.com/gh/wckd/imbox/tree/master.png?circle-token=b71a530429b626c98ae8e5b2f2e2a343bcbdb232)](https://circleci.com/gh/martinrusev/imbox)
+[![Circle CI](https://circleci.com/gh/wckd/imbox/tree/master.png?circle-token=b71a530429b626c98ae8e5b2f2e2a343bcbdb232)](https://circleci.com/gh/wckd/imbox)
 
 
 Python library for reading IMAP mailboxes and converting email content to machine readable data
