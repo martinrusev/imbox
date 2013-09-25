@@ -76,7 +76,8 @@ def parse_attachment(message_part):
 
 def parse_email(raw_email):
     data = raw_email
-    email_message = email.message_from_string(data['data'])
+    if type(data) is dict: email_message = email.message_from_string(data['data'])
+    else: email_message = email.message_from_string(data)
     maintype = email_message.get_content_maintype()
     parsed_email = {}
 
