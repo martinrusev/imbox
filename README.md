@@ -56,23 +56,23 @@ for message in all_messages:
 	........
 # Every message is an object with the following keys
 	
-	message.sent_from
-	message.sent_to
-	message.subject
-	message.headers
-	message.message-id
-	message.date
-	message.body.plain
-	message.body.html
-	message.attachments
+	message[1].sent_from
+	message[1].sent_to
+	message[1].subject
+	message[1].headers
+	message[1].message-id
+	message[1].date
+	message[1].body.plain
+	message[1].body.html
+	message[1].attachments
 
 # To check all available keys
-	print message.keys()
+	print message[1].keys()
 
 
 # To check the whole object, just write
 
-	print message
+	print message[1]
 
 	{
 	'headers': 

@@ -7,11 +7,12 @@ class Imbox(object):
     def __init__(self, hostname, username=None, password=None, ssl=True):
 
         self.server = ImapTransport(hostname, ssl=ssl)
+        self.connection = self.server.connect(username, password)
         self.username = username
         self.password = password
 
     def __enter__(self):
-        self.connect()
+        self.connection()
 
     def __exit__(self, type, value, traceback):
         self.logout()
