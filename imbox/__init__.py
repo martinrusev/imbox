@@ -63,7 +63,6 @@ class Imbox(object):
         folder = kwargs.get('folder', False)
         
         if folder:
-            self.connection.select(folder)
+            self.connection.select(folder, readonly=True)
 
         return self.fetch_list(**kwargs)
-        
