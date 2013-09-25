@@ -75,9 +75,13 @@ def parse_attachment(message_part):
     return None 
 
 def parse_email(raw_email):
+    is_dict = True
     data = raw_email
-    if type(data) is dict: email_message = email.message_from_string(data['data'])
-    else: email_message = email.message_from_string(data)
+    if type(data) is dict:
+        email_message = email.message_from_string(data['data'])
+    else: 
+        email_message = email.message_from_string(data)
+        is_dict = False
     maintype = email_message.get_content_maintype()
     parsed_email = {}
 
@@ -121,10 +125,11 @@ def parse_email(raw_email):
 
     parsed_email['headers'] = []
 
-    for key, value in data.iteritems():
-        if key == 'data':
-            continue
-        parsed_email['headers'].append({'Name': key, 'Value': value})
+    if is_dict:
+        for key, value in data.iteritems():
+            if key == 'data':
+                continue
+            parsed_email['headers'].append({'Name': key, 'Value': value})
 
     for key, value in email_dict.iteritems():
         if key in value_headers_keys:
