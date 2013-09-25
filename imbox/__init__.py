@@ -20,7 +20,7 @@ class Imbox(object):
     def connect(self):
         username = self.username
         password = self.password
-        self.connection = self.server.connect(username, password)
+        self.connection = self.connection
 
     def logout(self):
         self.connection.logout()
@@ -61,8 +61,10 @@ class Imbox(object):
 
     def messages(self, *args, **kwargs):
         folder = kwargs.get('folder', False)
+        read_only = kwargs.get('readonly', True)
+        print folder
         
         if folder:
-            self.connection.select(folder, readonly=True)
+            self.connection.select(folder, readonly=read_only)
 
         return self.fetch_list(**kwargs)
