@@ -22,7 +22,7 @@ class Imbox(object):
         return data[0].split()
 
     def fetch_by_uid(self, uid):
-        message, data = self.connection.uid('fetch', uid, '(BODY.PEEK[])') # Don't mark the messages as read, save bandwidth with PEEK
+        message, data = self.connection.uid('fetch', uid, '(BODY.PEEK[])')
         raw_email = data[0][1]
 
         email_object = parse_email(raw_email)

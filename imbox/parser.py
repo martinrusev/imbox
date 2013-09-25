@@ -122,7 +122,7 @@ def parse_email(raw_email):
 	for key, value in email_dict.iteritems():
 		
 		if key in value_headers_keys:
-			valid_key_name = key.lower()
+			valid_key_name = key.lower().replace('-', '_')
 			parsed_email[valid_key_name] = decode_mail_header(value)
 		
 		if key in key_value_header_keys:
