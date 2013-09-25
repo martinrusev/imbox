@@ -60,7 +60,7 @@ for message in all_messages:
 	message.sent_to
 	message.subject
 	message.headers
-	message.message-id
+	message.message_id
 	message.date
 	message.body.plain
 	message.body.html
@@ -95,7 +95,7 @@ for message in all_messages:
 		'size': 80264
 	}],
 	'date': u 'Fri, 26 Jul 2013 10:56:26 +0300',
-	'message-id': u '51F22BAA.1040606',
+	'message_id': u '51F22BAA.1040606',
 	'sent_from': [{
 		'name': u 'Martin Rusev',
 		'email': 'martin@amon.cx'
