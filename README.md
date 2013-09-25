@@ -53,7 +53,25 @@ messages_folder = imbox.messages(folder='Social')
 # Get messages in read-only mode
 messages_folder = inbox.messages(folder='Social, readonly=True)
 
+# Get all messages in all folders
+from imbox import Imbox
 
+imbox = Imbox('imap.gmail.com',
+              username=username,
+              password=password,
+              ssl=True)
+
+boxlist = []
+rc = imbox.connection.list()[1]
+derp = [boxlist.append(rc[item].partition('"/"')[2].strip()) for item in range(len(rc))]
+
+for box in boxlist:
+    messages = imbox.messages(folder=box, readonly=True)
+    for message in messages:
+        print message[1].subject.encode('utf-8')
+
+
+# Get all messages in selected folder
 for message in all_messages:
 	........
 # Every message is an object with the following keys
