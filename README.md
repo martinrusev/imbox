@@ -68,7 +68,9 @@ derp = [boxlist.append(rc[item].partition('"/"')[2].strip()) for item in range(l
 for box in boxlist:
     messages = imbox.messages(folder=box, readonly=True)
     for message in messages:
-        print message[1].subject.encode('utf-8')
+        message = message[1]
+        print message.subject.encode('utf-8')
+        print message.cc # Returns None if empty
 
 
 # Get all messages in selected folder
