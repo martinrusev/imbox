@@ -14,6 +14,9 @@ class Struct(object):
     def __repr__(self):
         return str(self.__dict__)
 
+    def __iter__(self):
+        return iter(self.__dict__)
+
 
 def decode_mail_header(value, default_charset='us-ascii'):
     """
