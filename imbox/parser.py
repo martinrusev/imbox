@@ -82,14 +82,16 @@ def parse_email(raw_email):
     else: 
         email_message = email.message_from_string(data)
         is_dict = False
+
     maintype = email_message.get_content_maintype()
     parsed_email = {}
 
     body = {
         "plain": [],
-        "html": []
+        "html": [],
     }
     attachments = []
+
 
     if maintype == 'multipart':
         for part in email_message.walk():
@@ -126,10 +128,13 @@ def parse_email(raw_email):
     parsed_email['headers'] = []
 
     if is_dict:
+        """ Add some gmail-specific headers and more to the parsed_email-list """
         for key, value in data.iteritems():
             if key == 'data':
                 continue
-            parsed_email['headers'].append({'Name': key, 'Value': value})
+            valid_key_name = re.sub('-', '_', key.lower())
+            parsed_email[valid_key_name] = value
+            parsed_email['rfc822'] = data['data']
 
     for key, value in email_dict.iteritems():
         if key in value_headers_keys:

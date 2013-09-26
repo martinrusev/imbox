@@ -80,11 +80,15 @@ for message in all_messages:
 	message[1].sent_to
 	message[1].subject
 	message[1].headers
-	message[1].message-id
+	message[1].message_id
 	message[1].date
 	message[1].body.plain
 	message[1].body.html
 	message[1].attachments
+    message[1].rfc822
+    message[1].gmsgid
+    message[1].gthrid
+    message[1].flags
 
 # To check all available keys
 	print message[1].keys()
