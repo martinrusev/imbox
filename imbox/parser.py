@@ -1,7 +1,8 @@
 import re
 import StringIO
 import email
-from email.header import decode_header
+import base64, quopri
+from email.header import Header, decode_header
 
 
 class Struct(object):
@@ -48,6 +49,26 @@ def get_mail_addresses(message, header_name):
 
     return addresses
 
+
+def decode_param(param):
+	name, v = param.split('=', 1)
+	values = v.split('\n')
+	value_results = []
+	for value in values:
+		match = re.search(r'=\?(\w+)\?(Q|B)\?(.+)\?=', value)
+		if match:
+			encoding, type_, code = match.groups()
+			if type_ == 'Q':
+				value = quopri.decodestring(code)
+			elif type_ == 'B':
+				value = base64.decodestring(code)
+			value = unicode(value, encoding)
+			value_results.append(value)
+	if value_results: v = ''.join(value_results)
+	return name, v 
+
+
+
 def parse_attachment(message_part):
     content_disposition = message_part.get("Content-Disposition", None) # Check again if this is a valid attachment
     if content_disposition != None:
@@ -64,8 +85,7 @@ def parse_attachment(message_part):
 
             
             for param in dispositions[1:]:
-                name,value = param.split("=")
-                name = name.lower()
+                name, value = decode_param(param)
 
                 if 'file' in  name:
                     attachment['filename'] = value
@@ -107,13 +127,13 @@ def parse_email(raw_email):
             elif content_type == "text/html" and content_disposition == None:
                 body['html'].append(content)
             elif content_disposition:
-                attachments.append(parse_attachment(part))
-    
+                attachment = parse_attachment(part)
+                if attachment: attachments.append(attachment)
+
     elif maintype == 'text':
         body['plain'].append(email_message.get_payload(decode=True))
 
-    if len(attachments) > 0:
-        parsed_email['attachments'] = attachments
+    parsed_email['attachments'] = attachments
 
     parsed_email['body'] = body
     email_dict = dict(email_message.items())
@@ -130,8 +150,7 @@ def parse_email(raw_email):
                             'Content-Type']
 
     parsed_email['headers'] = []
-    #parsed_email['cc'] = ()
-    #parsed_email['cc'].append({'Name': 'cc', 'Value': parsed_cc })
+
     if is_dict:
         """ Add some gmail-specific headers and more to the parsed_email-list """
         for key, value in data.iteritems():

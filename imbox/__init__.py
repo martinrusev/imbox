@@ -1,6 +1,7 @@
 from imbox.imap import ImapTransport
 from imbox.parser import parse_email
 from imbox.query import build_search_query
+import re
 
 class Imbox(object):
 
@@ -22,6 +23,7 @@ class Imbox(object):
         password = self.password
         self.connection = self.connection
 
+
     def logout(self):
         self.connection.logout()
 
@@ -35,7 +37,6 @@ class Imbox(object):
         message, data = self.connection.uid('fetch', uid, '(X-GM-MSGID X-GM-THRID UID FLAGS BODY.PEEK[])') # Don't mark the messages as read, save bandwidth with PEEK
         raw_email = data[0][1]
 
-        import re
         pattern = re.compile("^(\d+) \(X-GM-THRID (?P<gthrid>\d+) X-GM-MSGID (?P<gmsgid>\d+) UID (?P<uid>\d+) FLAGS \((?P<flags>[^\)]*)\)")
         self.maildata = {}
         headers = data[0][0]
