@@ -130,7 +130,8 @@ def parse_email(raw_email):
                             'Content-Type']
 
     parsed_email['headers'] = []
-
+    #parsed_email['cc'] = ()
+    #parsed_email['cc'].append({'Name': 'cc', 'Value': parsed_cc })
     if is_dict:
         """ Add some gmail-specific headers and more to the parsed_email-list """
         for key, value in data.iteritems():
