@@ -14,7 +14,7 @@ Installation
 
 or 
 
-	git clone git@github.com:martinrusev/imbox.git
+	git clone git@github.com:wckd/imbox.git
 	python setup.py install
 
 
@@ -143,4 +143,3 @@ Roadmap
 * Manage labels
 * Delete emails 
 * Compose emails
-
