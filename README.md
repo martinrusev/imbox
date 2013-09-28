@@ -1,7 +1,7 @@
 Imbox - Python IMAP for Humans
 =======
 
-[![Circle CI](https://circleci.com/gh/martinrusev/imbox/tree/master.png?circle-token=6d644013ad6c82223a952f018526aec416eeddc4)](https://circleci.com/gh/martinrusev/imbox)
+[![Circle CI](https://circleci.com/gh/wckd/imbox/tree/master.png?circle-token=b71a530429b626c98ae8e5b2f2e2a343bcbdb232)](https://circleci.com/gh/wckd/imbox)
 
 
 Python library for reading IMAP mailboxes and converting email content to machine readable data
@@ -14,7 +14,7 @@ Installation
 
 or 
 
-	git clone git@github.com:martinrusev/imbox.git
+	git clone git@github.com:wckd/imbox.git
 	python setup.py install
 
 
@@ -50,21 +50,48 @@ messages_from = imbox.messages(date__gt='30-July-2013')
 # Messages from a specific folder 
 messages_folder = imbox.messages(folder='Social')
 
+# Get messages in read-only mode
+messages_folder = inbox.messages(folder='Social, readonly=True)
+
+# Get all messages in all folders
+from imbox import Imbox
+
+imbox = Imbox('imap.gmail.com',
+              username=username,
+              password=password,
+              ssl=True)
+
+boxlist = []
+rc = imbox.connection.list()[1]
+derp = [boxlist.append(rc[item].partition('"/"')[2].strip()) for item in range(len(rc))]
+
+for box in boxlist:
+    messages = imbox.messages(folder=box, readonly=True)
+    for message in messages:
+        message = message[1]
+        print message.subject.encode('utf-8')
+        print message.cc # Returns None if empty
 
 
+# Get all messages in selected folder
 for message in all_messages:
 	........
 # Every message is an object with the following keys
-	
+
+    message = message[1]
 	message.sent_from
 	message.sent_to
 	message.subject
 	message.headers
 	message.message_id
 	message.date
-	message.body.plain
-	message.body.html
+	message.body['plain']
+	message.body['html']
 	message.attachments
+    message.rfc822
+    message.gmsgid
+    message.gthrid
+    message.flags
 
 # To check all available keys
 	print message.keys()
@@ -72,7 +99,7 @@ for message in all_messages:
 
 # To check the whole object, just write
 
-	print message
+	print message[1]
 
 	{
 	'headers': 
@@ -116,4 +143,3 @@ Roadmap
 * Manage labels
 * Delete emails 
 * Compose emails
-
