@@ -142,8 +142,9 @@ def parse_email(raw_email):
 
     parsed_email['sent_from'] = get_mail_addresses(email_message, 'from')
     parsed_email['sent_to'] = get_mail_addresses(email_message, 'to')
-    if parsed_email['sent_to'][0] == 'undisclosed-recipients:;'
-        parsed_email['sent_to'][0] = 'undisclosed@recipients.com'
+    for i in parsed_email['sent_to']:
+        if 'undisclosed-recipients*' in i:
+            i = 'undisclosed@recipients.com'
     parsed_email['cc'] = email_message.get_all('cc')
 
     value_headers_keys = ['Subject', 'Date','Message-ID']
