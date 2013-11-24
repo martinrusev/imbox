@@ -1,10 +1,11 @@
 import re
 import StringIO
 import email
-import base64, quopri
+import base64
+import quopri
 import time 
 from datetime import datetime
-from email.header import Header, decode_header
+from email.header import decode_header
 
 
 class Struct(object):
