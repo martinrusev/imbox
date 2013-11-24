@@ -2,6 +2,7 @@ from imbox.imap import ImapTransport
 from imbox.parser import parse_email
 from imbox.query import build_search_query
 
+
 class Imbox(object):
 
     def __init__(self, hostname, username=None, password=None, ssl=True):
@@ -56,4 +57,3 @@ class Imbox(object):
             self.connection.select(folder)
 
         return self.fetch_list(**kwargs)
-        
