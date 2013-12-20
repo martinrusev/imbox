@@ -16,14 +16,13 @@ class ImapTransport(object):
 			if not self.port:
 				self.port = 143
 
+		self.server = self.transport(self.hostname, self.port)
 
 	def list_folders(self):
 		return self.server.list()
 
 	def connect(self, username, password):
-		self.server = self.transport(self.hostname, self.port)
 		self.server.login(username, password)
-
 		self.server.select()
 
 		return self.server

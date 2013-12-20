@@ -13,6 +13,7 @@ class Imbox(object):
 
 
     def logout(self):
+        self.connection.close()
         self.connection.logout()
 
     def query_uids(self, **kwargs):
@@ -57,3 +58,5 @@ class Imbox(object):
 
         return self.fetch_list(**kwargs)
         
+    def folders(self):
+        return self.connection.list()
