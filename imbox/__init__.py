@@ -58,3 +58,5 @@ class Imbox(object):
 
         return self.fetch_list(**kwargs)
         
+    def folders(self):
+        return self.connection.list()
