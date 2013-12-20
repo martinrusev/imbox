@@ -13,6 +13,7 @@ class Imbox(object):
 
 
     def logout(self):
+        self.connection.close()
         self.connection.logout()
 
     def query_uids(self, **kwargs):
