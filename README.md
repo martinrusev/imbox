@@ -52,7 +52,7 @@ messages_folder = imbox.messages(folder='Social')
 
 
 
-for message in all_messages:
+for uid, message in all_messages:
 	........
 # Every message is an object with the following keys
 	
