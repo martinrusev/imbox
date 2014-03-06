@@ -1,9 +1,9 @@
-from imaplib import IMAP4, IMAP4_SSL
+from imaplib2 import IMAP4, IMAP4_SSL
 
 
 class ImapTransport(object):
 
-    def __init__(self, hostname, port=None, ssl=False):
+    def __init__(self, hostname, port=None, ssl=False, starttls=False):
         self.hostname = hostname
         self.port = port
 
@@ -17,6 +17,8 @@ class ImapTransport(object):
                 self.port = 143
 
         self.server = self.transport(self.hostname, self.port)
+        if starttls:
+            self.server.starttls()
 
     def list_folders(self):
         return self.server.list()
@@ -24,7 +26,5 @@ class ImapTransport(object):
     def connect(self, username, password):
         self.server.login(username, password)
         self.server.select()
-
         return self.server
-
 
