@@ -11,28 +11,23 @@ class Imbox(object):
         self.password = password
         self.connection = self.server.connect(username, password)
 
-
     def logout(self):
         self.connection.close()
         self.connection.logout()
 
     def query_uids(self, **kwargs):
         query = build_search_query(**kwargs)
-
         message, data = self.connection.uid('search', None, query)
         return data[0].split()
 
     def fetch_by_uid(self, uid):
         message, data = self.connection.uid('fetch', uid, '(BODY.PEEK[])')
         raw_email = data[0][1]
-
         email_object = parse_email(raw_email)
-
         return email_object
 
     def fetch_list(self, **kwargs):
         uid_list = self.query_uids(**kwargs)
-
         for uid in uid_list:
             yield (uid, self.fetch_by_uid(uid))
 
@@ -52,7 +47,6 @@ class Imbox(object):
 
     def messages(self, *args, **kwargs):
         folder = kwargs.get('folder', False)
-
         if folder:
             self.connection.select(folder)
 
