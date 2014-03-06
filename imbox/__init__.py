@@ -52,11 +52,11 @@ class Imbox(object):
 
     def messages(self, *args, **kwargs):
         folder = kwargs.get('folder', False)
-        
+
         if folder:
             self.connection.select(folder)
 
         return self.fetch_list(**kwargs)
-        
+
     def folders(self):
         return self.connection.list()

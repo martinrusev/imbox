@@ -12,7 +12,7 @@ MIME-Version: 1.0
 To: John Doe <johndoe@gmail.com>
 Subject: Test email - no attachment
 Content-Type: multipart/alternative;
-	boundary="------------080505090108000500080106"
+    boundary="------------080505090108000500080106"
 X-OriginalArrivalTime: 30 Jul 2013 12:56:43.0604 (UTC) FILETIME=[3DD52140:01CE8D24]
 
 --------------080505090108000500080106
@@ -38,27 +38,27 @@ Hi, this is a test email with no <span style="font-weight: bold;">attachments</s
 class TestParser(unittest.TestCase):
 
 
-	
-	def test_parse_email(self):
-		parsed_email = parse_email(raw_email)
 
-		self.assertEqual(u'Test email - no attachment', parsed_email.subject)
+    def test_parse_email(self):
+        parsed_email = parse_email(raw_email)
+
+        self.assertEqual(u'Test email - no attachment', parsed_email.subject)
 
 
-	# TODO - Complete the test suite
-	def test_parse_attachment(self):
-		pass
+    # TODO - Complete the test suite
+    def test_parse_attachment(self):
+        pass
 
- 	def test_decode_mail_header(self):
- 		pass
-   
-	
-	
-	def test_get_mail_addresses(self):
+    def test_decode_mail_header(self):
+        pass
 
-		to_message_object = email.message_from_string("To: John Doe <johndoe@gmail.com>")
-		self.assertEqual([{'email': 'johndoe@gmail.com', 'name': u'John Doe'}], get_mail_addresses(to_message_object, 'to'))
 
-		from_message_object = email.message_from_string("From: John Smith <johnsmith@gmail.com>")
-		self.assertEqual([{'email': 'johnsmith@gmail.com', 'name': u'John Smith'}], get_mail_addresses(from_message_object, 'from'))
+
+    def test_get_mail_addresses(self):
+
+        to_message_object = email.message_from_string("To: John Doe <johndoe@gmail.com>")
+        self.assertEqual([{'email': 'johndoe@gmail.com', 'name': u'John Doe'}], get_mail_addresses(to_message_object, 'to'))
+
+        from_message_object = email.message_from_string("From: John Smith <johnsmith@gmail.com>")
+        self.assertEqual([{'email': 'johnsmith@gmail.com', 'name': u'John Smith'}], get_mail_addresses(from_message_object, 'from'))
 
