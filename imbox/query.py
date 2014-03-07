@@ -1,5 +1,16 @@
 # TODO - Validate query arguments
+import datetime
+
+
+def format_date(date):
+    if isinstance(date, datetime.date):
+        return date.strftime('%d-%b-%Y')
+    else:
+        return date
+
+
 def build_search_query(**kwargs):
+    #TODO implement OR
 
     # Parse keyword arguments
     unread = kwargs.get('unread', False)
@@ -7,10 +18,11 @@ def build_search_query(**kwargs):
     sent_to = kwargs.get('sent_to', False)
     date__gt = kwargs.get('date__gt', False)
     date__lt = kwargs.get('date__lt', False)
+    date_on = kwargs.get('date_on', False)
 
     query = "(ALL)"
 
-    if unread != False:
+    if unread:
         query = "(UNSEEN)"
 
     if sent_from:
@@ -20,9 +32,12 @@ def build_search_query(**kwargs):
         query = '{0} (TO "{1}")'.format(query, sent_to)
 
     if date__gt:
-        query = '{0} (SINCE "{1}")'.format(query, date__gt)
+        query = '{0} (SINCE "{1}")'.format(query, format_date(date__gt))
 
     if date__lt:
-        query = '{0} (BEFORE "{1}")'.format(query, date__lt)
+        query = '{0} (BEFORE "{1}")'.format(query, format_date(date__lt))
 
-    return str(query)
+    if date_on:
+        query = '{0} (ON "{1}")'.format(query, format_date(date_on))
+
+    return query
