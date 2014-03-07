@@ -2,12 +2,15 @@ from imaplib2 import IMAP4, IMAP4_SSL
 
 
 class ImapTransport(object):
+    """
+    ssl should be None, SSL or STARTTLS
+    """
 
-    def __init__(self, hostname, port=None, ssl=False, starttls=False):
+    def __init__(self, hostname, port=None, ssl=None):
         self.hostname = hostname
         self.port = port
 
-        if ssl:
+        if ssl == 'SSL':
             self.transport = IMAP4_SSL
             if not self.port:
                 self.port = 993
@@ -17,7 +20,7 @@ class ImapTransport(object):
                 self.port = 143
 
         self.server = self.transport(self.hostname, self.port)
-        if starttls:
+        if ssl == 'STARTTLS':
             self.server.starttls()
 
     def list_folders(self):

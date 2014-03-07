@@ -4,9 +4,9 @@ from imbox.query import build_search_query
 
 class Imbox(object):
 
-    def __init__(self, hostname, username=None, password=None, ssl=True):
+    def __init__(self, hostname, port=None, ssl=None, username=None, password=None):
 
-        self.server = ImapTransport(hostname, ssl=ssl)
+        self.server = ImapTransport(hostname, port=port, ssl=ssl)
         self.username = username
         self.password = password
         self.connection = self.server.connect(username, password)
