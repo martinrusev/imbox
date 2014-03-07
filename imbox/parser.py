@@ -86,7 +86,7 @@ def parse_attachment(message_part):
                 name, value = decode_param(param)
 
                 if 'file' in  name:
-                    attachment['filename'] = value
+                    attachment['filename'] = value.strip('"')
 
                 if 'create-date' in name:
                     attachment['create-date'] = value
