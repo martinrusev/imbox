@@ -1,3 +1,18 @@
+Modifications of the original project
+=============
+
+I made some changes because i need to connect to an Exchange Server.
+
+Changes:
+
+- It now depends on imaplib2 instead of imaplib
+- Support date_on query for imap
+- Now python datetime instances can be used to query
+
+
+*Ivan Pereira*
+
+
 Imbox - Python IMAP for Humans
 =======
 
