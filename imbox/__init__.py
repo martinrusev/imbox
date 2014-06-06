@@ -37,7 +37,7 @@ class Imbox(object):
             yield (uid, self.fetch_by_uid(uid))
 
     def mark_seen(self, uid):
-        self.connection.uid('STORE', uid, '+FLAGS', '\\Seen')
+        self.connection.uid('STORE', uid, '+FLAGS', '(\\Seen)')
 
     def delete(self, uid):
         mov, data = self.connection.uid('STORE', uid, '+FLAGS', '(\\Deleted)')
