@@ -4,13 +4,12 @@ from imbox.query import build_search_query
 
 class Imbox(object):
 
-    def __init__(self, hostname, username=None, password=None, ssl=True):
+    def __init__(self, hostname, port=None, ssl=None, username=None, password=None):
 
-        self.server = ImapTransport(hostname, ssl=ssl)
+        self.server = ImapTransport(hostname, port=port, ssl=ssl)
         self.username = username
         self.password = password
         self.connection = self.server.connect(username, password)
-
 
     def logout(self):
         self.connection.close()
@@ -18,21 +17,17 @@ class Imbox(object):
 
     def query_uids(self, **kwargs):
         query = build_search_query(**kwargs)
-
         message, data = self.connection.uid('search', None, query)
         return data[0].split()
 
     def fetch_by_uid(self, uid):
         message, data = self.connection.uid('fetch', uid, '(BODY.PEEK[])')
         raw_email = data[0][1]
-
         email_object = parse_email(raw_email)
-
         return email_object
 
     def fetch_list(self, **kwargs):
         uid_list = self.query_uids(**kwargs)
-
         for uid in uid_list:
             yield (uid, self.fetch_by_uid(uid))
 
@@ -52,11 +47,10 @@ class Imbox(object):
 
     def messages(self, *args, **kwargs):
         folder = kwargs.get('folder', False)
-        
         if folder:
             self.connection.select(folder)
 
         return self.fetch_list(**kwargs)
-        
+
     def folders(self):
         return self.connection.list()
