@@ -43,6 +43,15 @@ class TestParser(unittest.TestCase):
 		parsed_email = parse_email(raw_email)
 
 		self.assertEqual(u'Test email - no attachment', parsed_email.subject)
+		self.assertEqual(u'Tue, 30 Jul 2013 15:56:29 +0300', parsed_email.date)
+		self.assertEqual(u'<test0@example.com>', parsed_email.message_id)
+
+
+	def test_parse_email_ignores_header_casing(self):
+		self.assertEqual('one', parse_email('Message-ID: one').message_id)
+		self.assertEqual('one', parse_email('Message-Id: one').message_id)
+		self.assertEqual('one', parse_email('Message-id: one').message_id)
+		self.assertEqual('one', parse_email('message-id: one').message_id)
 
 
 	# TODO - Complete the test suite

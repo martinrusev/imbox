@@ -132,21 +132,21 @@ def parse_email(raw_email):
 	parsed_email['sent_to'] = get_mail_addresses(email_message, 'to')
 
 
-	value_headers_keys = ['Subject', 'Date','Message-ID']
-	key_value_header_keys = ['Received-SPF', 
-							'MIME-Version',
-							'X-Spam-Status',
-							'X-Spam-Score',
-							'Content-Type']
+	value_headers_keys = ['subject', 'date','message-id']
+	key_value_header_keys = ['received-spf', 
+							'mime-version',
+							'x-spam-status',
+							'x-spam-score',
+							'content-type']
 
 	parsed_email['headers'] = []
 	for key, value in email_dict.iteritems():
 		
-		if key in value_headers_keys:
+		if key.lower() in value_headers_keys:
 			valid_key_name = key.lower().replace('-', '_')
 			parsed_email[valid_key_name] = decode_mail_header(value)
 		
-		if key in key_value_header_keys:
+		if key.lower() in key_value_header_keys:
 			parsed_email['headers'].append({'Name': key,
 				'Value': value})
 
