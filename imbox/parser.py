@@ -99,6 +99,8 @@ def parse_email(raw_email):
 	email_message = email.message_from_string(raw_email)
 	maintype = email_message.get_content_maintype()
 	parsed_email = {}
+
+	parsed_email['raw_email'] = raw_email
 	
 	body = {
 		"plain": [],

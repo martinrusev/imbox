@@ -42,6 +42,7 @@ class TestParser(unittest.TestCase):
 	def test_parse_email(self):
 		parsed_email = parse_email(raw_email)
 
+		self.assertEqual(raw_email, parsed_email.raw_email)
 		self.assertEqual(u'Test email - no attachment', parsed_email.subject)
 		self.assertEqual(u'Tue, 30 Jul 2013 15:56:29 +0300', parsed_email.date)
 		self.assertEqual(u'<test0@example.com>', parsed_email.message_id)
