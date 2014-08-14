@@ -114,9 +114,9 @@ def parse_email(raw_email):
 			content_type = part.get_content_type()
 			content_disposition = part.get('Content-Disposition', None)
 			
-			if content_type == "text/plain" and content_disposition == None:
-				body['plain'].append(content)
-			elif content_type == "text/html" and content_disposition == None:
+                        if content_type == "text/plain" and (content_disposition == None or content_disposition == "inline"):
+                                body['plain'].append(content)
+                        elif content_type == "text/html" and (content_disposition == None or content_disposition == "inline"):
 				body['html'].append(content)
 			elif content_disposition:
 				attachment = parse_attachment(part)
