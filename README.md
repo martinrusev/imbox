@@ -9,13 +9,7 @@ Python library for reading IMAP mailboxes and converting email content to machin
 Installation
 ============
 
-	pip install imbox
-
-
-or 
-
-	git clone git@github.com:martinrusev/imbox.git
-	python setup.py install
+	pip install https://github.com/martinrusev/imbox/archive/master.zip
 
 
 Usage 
