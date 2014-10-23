@@ -131,9 +131,9 @@ def parse_email(raw_email):
                 if attachment:
                     attachments.append(attachment)
 
-                elif maintype == 'text':
-                    payload = email_message.get_payload(decode=True)
-                    body['plain'].append(payload)
+    elif maintype == 'text':
+        payload = email_message.get_payload(decode=True)
+        body['plain'].append(payload)
 
     parsed_email['attachments'] = attachments
 
