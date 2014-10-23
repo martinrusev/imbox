@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import unittest
 from imbox.parser import *
 
@@ -41,9 +42,9 @@ class TestParser(unittest.TestCase):
         parsed_email = parse_email(raw_email)
 
         self.assertEqual(raw_email, parsed_email.raw_email)
-        self.assertEqual(u'Test email - no attachment', parsed_email.subject)
-        self.assertEqual(u'Tue, 30 Jul 2013 15:56:29 +0300', parsed_email.date)
-        self.assertEqual(u'<test0@example.com>', parsed_email.message_id)
+        self.assertEqual('Test email - no attachment', parsed_email.subject)
+        self.assertEqual('Tue, 30 Jul 2013 15:56:29 +0300', parsed_email.date)
+        self.assertEqual('<test0@example.com>', parsed_email.message_id)
 
     def test_parse_email_ignores_header_casing(self):
         self.assertEqual('one', parse_email('Message-ID: one').message_id)
