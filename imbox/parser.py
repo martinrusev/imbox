@@ -1,11 +1,14 @@
+from __future__ import unicode_literals
+from six import StringIO
+
 import re
-import StringIO
 import email
 import base64
 import quopri
 import time
 from datetime import datetime
 from email.header import decode_header
+from imbox.utils import str_encode, str_decode
 
 
 class Struct(object):
@@ -26,17 +29,17 @@ def decode_mail_header(value, default_charset='us-ascii'):
     try:
         headers = decode_header(value)
     except email.errors.HeaderParseError:
-        return value.encode(default_charset, 'replace').decode(default_charset)
+        return str_decode(str_encode(value, default_charset, 'replace'), default_charset)
     else:
         for index, (text, charset) in enumerate(headers):
             try:
-                headers[index] = text.decode(charset or default_charset,
-                                             'replace')
+                headers[index] = str_decode(text, charset or default_charset,
+                                            'replace')
             except LookupError:
                 # if the charset is unknown, force default
-                headers[index] = text.decode(default_charset, 'replace')
+                headers[index] = str_decode(text, default_charset, 'replace')
 
-        return u"".join(headers)
+        return ''.join(headers)
 
 
 def get_mail_addresses(message, header_name):
@@ -65,7 +68,7 @@ def decode_param(param):
                 value = quopri.decodestring(code)
             elif type_ == 'B':
                 value = base64.decodestring(code)
-                value = unicode(value, encoding)
+                value = str_encode(value, encoding)
                 value_results.append(value)
                 if value_results:
                     v = ''.join(value_results)
@@ -151,7 +154,7 @@ def parse_email(raw_email):
                              'content-type']
 
     parsed_email['headers'] = []
-    for key, value in email_dict.iteritems():
+    for key, value in email_dict.items():
 
         if key.lower() in value_headers_keys:
             valid_key_name = key.lower().replace('-', '_')
