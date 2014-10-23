@@ -62,7 +62,7 @@ class TestParser(unittest.TestCase):
     def test_get_mail_addresses(self):
 
         to_message_object = email.message_from_string("To: John Doe <johndoe@gmail.com>")
-        self.assertEqual([{'email': 'johndoe@gmail.com', 'name': u'John Doe'}], get_mail_addresses(to_message_object, 'to'))
+        self.assertEqual([{'email': 'johndoe@gmail.com', 'name': 'John Doe'}], get_mail_addresses(to_message_object, 'to'))
 
         from_message_object = email.message_from_string("From: John Smith <johnsmith@gmail.com>")
-        self.assertEqual([{'email': 'johnsmith@gmail.com', 'name': u'John Smith'}], get_mail_addresses(from_message_object, 'from'))
+        self.assertEqual([{'email': 'johnsmith@gmail.com', 'name': 'John Smith'}], get_mail_addresses(from_message_object, 'from'))
