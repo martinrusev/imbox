@@ -1,5 +1,5 @@
+from __future__ import unicode_literals
 import unittest
-import email
 from imbox.parser import *
 
 raw_email = """Delivered-To: johndoe@gmail.com
@@ -12,7 +12,7 @@ MIME-Version: 1.0
 To: John Doe <johndoe@gmail.com>
 Subject: Test email - no attachment
 Content-Type: multipart/alternative;
-	boundary="------------080505090108000500080106"
+    boundary="------------080505090108000500080106"
 X-OriginalArrivalTime: 30 Jul 2013 12:56:43.0604 (UTC) FILETIME=[3DD52140:01CE8D24]
 
 --------------080505090108000500080106
@@ -35,40 +35,34 @@ Hi, this is a test email with no <span style="font-weight: bold;">attachments</s
 --------------080505090108000500080106--
 """
 
+
 class TestParser(unittest.TestCase):
 
+    def test_parse_email(self):
+        parsed_email = parse_email(raw_email)
 
-	
-	def test_parse_email(self):
-		parsed_email = parse_email(raw_email)
+        self.assertEqual(raw_email, parsed_email.raw_email)
+        self.assertEqual('Test email - no attachment', parsed_email.subject)
+        self.assertEqual('Tue, 30 Jul 2013 15:56:29 +0300', parsed_email.date)
+        self.assertEqual('<test0@example.com>', parsed_email.message_id)
 
-		self.assertEqual(raw_email, parsed_email.raw_email)
-		self.assertEqual(u'Test email - no attachment', parsed_email.subject)
-		self.assertEqual(u'Tue, 30 Jul 2013 15:56:29 +0300', parsed_email.date)
-		self.assertEqual(u'<test0@example.com>', parsed_email.message_id)
+    def test_parse_email_ignores_header_casing(self):
+        self.assertEqual('one', parse_email('Message-ID: one').message_id)
+        self.assertEqual('one', parse_email('Message-Id: one').message_id)
+        self.assertEqual('one', parse_email('Message-id: one').message_id)
+        self.assertEqual('one', parse_email('message-id: one').message_id)
 
+    # TODO - Complete the test suite
+    def test_parse_attachment(self):
+        pass
 
-	def test_parse_email_ignores_header_casing(self):
-		self.assertEqual('one', parse_email('Message-ID: one').message_id)
-		self.assertEqual('one', parse_email('Message-Id: one').message_id)
-		self.assertEqual('one', parse_email('Message-id: one').message_id)
-		self.assertEqual('one', parse_email('message-id: one').message_id)
-
-
-	# TODO - Complete the test suite
-	def test_parse_attachment(self):
-		pass
-
- 	def test_decode_mail_header(self):
- 		pass
+    def test_decode_mail_header(self):
+        pass
    
-	
-	
-	def test_get_mail_addresses(self):
+    def test_get_mail_addresses(self):
 
-		to_message_object = email.message_from_string("To: John Doe <johndoe@gmail.com>")
-		self.assertEqual([{'email': 'johndoe@gmail.com', 'name': u'John Doe'}], get_mail_addresses(to_message_object, 'to'))
+        to_message_object = email.message_from_string("To: John Doe <johndoe@gmail.com>")
+        self.assertEqual([{'email': 'johndoe@gmail.com', 'name': 'John Doe'}], get_mail_addresses(to_message_object, 'to'))
 
-		from_message_object = email.message_from_string("From: John Smith <johnsmith@gmail.com>")
-		self.assertEqual([{'email': 'johnsmith@gmail.com', 'name': u'John Smith'}], get_mail_addresses(from_message_object, 'from'))
-
+        from_message_object = email.message_from_string("From: John Smith <johnsmith@gmail.com>")
+        self.assertEqual([{'email': 'johnsmith@gmail.com', 'name': 'John Smith'}], get_mail_addresses(from_message_object, 'from'))
