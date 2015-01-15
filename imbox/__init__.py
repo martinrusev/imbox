@@ -20,6 +20,8 @@ class Imbox(object):
         query = build_search_query(**kwargs)
 
         message, data = self.connection.uid('search', None, query)
+        if data[0] is None:
+            return []
         return data[0].split()
 
     def fetch_by_uid(self, uid):
