@@ -68,11 +68,11 @@ def decode_param(param):
                 value = quopri.decodestring(code)
             elif type_ == 'B':
                 value = base64.decodestring(code)
-                value = str_encode(value, encoding)
-                value_results.append(value)
-                if value_results:
-                    v = ''.join(value_results)
-                return name, v
+            value = str_encode(value, encoding)
+            value_results.append(value)
+            if value_results:
+                v = ''.join(value_results)
+    return name, v
 
 
 def parse_attachment(message_part):
@@ -87,7 +87,7 @@ def parse_attachment(message_part):
             attachment = {
                 'content-type': message_part.get_content_type(),
                 'size': len(file_data),
-                'content': StringIO.StringIO(file_data)
+                'content': StringIO(file_data)
             }
 
             for param in dispositions[1:]:
