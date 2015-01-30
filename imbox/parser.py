@@ -104,6 +104,14 @@ def parse_attachment(message_part):
     return None
 
 
+def decode_content(message):
+    content = message.get_payload(decode=True)
+    charset = message.get_content_charset('utf-8')
+    if charset != 'utf-8':
+        return content.decode(charset)
+    return content
+
+
 def parse_email(raw_email):
     email_message = email.message_from_string(raw_email)
     maintype = email_message.get_content_maintype()
@@ -119,7 +127,7 @@ def parse_email(raw_email):
 
     if maintype == 'multipart':
         for part in email_message.walk():
-            content = part.get_payload(decode=True)
+            content = decode_content(part)
             content_type = part.get_content_type()
             content_disposition = part.get('Content-Disposition', None)
 
@@ -135,7 +143,7 @@ def parse_email(raw_email):
                     attachments.append(attachment)
 
     elif maintype == 'text':
-        payload = email_message.get_payload(decode=True)
+        payload = decode_content(email_message)
         body['plain'].append(payload)
 
     parsed_email['attachments'] = attachments
