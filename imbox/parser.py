@@ -61,7 +61,7 @@ def decode_param(param):
     values = v.split('\n')
     value_results = []
     for value in values:
-        match = re.search(r'=\?(\w+)\?(Q|B)\?(.+)\?=', value)
+        match = re.search(r'=\?((?:\w|-)+)\?(Q|B)\?(.+)\?=', value)
         if match:
             encoding, type_, code = match.groups()
             if type_ == 'Q':
@@ -127,9 +127,12 @@ def parse_email(raw_email):
 
     if maintype == 'multipart':
         for part in email_message.walk():
-            content = decode_content(part)
             content_type = part.get_content_type()
             content_disposition = part.get('Content-Disposition', None)
+            if content_disposition:
+                content = part.get_payload(decode=True)
+            else:
+                content = decode_content(part)
 
             is_inline = content_disposition is None \
                 or content_disposition == "inline"
