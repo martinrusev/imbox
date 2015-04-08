@@ -23,6 +23,7 @@ def build_search_query(**kwargs):
     date__lt = kwargs.get('date__lt', False)
     if type(date__lt) is datetime.date:
         date__lt = format_date(date__lt)
+    subject = kwargs.get('subject')
 
     query = []
 
@@ -40,6 +41,9 @@ def build_search_query(**kwargs):
 
     if date__lt:
         query.append('(BEFORE "%s")' % date__lt)
+
+    if subject is not None:
+        query.append('(SUBJECT "%s")' % subject)
 
     if query:
         return " ".join(query)
