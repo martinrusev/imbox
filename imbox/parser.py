@@ -1,7 +1,9 @@
 from __future__ import unicode_literals
-from six import StringIO
+from six import StringIO, BytesIO
 
 import re
+import six
+import sys
 import email
 import base64
 import quopri
@@ -22,31 +24,66 @@ class Struct(object):
         return str(self.__dict__)
 
 
-def decode_mail_header(value, default_charset='us-ascii'):
-    """
-    Decode a header value into a unicode string.
-    """
-    try:
-        headers = decode_header(value)
-    except email.errors.HeaderParseError:
-        return str_decode(str_encode(value, default_charset, 'replace'), default_charset)
-    else:
-        for index, (text, charset) in enumerate(headers):
-            try:
-                headers[index] = str_decode(text, charset or default_charset,
-                                            'replace')
-            except LookupError:
-                # if the charset is unknown, force default
-                headers[index] = str_decode(text, default_charset, 'replace')
+if sys.version_info[0] == 3 and sys.version_info[1] >= 3:
+    def get_message_part_buffer(file_data):
+        return six.BytesIO(file_data)
 
-        return ''.join(headers)
+    def decode_content(mesage):
+        return mesage
+
+    def get_message_from_raw_email(raw_email):
+        return email.message_from_bytes(raw_email)
+
+    def decode_mail_header(value, default_charset='us-ascii'):
+        return value
+
+    def base64_decode(value):
+        return base64.standard_b64decode(value)
+else:
+    def get_message_part_buffer(file_data):
+        return six.StringIO(file_data)
+
+    def decode_content(message):
+        content = message.get_payload(decode=True)
+        charset = message.get_content_charset('utf-8')
+        if charset != 'utf-8':
+            return content.decode(charset)
+        return content
+
+    def get_message_from_raw_email(raw_email):
+        return email.message_from_string(raw_email)
+
+    def decode_mail_header(value, default_charset='us-ascii'):
+        """
+        Decode a header value into a unicode string.
+        """
+        try:
+            headers = decode_header(value)
+        except email.errors.HeaderParseError:
+            return str_decode(str_encode(value, default_charset, 'replace'), default_charset)
+        else:
+            for index, (text, charset) in enumerate(headers):
+                try:
+                    headers[index] = str_decode(text, charset or default_charset,
+                                                'replace')
+                except LookupError:
+                    # if the charset is unknown, force default
+                    headers[index] = str_decode(text, default_charset, 'replace')
+
+            return ''.join(headers)
+
+    def base64_decode(value):
+        return base64.decodestring(value)
 
 
 def get_mail_addresses(message, header_name):
     """
     Retrieve all email addresses from one message header.
     """
-    headers = [h for h in message.get_all(header_name, [])]
+    if sys.version_info[0] == 3 and sys.version_info[1] >= 3:
+        headers = [str(h) for h in message.get_all(header_name, [])]
+    else:
+        headers = [h for h in message.get_all(header_name, [])]
     addresses = email.utils.getaddresses(headers)
 
     for index, (address_name, address_email) in enumerate(addresses):
@@ -67,8 +104,9 @@ def decode_param(param):
             if type_ == 'Q':
                 value = quopri.decodestring(code)
             elif type_ == 'B':
-                value = base64.decodestring(code)
+                value = base64_decode(code)
             value = str_encode(value, encoding)
+
             value_results.append(value)
             if value_results:
                 v = ''.join(value_results)
@@ -87,7 +125,7 @@ def parse_attachment(message_part):
             attachment = {
                 'content-type': message_part.get_content_type(),
                 'size': len(file_data),
-                'content': StringIO(file_data)
+                'content': get_message_part_buffer(file_data)
             }
 
             for param in dispositions[1:]:
@@ -104,16 +142,8 @@ def parse_attachment(message_part):
     return None
 
 
-def decode_content(message):
-    content = message.get_payload(decode=True)
-    charset = message.get_content_charset('utf-8')
-    if charset != 'utf-8':
-        return content.decode(charset)
-    return content
-
-
 def parse_email(raw_email):
-    email_message = email.message_from_string(raw_email)
+    email_message = get_message_from_raw_email(raw_email)
     maintype = email_message.get_content_maintype()
     parsed_email = {}
 
