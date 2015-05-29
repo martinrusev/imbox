@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 import unittest
+import sys
 from imbox.parser import *
 
 raw_email = """Delivered-To: johndoe@gmail.com
@@ -35,11 +36,18 @@ Hi, this is a test email with no <span style="font-weight: bold;">attachments</s
 --------------080505090108000500080106--
 """
 
+if sys.version_info[0] == 3 and sys.version_info[1] >= 3:
+    def prepare_raw_email(raw_email):
+        return bytes(raw_email, 'ascii')
+else:
+    def prepare_raw_email(raw_email):
+        return raw_email
+
 
 class TestParser(unittest.TestCase):
 
     def test_parse_email(self):
-        parsed_email = parse_email(raw_email)
+        parsed_email = parse_email(prepare_raw_email(raw_email))
 
         self.assertEqual(raw_email, parsed_email.raw_email)
         self.assertEqual('Test email - no attachment', parsed_email.subject)
@@ -47,10 +55,10 @@ class TestParser(unittest.TestCase):
         self.assertEqual('<test0@example.com>', parsed_email.message_id)
 
     def test_parse_email_ignores_header_casing(self):
-        self.assertEqual('one', parse_email('Message-ID: one').message_id)
-        self.assertEqual('one', parse_email('Message-Id: one').message_id)
-        self.assertEqual('one', parse_email('Message-id: one').message_id)
-        self.assertEqual('one', parse_email('message-id: one').message_id)
+        self.assertEqual('one', parse_email(prepare_raw_email('Message-ID: one')).message_id)
+        self.assertEqual('one', parse_email(prepare_raw_email('Message-Id: one')).message_id)
+        self.assertEqual('one', parse_email(prepare_raw_email('Message-id: one')).message_id)
+        self.assertEqual('one', parse_email(prepare_raw_email('message-id: one')).message_id)
 
     # TODO - Complete the test suite
     def test_parse_attachment(self):
