@@ -1,6 +1,8 @@
 import datetime
+import logging
 # TODO - Validate query arguments
 
+logger = logging.getLogger(__name__)
 
 IMAP_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -46,6 +48,8 @@ def build_search_query(**kwargs):
         query.append('(SUBJECT "%s")' % subject)
 
     if query:
+        logger.debug("IMAP query: {}".format(" ".join(query)))
         return " ".join(query)
 
+    logger.debug("IMAP query: {}".format("(ALL)"))
     return "(ALL)"

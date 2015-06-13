@@ -10,6 +10,9 @@ from datetime import datetime
 from email.header import decode_header
 from imbox.utils import str_encode, str_decode
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 class Struct(object):
     def __init__(self, **entries):
@@ -32,6 +35,7 @@ def decode_mail_header(value, default_charset='us-ascii'):
         return str_decode(str_encode(value, default_charset, 'replace'), default_charset)
     else:
         for index, (text, charset) in enumerate(headers):
+            logger.debug("Mail header no. {}: {} encoding {}".format(index, text, charset))
             try:
                 headers[index] = str_decode(text, charset or default_charset,
                                             'replace')
@@ -52,7 +56,7 @@ def get_mail_addresses(message, header_name):
     for index, (address_name, address_email) in enumerate(addresses):
         addresses[index] = {'name': decode_mail_header(address_name),
                             'email': address_email}
-
+        logger.debug("{} Mail addressees in message: <{}> {}".format(header_name.upper(), address_name, address_email))
     return addresses
 
 
@@ -72,6 +76,7 @@ def decode_param(param):
             value_results.append(value)
             if value_results:
                 v = ''.join(value_results)
+    logger.debug("Decoded parameter {} - {}".format(name, v))
     return name, v
 
 
@@ -126,6 +131,7 @@ def parse_email(raw_email):
     attachments = []
 
     if maintype == 'multipart':
+        logger.debug("Multipart message. Will process parts.")
         for part in email_message.walk():
             content_type = part.get_content_type()
             content_disposition = part.get('Content-Disposition', None)
@@ -183,4 +189,6 @@ def parse_email(raw_email):
             if timetuple else None
         parsed_email['parsed_date'] = parsed_date
 
+    logger.info("Downloaded and parsed mail '{}' with {} attachments".format(
+        parsed_email.get('subject'), len(parsed_email.get('attachments'))))
     return Struct(**parsed_email)
