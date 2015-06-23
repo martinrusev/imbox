@@ -11,6 +11,7 @@ class Imbox(object):
     def __init__(self, hostname, username=None, password=None, ssl=True):
 
         self.server = ImapTransport(hostname, ssl=ssl)
+        self.hostname = hostname
         self.username = username
         self.password = password
         self.connection = self.server.connect(username, password)

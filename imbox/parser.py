@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-from six import StringIO
+from six import BytesIO, binary_type
 
 import re
 import email
@@ -35,7 +35,7 @@ def decode_mail_header(value, default_charset='us-ascii'):
         return str_decode(str_encode(value, default_charset, 'replace'), default_charset)
     else:
         for index, (text, charset) in enumerate(headers):
-            logger.debug("Mail header no. {}: {} encoding {}".format(index, text.decode('utf-8'), charset))
+            logger.debug("Mail header no. {}: {} encoding {}".format(index, str_decode(text, 'utf-8'), charset))
             try:
                 headers[index] = str_decode(text, charset or default_charset,
                                             'replace')
@@ -92,7 +92,7 @@ def parse_attachment(message_part):
             attachment = {
                 'content-type': message_part.get_content_type(),
                 'size': len(file_data),
-                'content': StringIO(file_data)
+                'content': BytesIO(file_data)
             }
 
             for param in dispositions[1:]:
@@ -118,6 +118,8 @@ def decode_content(message):
 
 
 def parse_email(raw_email):
+    if isinstance(raw_email, binary_type):
+        raw_email = str_encode(raw_email, 'utf-8')
     email_message = email.message_from_string(raw_email)
     maintype = email_message.get_content_maintype()
     parsed_email = {}
