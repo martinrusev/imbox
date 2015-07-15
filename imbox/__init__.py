@@ -8,9 +8,9 @@ logger = logging.getLogger(__name__)
 
 class Imbox(object):
 
-    def __init__(self, hostname, username=None, password=None, ssl=True):
+    def __init__(self, hostname, username=None, password=None, ssl=True, port=None):
 
-        self.server = ImapTransport(hostname, ssl=ssl)
+        self.server = ImapTransport(hostname, ssl=ssl, port=port)
         self.hostname = hostname
         self.username = username
         self.password = password
