@@ -132,7 +132,7 @@ def parse_email(raw_email):
     }
     attachments = []
 
-    if maintype == 'multipart':
+    if maintype in ('multipart', 'image'):
         logger.debug("Multipart message. Will process parts.")
         for part in email_message.walk():
             content_type = part.get_content_type()
