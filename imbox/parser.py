@@ -94,6 +94,9 @@ def parse_attachment(message_part):
                 'size': len(file_data),
                 'content': BytesIO(file_data)
             }
+            filename = message_part.get_param('name')
+            if filename:
+                attachment['filename'] = filename
 
             for param in dispositions[1:]:
                 name, value = decode_param(param)
@@ -132,7 +135,7 @@ def parse_email(raw_email):
     }
     attachments = []
 
-    if maintype == 'multipart':
+    if maintype in ('multipart', 'image'):
         logger.debug("Multipart message. Will process parts.")
         for part in email_message.walk():
             content_type = part.get_content_type()
