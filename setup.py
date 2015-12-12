@@ -1,7 +1,7 @@
 from setuptools import setup
 import os
 
-version = '0.6'
+version = '0.7'
 
 
 def read(filename):
