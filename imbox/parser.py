@@ -83,7 +83,7 @@ def decode_param(param):
 def parse_attachment(message_part):
     # Check again if this is a valid attachment
     content_disposition = message_part.get("Content-Disposition", None)
-    if content_disposition is not None:
+    if content_disposition is not None and not message_part.is_multipart():
         dispositions = content_disposition.strip().split(";")
 
         if dispositions[0].lower() in ["attachment", "inline"]:
