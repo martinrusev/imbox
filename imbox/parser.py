@@ -35,7 +35,7 @@ def decode_mail_header(value, default_charset='us-ascii'):
         return str_decode(str_encode(value, default_charset, 'replace'), default_charset)
     else:
         for index, (text, charset) in enumerate(headers):
-            logger.debug("Mail header no. {}: {} encoding {}".format(index, str_decode(text, 'utf-8'), charset))
+            logger.debug("Mail header no. {}: {} encoding {}".format(index, str_decode(text, charset or 'utf-8'), charset))
             try:
                 headers[index] = str_decode(text, charset or default_charset,
                                             'replace')
