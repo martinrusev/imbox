@@ -143,8 +143,9 @@ def parse_email(raw_email):
         logger.debug("Multipart message. Will process parts.")
         for part in email_message.walk():
             content_type = part.get_content_type()
+            part_maintype = part.get_content_maintype()
             content_disposition = part.get('Content-Disposition', None)
-            if content_disposition:
+            if content_disposition or not part_maintype == "text":
                 content = part.get_payload(decode=True)
             else:
                 content = decode_content(part)
