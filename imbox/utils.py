@@ -13,7 +13,7 @@ if PY3:
         if isinstance(value, str):
             return bytes(value, encoding, errors).decode('utf-8')
         elif isinstance(value, bytes):
-            return value.decode('utf-8', errors=errors)
+            return value.decode(encoding or 'utf-8', errors=errors)
         else:
             raise TypeError( "Cannot decode '{}' object".format(value.__class__) )
 else:
