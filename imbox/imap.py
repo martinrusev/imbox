@@ -11,22 +11,19 @@ class ImapTransport(object):
     def __init__(self, hostname, port=None, ssl=True, usesslcontext=True):
         self.hostname = hostname
         self.port = port
+        kwargs = {}
 
         if ssl:
-            if usesslcontext is True:
-                context = pythonssllib.create_default_context()
-            else:
-                context = None
-
+            self.transport = IMAP4_SSL
             if not self.port:
                 self.port = 993
-            self.server = self.IMAP4_SSL(self.hostname, self.port,
-                                         ssl_context=context)
+            kwargs["ssl_context"] = pythonssllib.create_default_context()
         else:
+            self.transport = IMAP4
             if not self.port:
                 self.port = 143
 
-        self.server = self.IMAP4(self.hostname, self.port)
+        self.server = self.transport(self.hostname, self.port, **kwargs)
         logger.debug("Created IMAP4 transport for {host}:{port}"
                      .format(host=self.hostname, port=self.port))
 
