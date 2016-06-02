@@ -13,7 +13,7 @@ class ImapTransport(object):
         self.port = port
 
         if ssl:
-            if usesslcontext = True:
+            if usesslcontext is True:
                 context = pythonssllib.create_default_context()
             else:
                 context = None
