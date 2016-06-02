@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 class ImapTransport(object):
 
-    def __init__(self, hostname, port=None, ssl=True, usesslcontext=True):
+    def __init__(self, hostname, port=None, ssl=True, ssl_context=None):
         self.hostname = hostname
         self.port = port
         kwargs = {}
@@ -17,7 +17,9 @@ class ImapTransport(object):
             self.transport = IMAP4_SSL
             if not self.port:
                 self.port = 993
-            kwargs["ssl_context"] = pythonssllib.create_default_context()
+            if ssl_context is None:
+                ssl_context = pythonssllib.create_default_context()
+            kwargs["ssl_context"] = ssl_context
         else:
             self.transport = IMAP4
             if not self.port:
