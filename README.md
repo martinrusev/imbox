@@ -7,7 +7,6 @@ Imbox - Python IMAP for Humans
 Python library for reading IMAP mailboxes and converting email content to machine readable data
 
 
-# [Changelog](https://github.com/martinrusev/imbox/blob/master/CHANGELOG.md)
 
 Installation
 ============
@@ -109,3 +108,4 @@ for uid, message in all_messages:
 ```
 
 
+# [Changelog](https://github.com/martinrusev/imbox/blob/master/CHANGELOG.md)
