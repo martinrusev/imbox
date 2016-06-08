@@ -18,6 +18,8 @@ Usage
 ```python
 from imbox import Imbox
 
+# SSL Context docs https://docs.python.org/2/library/ssl.html#ssl.create_default_context
+
 imbox = Imbox('imap.gmail.com',
 		username='username', 
 		password='password',
