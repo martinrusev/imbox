@@ -19,9 +19,10 @@ Usage
 from imbox import Imbox
 
 imbox = Imbox('imap.gmail.com',
-			  username='username', 
-			  password='password',
-			  ssl=True)
+		username='username', 
+		password='password',
+		ssl=True,
+		ssl_context=None)
 
 # Gets all messages 
 all_messages = imbox.messages()
@@ -102,12 +103,4 @@ for uid, message in all_messages:
 	}
 ```
 
-Roadmap 
-========
-* Lazy email fetching
-* Improved attachement handling
-* Search mailboxes
-* Manage labels
-* Delete emails 
-* Compose emails
 
