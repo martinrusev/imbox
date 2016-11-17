@@ -75,7 +75,7 @@ class Imbox(object):
             self.connection.select(folder)
             msg = " from folder '{}'".format(folder)
 
-        logger.info("Fetch list of massages{}".format(msg))
+        logger.info("Fetch list of messages{}".format(msg))
         return self.fetch_list(**kwargs)
 
     def folders(self):
