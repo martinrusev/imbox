@@ -12,7 +12,7 @@ class Imbox(object):
                  port=None, ssl_context=None):
 
         self.server = ImapTransport(hostname, ssl=ssl, port=port,
-                                    ssl_context=None)
+                                    ssl_context=ssl_context)
         self.hostname = hostname
         self.username = username
         self.password = password
