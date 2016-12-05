@@ -3,7 +3,11 @@ from __future__ import unicode_literals
 import unittest
 from imbox.parser import *
 
-from email.policy import SMTP
+import sys
+if sys.version_info.major < 3 or sys.version_info.minor < 3:
+    SMTP = False
+else:
+    from email.policy import SMTP
 
 
 raw_email = """Delivered-To: johndoe@gmail.com
@@ -106,7 +110,7 @@ class TestParser(unittest.TestCase):
 
     def test_decode_mail_header(self):
         pass
-   
+
     def test_get_mail_addresses(self):
 
         to_message_object = email.message_from_string("To: John Doe <johndoe@gmail.com>")
@@ -116,6 +120,9 @@ class TestParser(unittest.TestCase):
         self.assertEqual([{'email': 'johnsmith@gmail.com', 'name': 'John Smith'}], get_mail_addresses(from_message_object, 'from'))
 
     def test_parse_email_with_policy(self):
+        if not SMTP:
+            return
+
         message_object = email.message_from_bytes(
             raw_email_encoded_needs_refolding,
             policy=SMTP.clone(refold_source='all')
