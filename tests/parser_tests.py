@@ -3,6 +3,13 @@ from __future__ import unicode_literals
 import unittest
 from imbox.parser import *
 
+import sys
+if sys.version_info.major < 3 or sys.version_info.minor < 3:
+    SMTP = False
+else:
+    from email.policy import SMTP
+
+
 raw_email = """Delivered-To: johndoe@gmail.com
 X-Originating-Email: [martin@amon.cx]
 Message-ID: <test0@example.com>
@@ -55,6 +62,25 @@ Content-Transfer-Encoding: quoted-printable
 ------=_Part_1295_1644105626.1458989730614--
 """
 
+raw_email_encoded_needs_refolding = b"""Delivered-To: receiver@example.com
+Return-Path: <sender@example.com>
+Date: Sat, 26 Mar 2016 13:55:30 +0300 (FET)
+From: sender@example.com
+To: "Receiver" <receiver@example.com>, "Second\r\n Receiver" <recipient@example.com>
+Message-ID: <811170233.1296.1345983710614.JavaMail.bris@BRIS-AS-NEW.site>
+Subject: =?ISO-8859-5?B?suvf2OHa0CDf3iDa0ODi1Q==?=
+MIME-Version: 1.0
+Content-Type: multipart/mixed; 
+    boundary="----=_Part_1295_1644105626.1458989730614"
+
+------=_Part_1295_1644105626.1458989730614
+Content-Type: text/html; charset=ISO-8859-5
+Content-Transfer-Encoding: quoted-printable
+
+=B2=EB=DF=D8=E1=DA=D0 =DF=DE =DA=D0=E0=E2=D5 1234
+------=_Part_1295_1644105626.1458989730614--
+"""
+
 
 class TestParser(unittest.TestCase):
 
@@ -84,7 +110,7 @@ class TestParser(unittest.TestCase):
 
     def test_decode_mail_header(self):
         pass
-   
+
     def test_get_mail_addresses(self):
 
         to_message_object = email.message_from_string("To: John Doe <johndoe@gmail.com>")
@@ -92,3 +118,17 @@ class TestParser(unittest.TestCase):
 
         from_message_object = email.message_from_string("From: John Smith <johnsmith@gmail.com>")
         self.assertEqual([{'email': 'johnsmith@gmail.com', 'name': 'John Smith'}], get_mail_addresses(from_message_object, 'from'))
+
+    def test_parse_email_with_policy(self):
+        if not SMTP:
+            return
+
+        message_object = email.message_from_bytes(
+            raw_email_encoded_needs_refolding,
+            policy=SMTP.clone(refold_source='all')
+        )
+
+        self.assertEqual([
+            {'email': 'receiver@example.com', 'name': 'Receiver'},
+            {'email': 'recipient@example.com', 'name': 'Second Receiver'}
+        ], get_mail_addresses(message_object, 'to'))

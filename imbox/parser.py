@@ -121,13 +121,18 @@ def decode_content(message):
         return content
 
 
-def parse_email(raw_email):
+def parse_email(raw_email, policy=None):
     if isinstance(raw_email, binary_type):
         raw_email = str_encode(raw_email, 'utf-8')
+    if policy is not None:
+        email_parse_kwargs = dict(policy=policy)
+    else:
+        email_parse_kwargs = {}
+
     try:
-        email_message = email.message_from_string(raw_email)
+        email_message = email.message_from_string(raw_email, **email_parse_kwargs)
     except UnicodeEncodeError:
-        email_message = email.message_from_string(raw_email.encode('utf-8'))
+        email_message = email.message_from_string(raw_email.encode('utf-8'), **email_parse_kwargs)
     maintype = email_message.get_content_maintype()
     parsed_email = {}
 
