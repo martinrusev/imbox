@@ -10,7 +10,7 @@ Python library for reading IMAP mailboxes and converting email content to machin
 Requirements
 ============
 
-Python (3.2, 3.3, 3.4, 3.5)
+Python (3.2, 3.3, 3.4, 3.5, 3.6)
 
 
 Installation
