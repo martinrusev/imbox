@@ -71,12 +71,12 @@ for uid, message in all_messages:
 	message.attachments
 
 # To check all available keys
-	print message.keys()
+	print(message.keys())
 
 
 # To check the whole object, just write
 
-	print message
+	print(message)
 
 	{
 	'headers': 
