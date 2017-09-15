@@ -1,6 +1,4 @@
-from __future__ import unicode_literals
-from six import BytesIO, binary_type
-
+import io
 import re
 import email
 import base64
@@ -92,7 +90,7 @@ def parse_attachment(message_part):
             attachment = {
                 'content-type': message_part.get_content_type(),
                 'size': len(file_data),
-                'content': BytesIO(file_data)
+                'content': io.BytesIO(file_data)
             }
             filename = message_part.get_param('name')
             if filename:
@@ -122,7 +120,7 @@ def decode_content(message):
 
 
 def parse_email(raw_email, policy=None):
-    if isinstance(raw_email, binary_type):
+    if isinstance(raw_email, bytes):
         raw_email = str_encode(raw_email, 'utf-8')
     if policy is not None:
         email_parse_kwargs = dict(policy=policy)
