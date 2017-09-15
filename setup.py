@@ -20,7 +20,6 @@ setup(
     packages=['imbox'],
     package_dir={'imbox': 'imbox'},
     zip_safe=False,
-    install_requires=['six'],
     classifiers=(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.2',

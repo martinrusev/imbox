@@ -1,10 +1,8 @@
-# Encoding: utf-8
-from __future__ import unicode_literals
 import unittest
 from imbox.parser import *
 
 import sys
-if sys.version_info.major < 3 or sys.version_info.minor < 3:
+if sys.version_info.minor < 3:
     SMTP = False
 else:
     from email.policy import SMTP
