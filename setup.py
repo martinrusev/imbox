@@ -11,7 +11,7 @@ setup(
     name='imbox',
     version=version,
     description="Python IMAP for Human beings",
-    long_description=read('README.md'),
+    long_description=read('README.rst'),
     keywords='email, IMAP, parsing emails',
     author='Martin Rusev',
     author_email='martin@amon.cx',
