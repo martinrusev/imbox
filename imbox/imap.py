@@ -6,7 +6,7 @@ import ssl as pythonssllib
 logger = logging.getLogger(__name__)
 
 
-class ImapTransport(object):
+class ImapTransport:
 
     def __init__(self, hostname, port=None, ssl=True, ssl_context=None):
         self.hostname = hostname
