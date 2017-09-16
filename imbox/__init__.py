@@ -6,7 +6,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class Imbox(object):
+class Imbox:
 
     def __init__(self, hostname, username=None, password=None, ssl=True,
                  port=None, ssl_context=None, policy=None):

@@ -12,7 +12,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class Struct(object):
+class Struct:
     def __init__(self, **entries):
         self.__dict__.update(entries)
 
