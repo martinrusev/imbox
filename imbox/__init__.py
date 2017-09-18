@@ -21,6 +21,12 @@ class Imbox:
         logger.info("Connected to IMAP Server with user {username} on {hostname}{ssl}".format(
             hostname=hostname, username=username, ssl=(" over SSL" if ssl else "")))
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.logout()
+
     def logout(self):
         self.connection.close()
         self.connection.logout()
