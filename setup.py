@@ -1,7 +1,7 @@
 from setuptools import setup
 import os
 
-version = '0.8.5'
+version = '0.9'
 
 
 def read(filename):
@@ -26,5 +26,6 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6'
     ),
 )
