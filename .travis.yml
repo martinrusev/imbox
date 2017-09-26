@@ -5,8 +5,7 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-  - "3.6-dev"
   - "3.7-dev"
 install:
   - python setup.py -q install
-script: nosetests
+script: nosetests -v

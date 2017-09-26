@@ -1,10 +1,8 @@
-# Encoding: utf-8
-from __future__ import unicode_literals
 import unittest
 from imbox.parser import *
 
 import sys
-if sys.version_info.major < 3 or sys.version_info.minor < 3:
+if sys.version_info.minor < 3:
     SMTP = False
 else:
     from email.policy import SMTP
@@ -79,6 +77,46 @@ Content-Transfer-Encoding: quoted-printable
 
 =B2=EB=DF=D8=E1=DA=D0 =DF=DE =DA=D0=E0=E2=D5 1234
 ------=_Part_1295_1644105626.1458989730614--
+"""
+
+
+raw_email_encoded_bad_multipart = b"""Delivered-To: receiver@example.com
+Return-Path: <sender@example.com>
+From: sender@example.com
+To: "Receiver" <receiver@example.com>, "Second\r\n Receiver" <recipient@example.com>
+Subject: Re: Looking to connect with you...
+Date: Thu, 20 Apr 2017 15:32:52 +0000
+Message-ID: <BN6PR16MB179579288933D60C4016D078C31B0@BN6PR16MB1795.namprd16.prod.outlook.com>
+Content-Type: multipart/related;
+	boundary="_004_BN6PR16MB179579288933D60C4016D078C31B0BN6PR16MB1795namp_";
+	type="multipart/alternative"
+MIME-Version: 1.0
+--_004_BN6PR16MB179579288933D60C4016D078C31B0BN6PR16MB1795namp_
+Content-Type: multipart/alternative;
+	boundary="_000_BN6PR16MB179579288933D60C4016D078C31B0BN6PR16MB1795namp_"
+--_000_BN6PR16MB179579288933D60C4016D078C31B0BN6PR16MB1795namp_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+SGkgRGFuaWVsbGUsDQoNCg0KSSBhY3R1YWxseSBhbSBoYXBweSBpbiBteSBjdXJyZW50IHJvbGUs
+Y3J1aXRlciB8IENoYXJsb3R0ZSwgTkMNClNlbnQgdmlhIEhhcHBpZQ0KDQoNCg==
+--_000_BN6PR16MB179579288933D60C4016D078C31B0BN6PR16MB1795namp_
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+PGh0bWw+DQo8aGVhZD4NCjxtZXRhIGh0dHAtZXF1aXY9IkNvbnRlbnQtVHlwZSIgY29udGVudD0i
+CjwvZGl2Pg0KPC9kaXY+DQo8L2JvZHk+DQo8L2h0bWw+DQo=
+--_000_BN6PR16MB179579288933D60C4016D078C31B0BN6PR16MB1795namp_--
+--_004_BN6PR16MB179579288933D60C4016D078C31B0BN6PR16MB1795namp_
+Content-Type: image/png; name="=?utf-8?B?T3V0bG9va0Vtb2ppLfCfmIoucG5n?="
+Content-Description: =?utf-8?B?T3V0bG9va0Vtb2ppLfCfmIoucG5n?=
+Content-Disposition: inline;
+	filename="=?utf-8?B?T3V0bG9va0Vtb2ppLfCfmIoucG5n?="; size=488;
+	creation-date="Thu, 20 Apr 2017 15:32:52 GMT";
+	modification-date="Thu, 20 Apr 2017 15:32:52 GMT"
+Content-ID: <254962e2-f05c-40d1-aa11-0d34671b056c>
+Content-Transfer-Encoding: base64
+iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
+cvED9AIR3TCAAAMAqh+p+YMVeBQAAAAASUVORK5CYII=
+--_004_BN6PR16MB179579288933D60C4016D078C31B0BN6PR16MB1795namp_--
 """
 
 
@@ -159,6 +197,10 @@ class TestParser(unittest.TestCase):
         self.assertEqual("Re: Reaching Out About Peoples Home Equity", parsed_email.subject)
         self.assertTrue(parsed_email.body['plain'])
         self.assertTrue(parsed_email.body['html'])
+
+    def test_parse_email_bad_multipart(self):
+        parsed_email = parse_email(raw_email_encoded_bad_multipart)
+        self.assertEqual("Re: Looking to connect with you...", parsed_email.subject)
 
     def test_parse_email_ignores_header_casing(self):
         self.assertEqual('one', parse_email('Message-ID: one').message_id)
