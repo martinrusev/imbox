@@ -123,7 +123,7 @@ def decode_content(message):
 
 def parse_email(raw_email, policy=None):
     if isinstance(raw_email, binary_type):
-        raw_email = str_encode(raw_email, 'utf-8')
+        raw_email = str_encode(raw_email, 'utf-8', errors='ignore')
     if policy is not None:
         email_parse_kwargs = dict(policy=policy)
     else:
