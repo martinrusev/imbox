@@ -6,7 +6,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class Imbox(object):
+class Imbox:
 
     def __init__(self, hostname, username=None, password=None, ssl=True,
                  port=None, ssl_context=None, policy=None):
@@ -20,6 +20,12 @@ class Imbox(object):
         self.connection = self.server.connect(username, password)
         logger.info("Connected to IMAP Server with user {username} on {hostname}{ssl}".format(
             hostname=hostname, username=username, ssl=(" over SSL" if ssl else "")))
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, value, traceback):
+        self.logout()
 
     def logout(self):
         self.connection.close()
