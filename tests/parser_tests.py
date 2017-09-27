@@ -120,6 +120,62 @@ cvED9AIR3TCAAAMAqh+p+YMVeBQAAAAASUVORK5CYII=
 """
 
 
+raw_email_encoded_another_bad_multipart = b"""Delivered-To: receiver@example.com
+Return-Path: <sender@example.com>
+Mime-Version: 1.0
+Date: Wed, 22 Mar 2017 15:21:55 -0500
+Message-ID: <58D29693.192A.0075.1@wimort.com>
+Subject: Re: Reaching Out About Peoples Home Equity
+From: sender@example.com
+To: receiver@example.com
+Content-Type: multipart/alternative; boundary="____NOIBTUQXSYRVOOAFLCHY____"
+
+
+--____NOIBTUQXSYRVOOAFLCHY____
+Content-Type: text/plain; charset=iso-8859-15
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline;
+	modification-date="Wed, 22 Mar 2017 15:21:55 -0500"
+
+Chloe,
+ 
+--____NOIBTUQXSYRVOOAFLCHY____
+Content-Type: multipart/related; boundary="____XTSWHCFJMONXSVGPVDLY____"
+
+
+--____XTSWHCFJMONXSVGPVDLY____
+Content-Type: text/html; charset=iso-8859-15
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline;
+	modification-date="Wed, 22 Mar 2017 15:21:55 -0500"
+
+<HTML xmlns=3D"http://www.w3.org/1999/xhtml">
+<BODY style=3D"COLOR: black; FONT: 10pt Segoe UI; MARGIN: 4px 4px 1px" =
+leftMargin=3D0 topMargin=3D0 offset=3D"0" marginwidth=3D"0" marginheight=3D=
+"0">
+<DIV>Chloe,</DIV>
+<IMG src=3D"cid:VFXVGHA=
+GXNMI.36b3148cbf284ba18d35bdd8386ac266" width=3D1 height=3D1> </BODY></HTML=
+>
+--____XTSWHCFJMONXSVGPVDLY____
+Content-ID: <TLUACRGXVUBY.IMAGE_3.gif>
+Content-Type: image/gif
+Content-Transfer-Encoding: base64
+
+R0lGODlhHgHCAPf/AIOPr9GvT7SFcZZjVTEuMLS1tZKUlJN0Znp4eEA7PV1aWvz8+8V6Zl1BNYxX
+HvOZ1/zmOd95agUEADs=
+--____XTSWHCFJMONXSVGPVDLY____
+Content-ID: <VFXVGHAGXNMI.36b3148cbf284ba18d35bdd8386ac266>
+Content-Type: image/xxx
+Content-Transfer-Encoding: base64
+
+R0lGODlhAQABAPAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==
+--____XTSWHCFJMONXSVGPVDLY____--
+
+--____NOIBTUQXSYRVOOAFLCHY____--
+"""
+
+
 class TestParser(unittest.TestCase):
 
     def test_parse_email(self):
@@ -135,6 +191,12 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual('Выписка по карте', parsed_email.subject)
         self.assertEqual('Выписка по карте 1234', parsed_email.body['html'][0])
+
+    def test_parse_email_inline_body(self):
+        parsed_email = parse_email(raw_email_encoded_another_bad_multipart)
+        self.assertEqual("Re: Reaching Out About Peoples Home Equity", parsed_email.subject)
+        self.assertTrue(parsed_email.body['plain'])
+        self.assertTrue(parsed_email.body['html'])
 
     def test_parse_email_bad_multipart(self):
         parsed_email = parse_email(raw_email_encoded_bad_multipart)

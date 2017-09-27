@@ -154,7 +154,7 @@ def parse_email(raw_email, policy=None):
                 content = decode_content(part)
 
             is_inline = content_disposition is None \
-                or content_disposition == "inline"
+                or content_disposition.startswith("inline")
             if content_type == "text/plain" and is_inline:
                 body['plain'].append(content)
             elif content_type == "text/html" and is_inline:
