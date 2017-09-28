@@ -1,11 +1,15 @@
 import unittest
 from imbox.parser import *
 
+import os
 import sys
 if sys.version_info.minor < 3:
     SMTP = False
 else:
     from email.policy import SMTP
+
+
+TEST_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 raw_email = """Delivered-To: johndoe@gmail.com
@@ -191,6 +195,10 @@ class TestParser(unittest.TestCase):
 
         self.assertEqual('Выписка по карте', parsed_email.subject)
         self.assertEqual('Выписка по карте 1234', parsed_email.body['html'][0])
+
+    def test_parse_email_invalid_unicode(self):
+        parsed_email = parse_email(open(os.path.join(TEST_DIR, '8422.msg'), 'rb').read())
+        self.assertEqual("Following up Re: Looking to connect, let's schedule a call!", parsed_email.subject)
 
     def test_parse_email_inline_body(self):
         parsed_email = parse_email(raw_email_encoded_another_bad_multipart)
