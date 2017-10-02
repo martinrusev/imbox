@@ -86,7 +86,7 @@ Date: Tue, 08 Aug 2017 08:15:11 -0700
 From: <kkoudelka@wallvet.com>
 To: interviews+347243@gethappie.me
 Message-Id: <20170808081511.2b876c018dd94666bcc18e28cf079afb.99766f164b.wbe@email24.godaddy.com>
-Subject: RE: Kari, are you open to =?UTF-8?Q?this=3F?=
+Subject: RE: Kari, are you open to this?
 Mime-Version: 1.0
 Content-Type: multipart/related;
 	boundary="=_7c18e0b95b772890a22ed6c0f810a434"
