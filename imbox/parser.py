@@ -97,13 +97,14 @@ def parse_attachment(message_part):
                 attachment['filename'] = filename
 
             for param in dispositions[1:]:
-                name, value = decode_param(param)
+                if param:
+                    name, value = decode_param(param)
 
-                if 'file' in name:
-                    attachment['filename'] = value
+                    if 'file' in name:
+                        attachment['filename'] = value
 
-                if 'create-date' in name:
-                    attachment['create-date'] = value
+                    if 'create-date' in name:
+                        attachment['create-date'] = value
 
             return attachment
 
