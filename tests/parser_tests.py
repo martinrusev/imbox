@@ -180,6 +180,60 @@ R0lGODlhAQABAPAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==
 """
 
 
+raw_email_with_trailing_semicolon_to_disposition_content = b"""Delivered-To: receiver@example.com
+Return-Path: <sender@example.com>
+Mime-Version: 1.0
+Date: Wed, 22 Mar 2017 15:21:55 -0500
+Message-ID: <58D29693.192A.0075.1@wimort.com>
+Subject: Re: Reaching Out About Peoples Home Equity
+From: sender@example.com
+To: receiver@example.com
+Content-Type: multipart/alternative; boundary="____NOIBTUQXSYRVOOAFLCHY____"
+
+
+--____NOIBTUQXSYRVOOAFLCHY____
+Content-Type: text/plain; charset=iso-8859-15
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline;
+	modification-date="Wed, 22 Mar 2017 15:21:55 -0500"
+
+Hello Chloe
+
+--____NOIBTUQXSYRVOOAFLCHY____
+Content-Type: multipart/related; boundary="____XTSWHCFJMONXSVGPVDLY____"
+
+
+--____XTSWHCFJMONXSVGPVDLY____
+Content-Type: text/html; charset=iso-8859-15
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline;
+	modification-date="Wed, 22 Mar 2017 15:21:55 -0500"
+
+<HTML xmlns=3D"http://www.w3.org/1999/xhtml">
+<BODY>
+<DIV>Hello Chloe</DIV>
+</BODY>
+</HTML>
+--____XTSWHCFJMONXSVGPVDLY____
+Content-Type: application/octet-stream; name="abc.xyz"
+Content-Description: abc.xyz
+Content-Disposition: attachment; filename="abc.xyz";
+Content-Transfer-Encoding: base64
+
+R0lGODlhHgHCAPf/AIOPr9GvT7SFcZZjVTEuMLS1tZKUlJN0Znp4eEA7PV1aWvz8+8V6Zl1BNYxX
+HvOZ1/zmOd95agUEADs=
+--____XTSWHCFJMONXSVGPVDLY____
+Content-ID: <VFXVGHAGXNMI.36b3148cbf284ba18d35bdd8386ac266>
+Content-Type: image/xxx
+Content-Transfer-Encoding: base64
+
+R0lGODlhAQABAPAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==
+--____XTSWHCFJMONXSVGPVDLY____--
+
+--____NOIBTUQXSYRVOOAFLCHY____--
+"""
+
+
 class TestParser(unittest.TestCase):
 
     def test_parse_email(self):
@@ -216,10 +270,16 @@ class TestParser(unittest.TestCase):
         self.assertEqual('one', parse_email('Message-id: one').message_id)
         self.assertEqual('one', parse_email('message-id: one').message_id)
 
-    # TODO - Complete the test suite
     def test_parse_attachment(self):
-        pass
+        parsed_email = parse_email(raw_email_with_trailing_semicolon_to_disposition_content)
+        self.assertEqual(1, len(parsed_email.attachments))
+        attachment = parsed_email.attachments[0]
+        self.assertEqual('application/octet-stream', attachment['content-type'])
+        self.assertEqual(71, attachment['size'])
+        self.assertEqual('"abc.xyz"', attachment['filename'])
+        self.assertTrue(attachment['content'])
 
+    # TODO - Complete the test suite
     def test_decode_mail_header(self):
         pass
 
