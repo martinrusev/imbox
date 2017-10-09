@@ -82,7 +82,11 @@ def parse_attachment(message_part):
     # Check again if this is a valid attachment
     content_disposition = message_part.get("Content-Disposition", None)
     if content_disposition is not None and not message_part.is_multipart():
-        dispositions = content_disposition.strip().split(";")
+        dispositions = [
+            disposition.strip()
+            for disposition in content_disposition.split(";")
+            if disposition.strip()
+        ]
 
         if dispositions[0].lower() in ["attachment", "inline"]:
             file_data = message_part.get_payload(decode=True)

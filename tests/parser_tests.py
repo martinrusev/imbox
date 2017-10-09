@@ -84,6 +84,47 @@ Content-Transfer-Encoding: quoted-printable
 """
 
 
+raw_email_encoded_multipart = b"""Delivered-To: receiver@example.com
+Return-Path: <kkoudelka@wallvet.com>
+Date: Tue, 08 Aug 2017 08:15:11 -0700
+From: <kkoudelka@wallvet.com>
+To: interviews+347243@gethappie.me
+Message-Id: <20170808081511.2b876c018dd94666bcc18e28cf079afb.99766f164b.wbe@email24.godaddy.com>
+Subject: RE: Kari, are you open to this?
+Mime-Version: 1.0
+Content-Type: multipart/related;
+	boundary="=_7c18e0b95b772890a22ed6c0f810a434"
+
+--=_7c18e0b95b772890a22ed6c0f810a434
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html; charset="utf-8"
+
+<html><body><span style=3D"font-family:Verdana; color:#000; font-size:10pt;=
+"><div>Hi Richie,</div></span></body></html>
+--=_7c18e0b95b772890a22ed6c0f810a434
+Content-Transfer-Encoding: base64
+Content-Type: image/jpeg; charset=binary;
+ name="sigimg0"; 
+Content-Disposition: inline;
+ filename="sigimg0"; 
+
+/9j/4AAQSkZJRgABAQAAAQABAAD//gA+Q1JFQVRPUjogZ2QtanBlZyB2MS4wICh1c2luZyBJSkcg
+jt0JaKhjm3xq23GR60UuZBZn/9k=
+--=_7c18e0b95b772890a22ed6c0f810a434
+Content-Transfer-Encoding: base64
+Content-Type: image/jpeg; charset=binary;
+ name="sigimg1"; 
+Content-Disposition: inline;
+ filename="sigimg1"; 
+
+/9j/4AAQSkZJRgABAQAAAQABAAD//gA+Q1JFQVRPUjogZ2QtanBlZyB2MS4wICh1c2luZyBJSkcg
+SlBFRyB2NjIpLCBkZWZhdWx0IHF1YWxpdHkK/9sAQwAIBgYHBgUIBwcHCQkICgwUDQwLCwwZEhMP
+ooooA//Z
+--=_7c18e0b95b772890a22ed6c0f810a434--
+
+"""
+
+
 raw_email_encoded_bad_multipart = b"""Delivered-To: receiver@example.com
 Return-Path: <sender@example.com>
 From: sender@example.com
@@ -259,6 +300,10 @@ class TestParser(unittest.TestCase):
         self.assertEqual("Re: Reaching Out About Peoples Home Equity", parsed_email.subject)
         self.assertTrue(parsed_email.body['plain'])
         self.assertTrue(parsed_email.body['html'])
+
+    def test_parse_email_multipart(self):
+        parsed_email = parse_email(raw_email_encoded_multipart)
+        self.assertEqual("RE: Kari, are you open to this?", parsed_email.subject)
 
     def test_parse_email_bad_multipart(self):
         parsed_email = parse_email(raw_email_encoded_bad_multipart)
