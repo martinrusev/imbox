@@ -12,7 +12,7 @@ Python library for reading IMAP mailboxes and converting email content to machin
 Requirements
 ------------
 
-Python (3.2, 3.3, 3.4, 3.5, 3.6)
+Python (3.3, 3.4, 3.5, 3.6)
 
 
 Installation
@@ -114,4 +114,25 @@ Usage
             }
 
 
+Changelog
+---------
+
 `Changelog <https://github.com/martinrusev/imbox/blob/master/CHANGELOG.md>`_
+
+
+Running the tests
+-----------------
+
+You can run the imbox tests with ``tox``.
+
+Requirements:
+ * the supported python versions
+ * ``tox``. Tox is packaged in Debian and derivatives distributions.
+
+On Ubuntu, you can install several python versions with:
+
+.. code:: sh
+
+    sudo add-apt-repository ppa:deadsnakes/ppa
+    sudo apt update
+    sudo apt install python3.X
