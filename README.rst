@@ -49,10 +49,10 @@ Usage
         messages_from = imbox.messages(sent_to='martin@amon.cx')
 
         # Messages received before specific date
-        messages_from = imbox.messages(date__lt='31-July-2013')
+        messages_from = imbox.messages(date__lt=datetime.date(2013, 7, 31))
 
         # Messages received after specific date
-        messages_from = imbox.messages(date__gt='30-July-2013')
+        messages_from = imbox.messages(date__gt=datetime.date(2013, 7, 30))
 
         # Messages from a specific folder
         messages_folder = imbox.messages(folder='Social')
