@@ -321,7 +321,7 @@ class TestParser(unittest.TestCase):
         attachment = parsed_email.attachments[0]
         self.assertEqual('application/octet-stream', attachment['content-type'])
         self.assertEqual(71, attachment['size'])
-        self.assertEqual('"abc.xyz"', attachment['filename'])
+        self.assertEqual('abc.xyz', attachment['filename'])
         self.assertTrue(attachment['content'])
 
     # TODO - Complete the test suite
