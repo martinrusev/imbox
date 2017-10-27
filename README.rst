@@ -35,6 +35,8 @@ Usage
             password='password',
             ssl=True,
             ssl_context=None) as imbox:
+        # Get all folders
+        status, folders_with_additional_info = imbox.folders()
 
         # Gets all messages
         all_messages = imbox.messages()
@@ -112,6 +114,13 @@ Usage
             }],
             'subject': u 'Hello John, How are you today'
             }
+
+        # With the message id, several actions on the message are available:
+        # delete the message
+        mbox.delete(uid)
+
+        # mark the message as read
+        mbox.mark_seen(uid)
 
 
 Changelog
