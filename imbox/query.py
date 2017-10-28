@@ -17,6 +17,8 @@ def build_search_query(**kwargs):
 
     # Parse keyword arguments
     unread = kwargs.get('unread', False)
+    unflagged = kwargs.get('unflagged', False)
+    flagged = kwargs.get('flagged', False)
     sent_from = kwargs.get('sent_from', False)
     sent_to = kwargs.get('sent_to', False)
     date__gt = kwargs.get('date__gt', False)
@@ -31,6 +33,12 @@ def build_search_query(**kwargs):
 
     if unread:
         query.append("(UNSEEN)")
+
+    if unflagged:
+        query.append("(UNFLAGGED)")
+
+    if flagged:
+        query.append("(FLAGGED)")
 
     if sent_from:
         query.append('(FROM "%s")' % sent_from)
