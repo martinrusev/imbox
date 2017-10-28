@@ -18,7 +18,7 @@ class TestQuery(unittest.TestCase):
     def test_unflagged(self):
 
         res = build_search_query(unflagged=True)
-        self.assertEqual(res, "(UNFFLAGGED)")
+        self.assertEqual(res, "(UNFLAGGED)")
 
     def test_flagged(self):
 
