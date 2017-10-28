@@ -117,10 +117,10 @@ Usage
 
         # With the message id, several actions on the message are available:
         # delete the message
-        mbox.delete(uid)
+        imbox.delete(uid)
 
         # mark the message as read
-        mbox.mark_seen(uid)
+        imbox.mark_seen(uid)
 
 
 Changelog
