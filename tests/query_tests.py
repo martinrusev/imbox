@@ -15,6 +15,16 @@ class TestQuery(unittest.TestCase):
         res = build_search_query(unread=True)
         self.assertEqual(res, "(UNSEEN)")
 
+    def test_unflagged(self):
+
+        res = build_search_query(unflagged=True)
+        self.assertEqual(res, "(UNFLAGGED)")
+
+    def test_flagged(self):
+
+        res = build_search_query(flagged=True)
+        self.assertEqual(res, "(FLAGGED)")
+
     def test_sent_from(self):
 
         res = build_search_query(sent_from='test@example.com')

@@ -60,6 +60,10 @@ class Imbox:
         logger.info("Mark UID {} with \\Seen FLAG".format(int(uid)))
         self.connection.uid('STORE', uid, '+FLAGS', '(\\Seen)')
 
+    def mark_flag(self, uid):
+        logger.info("Mark UID {} with \\Flagged FLAG".format(int(uid)))
+        self.connection.uid('STORE', uid, '+FLAGS', '(\\Flagged)')
+
     def delete(self, uid):
         logger.info("Mark UID {} with \\Deleted FLAG and expunge.".format(int(uid)))
         mov, data = self.connection.uid('STORE', uid, '+FLAGS', '(\\Deleted)')
