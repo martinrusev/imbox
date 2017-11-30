@@ -9,17 +9,17 @@ logger = logging.getLogger(__name__)
 class Imbox:
 
     def __init__(self, hostname, username=None, password=None, ssl=True,
-                 port=None, ssl_context=None, policy=None):
+                 port=None, ssl_context=None, policy=None, starttls=False):
 
         self.server = ImapTransport(hostname, ssl=ssl, port=port,
-                                    ssl_context=ssl_context)
+                                    ssl_context=ssl_context, starttls=starttls)
         self.hostname = hostname
         self.username = username
         self.password = password
         self.parser_policy = policy
         self.connection = self.server.connect(username, password)
         logger.info("Connected to IMAP Server with user {username} on {hostname}{ssl}".format(
-            hostname=hostname, username=username, ssl=(" over SSL" if ssl else "")))
+            hostname=hostname, username=username, ssl=(" over SSL" if ssl or starttls else "")))
 
     def __enter__(self):
         return self

@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 class ImapTransport:
 
-    def __init__(self, hostname, port=None, ssl=True, ssl_context=None):
+    def __init__(self, hostname, port=None, ssl=True, ssl_context=None, starttls=False):
         self.hostname = hostname
         self.port = port
         kwargs = {}
@@ -26,6 +26,8 @@ class ImapTransport:
                 self.port = 143
 
         self.server = self.transport(self.hostname, self.port, **kwargs)
+        if starttls:
+            self.server.starttls()
         logger.debug("Created IMAP4 transport for {host}:{port}"
                      .format(host=self.hostname, port=self.port))
 
