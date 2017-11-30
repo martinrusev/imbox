@@ -125,14 +125,6 @@ Usage
 
         # mark the message as read
         imbox.mark_seen(uid)
-
-    # To use with starttls
-    with Imbox('server.com',
-        username='username',
-        password='password',
-        ssl=False,
-        ssl_context=None,
-        starttls=True) as imbox:
         
 
 
