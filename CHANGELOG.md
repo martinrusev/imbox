@@ -1,3 +1,16 @@
+## 0.9.5 (5 December 2017)
+
+IMPROVEMENTS:
+
+ * `date__on` support: ([#109](https://github.com/martinrusev/imbox/pull/109))
+ * Starttls support: ([#108](https://github.com/martinrusev/imbox/pull/108))
+ * Mark emails as flagged/starred: ([#107](https://github.com/martinrusev/imbox/pull/107))
+ * Messages filter can use date objects instead of stringified dates: ([#104](https://github.com/martinrusev/imbox/pull/104))
+ * Fix attachment parsing when a semicolon character ends the Content-Disposition line: ([#100](https://github.com/martinrusev/imbox/pull/100))
+ * Parsing - UnicecodeDecodeError() fixes: ([#96](https://github.com/martinrusev/imbox/pull/96))
+ * Imbox() `with` support: ([#92](https://github.com/martinrusev/imbox/pull/92))
+
+
 ## 0.9 (18 September 2017)
 
 IMPROVEMENTS:
