@@ -5,6 +5,9 @@ from imbox.query import build_search_query
 import logging
 logger = logging.getLogger(__name__)
 
+__version_info__ = (0, 9, 5)
+__version__ = '.'.join([str(x) for x in __version_info__])
+
 
 class Imbox:
 
