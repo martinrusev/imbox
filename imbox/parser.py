@@ -54,7 +54,7 @@ def get_mail_addresses(message, header_name):
     for index, (address_name, address_email) in enumerate(addresses):
         addresses[index] = {'name': decode_mail_header(address_name),
                             'email': address_email}
-        logger.debug("{} Mail addressees in message: <{}> {}".format(header_name.upper(), address_name, address_email))
+        logger.debug("{} Mail address in message: <{}> {}".format(header_name.upper(), address_name, address_email))
     return addresses
 
 
