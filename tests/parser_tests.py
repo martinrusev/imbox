@@ -336,6 +336,9 @@ class TestParser(unittest.TestCase):
         from_message_object = email.message_from_string("From: John Smith <johnsmith@gmail.com>")
         self.assertEqual([{'email': 'johnsmith@gmail.com', 'name': 'John Smith'}], get_mail_addresses(from_message_object, 'from'))
 
+        invalid_encoding_in_from_message_object = email.message_from_string("From: =?UTF-8?Q?C=E4cilia?= <caciliahxg827m@example.org>")
+        self.assertEqual([{'email': 'caciliahxg827m@example.org', 'name': 'C�cilia'}], get_mail_addresses(invalid_encoding_in_from_message_object, 'from'))
+
     def test_parse_email_with_policy(self):
         if not SMTP:
             return
