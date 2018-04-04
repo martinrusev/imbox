@@ -1,7 +1,9 @@
 from setuptools import setup
 import os
 
-version = '0.9.5'
+import imbox
+
+version = imbox.__version__
 
 
 def read(filename):
