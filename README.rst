@@ -46,31 +46,31 @@ Usage
         unread_messages = imbox.messages(unread=True)
 
         # Flagged messages
-        unread_messages = imbox.messages(flagged=True)
+        flagged_messages = imbox.messages(flagged=True)
 
         # Un-flagged messages
-        unread_messages = imbox.messages(unflagged=True)
+        unflagged_messages = imbox.messages(unflagged=True)
 
         # Messages sent FROM
-        messages_from = imbox.messages(sent_from='martin@amon.cx')
+        messages_from_martin = imbox.messages(sent_from='martin@amon.cx')
 
         # Messages sent TO
-        messages_from = imbox.messages(sent_to='martin@amon.cx')
+        messages_to_martin = imbox.messages(sent_to='martin@amon.cx')
 
         # Messages received before specific date
-        messages_from = imbox.messages(date__lt=datetime.date(2013, 7, 31))
+        messages_received_before_20130731 = imbox.messages(date__lt=datetime.date(2013, 7, 31))
 
         # Messages received after specific date
-        messages_from = imbox.messages(date__gt=datetime.date(2013, 7, 30))
+        messages_received_after_20130730 = imbox.messages(date__gt=datetime.date(2013, 7, 30))
 
         # Messages received on a specific date
-        messages_from = imbox.messages(date__on=datetime.date(2013, 7, 30))
+        messages_received_20130730 = imbox.messages(date__on=datetime.date(2013, 7, 30))
 
         # Messages whose subjects contain a string
-        messages_from = imbox.messages(subject='Christmas')
+        messages_subject_christmas = imbox.messages(subject='Christmas')
 
         # Messages from a specific folder
-        messages_folder = imbox.messages(folder='Social')
+        messages_in_folder_social = imbox.messages(folder='Social')
 
         for uid, message in all_messages:
         # Every message is an object with the following keys
