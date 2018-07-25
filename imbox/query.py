@@ -8,8 +8,7 @@ logger = logging.getLogger(__name__)
 def format_date(date):
     if isinstance(date, datetime.date):
         return date.strftime('%d-%b-%Y')
-    else:
-        return date
+    return date
 
 
 def build_search_query(**kwargs):
