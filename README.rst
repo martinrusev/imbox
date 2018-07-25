@@ -45,6 +45,12 @@ Usage
         # Unread messages
         unread_messages = imbox.messages(unread=True)
 
+        # Flagged messages
+        unread_messages = imbox.messages(flagged=True)
+
+        # Un-flagged messages
+        unread_messages = imbox.messages(unflagged=True)
+
         # Messages sent FROM
         messages_from = imbox.messages(sent_from='martin@amon.cx')
 
@@ -60,10 +66,11 @@ Usage
         # Messages received on a specific date
         messages_from = imbox.messages(date__on=datetime.date(2013, 7, 30))
 
+        # Messages whose subjects contain a string
+        messages_from = imbox.messages(subject='Christmas')
+
         # Messages from a specific folder
         messages_folder = imbox.messages(folder='Social')
-
-
 
         for uid, message in all_messages:
         # Every message is an object with the following keys
