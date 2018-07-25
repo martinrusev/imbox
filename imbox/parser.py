@@ -66,7 +66,7 @@ def decode_param(param):
     values = v.split('\n')
     value_results = []
     for value in values:
-        match = re.search(r'=\?((?:\w|-)+)\?(Q|B)\?(.+)\?=', value)
+        match = re.search(r'=\?((?:\w|-)+)\?([QB])\?(.+)\?=', value)
         if match:
             encoding, type_, code = match.groups()
             if type_ == 'Q':
@@ -140,9 +140,7 @@ def parse_email(raw_email, policy=None):
     except UnicodeEncodeError:
         email_message = email.message_from_string(raw_email.encode('utf-8'), **email_parse_kwargs)
     maintype = email_message.get_content_maintype()
-    parsed_email = {}
-
-    parsed_email['raw_email'] = raw_email
+    parsed_email = {'raw_email': raw_email}
 
     body = {
         "plain": [],
