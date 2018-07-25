@@ -85,25 +85,25 @@ class Messages:
         self.connection = connection
         self.parser_policy = parser_policy
         self.kwargs = kwargs
-        self.uid_list = self.query_uids(**kwargs)
+        self._uid_list = self._query_uids(**kwargs)
 
-        logger.debug("Fetch all messages for UID in {}".format(self.uid_list))
+        logger.debug("Fetch all messages for UID in {}".format(self._uid_list))
 
-    def fetch_email(self, uid):
+    def _fetch_email(self, uid):
         return fetch_email_by_uid(uid=uid,
                                   connection=self.connection,
                                   parser_policy=self.parser_policy)
 
-    def query_uids(self, **kwargs):
+    def _query_uids(self, **kwargs):
         query_ = build_search_query(**kwargs)
         message, data = self.connection.uid('search', None, query_)
         if data[0] is None:
             return []
         return data[0].split()
 
-    def fetch_email_list(self):
-        for uid in self.uid_list:
-            yield uid, self.fetch_email(uid)
+    def _fetch_email_list(self):
+        for uid in self._uid_list:
+            yield uid, self._fetch_email(uid)
 
     def __repr__(self):
         if len(self.kwargs) > 0:
@@ -112,20 +112,20 @@ class Messages:
         return 'Messages(ALL)'
 
     def __iter__(self):
-        return self.fetch_email_list()
+        return self._fetch_email_list()
 
     def __next__(self):
         return self
 
     def __len__(self):
-        return len(self.uid_list)
+        return len(self._uid_list)
 
     def __getitem__(self, index):
-        uids = self.uid_list[index]
+        uids = self._uid_list[index]
 
         if not isinstance(uids, list):
             uid = uids
-            return uid, self.fetch_email(uid)
+            return uid, self._fetch_email(uid)
 
-        return [(uid, self.fetch_email(uid))
+        return [(uid, self._fetch_email(uid))
                 for uid in uids]
