@@ -9,6 +9,7 @@ from email.header import decode_header
 from imbox.utils import str_encode, str_decode
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -66,7 +67,7 @@ def decode_param(param):
     values = v.split('\n')
     value_results = []
     for value in values:
-        match = re.search(r'=\?((?:\w|-)+)\?(Q|B)\?(.+)\?=', value)
+        match = re.search(r'=\?((?:\w|-)+)\?([QB])\?(.+)\?=', value)
         if match:
             encoding, type_, code = match.groups()
             if type_ == 'Q':
@@ -127,6 +128,16 @@ def decode_content(message):
         return content
 
 
+def fetch_email_by_uid(uid, connection, parser_policy):
+    message, data = connection.uid('fetch', uid, '(BODY.PEEK[])')
+    logger.debug("Fetched message for UID {}".format(int(uid)))
+    raw_email = data[0][1]
+
+    email_object = parse_email(raw_email, policy=parser_policy)
+
+    return email_object
+
+
 def parse_email(raw_email, policy=None):
     if isinstance(raw_email, bytes):
         raw_email = str_encode(raw_email, 'utf-8', errors='ignore')
@@ -140,9 +151,7 @@ def parse_email(raw_email, policy=None):
     except UnicodeEncodeError:
         email_message = email.message_from_string(raw_email.encode('utf-8'), **email_parse_kwargs)
     maintype = email_message.get_content_maintype()
-    parsed_email = {}
-
-    parsed_email['raw_email'] = raw_email
+    parsed_email = {'raw_email': raw_email}
 
     body = {
         "plain": [],
@@ -162,7 +171,7 @@ def parse_email(raw_email, policy=None):
                 content = decode_content(part)
 
             is_inline = content_disposition is None \
-                or content_disposition.startswith("inline")
+                        or content_disposition.startswith("inline")
             if content_type == "text/plain" and is_inline:
                 body['plain'].append(content)
             elif content_type == "text/html" and is_inline:
