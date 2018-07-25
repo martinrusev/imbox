@@ -37,8 +37,8 @@ class Imbox:
             hostname=self.hostname, username=self.username))
 
     def query_uids(self, **kwargs):
-        query = build_search_query(**kwargs)
-        message, data = self.connection.uid('search', None, query)
+        query_ = build_search_query(**kwargs)
+        message, data = self.connection.uid('search', None, query_)
         if data[0] is None:
             return []
         return data[0].split()
@@ -69,7 +69,6 @@ class Imbox:
 
     def delete(self, uid):
         logger.info("Mark UID {} with \\Deleted FLAG and expunge.".format(int(uid)))
-        mov, data = self.connection.uid('STORE', uid, '+FLAGS', '(\\Deleted)')
         self.connection.expunge()
 
     def copy(self, uid, destination_folder):
@@ -81,7 +80,7 @@ class Imbox:
         if self.copy(uid, destination_folder):
             self.delete(uid)
 
-    def messages(self, *args, **kwargs):
+    def messages(self, **kwargs):
         folder = kwargs.get('folder', False)
         msg = ""
 
