@@ -1,6 +1,6 @@
 import datetime
 import logging
--# TODO - Validate query arguments
+# TODO - Validate query arguments
 
 logger = logging.getLogger(__name__)
 
