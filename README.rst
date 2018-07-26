@@ -68,7 +68,6 @@ Usage
         messages_subject_christmas = imbox.messages(subject='Christmas')
 
 
-
         for uid, message in all_messages:
         # Every message is an object with the following keys
 
