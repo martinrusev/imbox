@@ -64,9 +64,8 @@ Usage
         # Messages from a specific folder
         messages_from_folder = imbox.messages(folder='Social')
 
-         # Messages whose subjects contain a string
+        # Messages whose subjects contain a string
         messages_subject_christmas = imbox.messages(subject='Christmas')
-
 
         for uid, message in all_messages:
         # Every message is an object with the following keys
