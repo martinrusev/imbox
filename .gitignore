@@ -31,3 +31,6 @@ nosetests.xml
 
 example.*
 example.py
+
+# PyCharm
+.idea/

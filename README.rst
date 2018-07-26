@@ -3,11 +3,11 @@ Imbox - Python IMAP for Humans
 
 
 .. image:: https://travis-ci.org/martinrusev/imbox.svg?branch=master
-   :target: https://travis-ci.org/martinrusev/imbox
+    :target: https://travis-ci.org/martinrusev/imbox
    :alt: Build Status
 
 
-   Python library for reading IMAP mailboxes and converting email content to machine readable data
+    Python library for reading IMAP mailboxes and converting email content to machine readable data
 
 Requirements
 ------------
@@ -64,8 +64,10 @@ Usage
         # Messages from a specific folder
         messages_from_folder = imbox.messages(folder='Social')
 
-        # Messages whose subjects contain a string
+         # Messages whose subjects contain a string
         messages_subject_christmas = imbox.messages(subject='Christmas')
+
+
 
         for uid, message in all_messages:
         # Every message is an object with the following keys
@@ -152,4 +154,3 @@ On Ubuntu, you can install several python versions with:
     sudo add-apt-repository ppa:deadsnakes/ppa
     sudo apt update
     sudo apt install python3.X
-
