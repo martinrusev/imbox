@@ -36,14 +36,21 @@ Usage
             ssl=True,
             ssl_context=None,
             starttls=False) as imbox:
+
         # Get all folders
         status, folders_with_additional_info = imbox.folders()
 
-        # Gets all messages
-        all_messages = imbox.messages()
+        # Gets all messages from the inbox
+        all_inbox_messages = imbox.messages()
 
         # Unread messages
-        unread_messages = imbox.messages(unread=True)
+        unread_inbox_messages = imbox.messages(unread=True)
+
+        # Flagged messages
+        inbox_flagged_messages = imbox.messages(flagged=True)
+
+        # Un-flagged messages
+        inbox_unflagged_messages = imbox.messages(unflagged=True)
 
         # Flagged messages
         flagged_messages = imbox.messages(flagged=True)
@@ -52,27 +59,30 @@ Usage
         unflagged_messages = imbox.messages(unflagged=True)
 
         # Messages sent FROM
-        messages_from_martin = imbox.messages(sent_from='martin@amon.cx')
+        inbox_messages_from = imbox.messages(sent_from='sender@example.org')
 
         # Messages sent TO
-        messages_to_martin = imbox.messages(sent_to='martin@amon.cx')
+        inbox_messages_to = imbox.messages(sent_to='receiver@example.org')
 
         # Messages received before specific date
-        messages_received_before_20130731 = imbox.messages(date__lt=datetime.date(2013, 7, 31))
+        inbox_messages_received_before = imbox.messages(date__lt=datetime.date(2018, 7, 31))
 
         # Messages received after specific date
-        messages_received_after_20130730 = imbox.messages(date__gt=datetime.date(2013, 7, 30))
+        inbox_messages_received_after = imbox.messages(date__gt=datetime.date(2018, 7, 30))
 
         # Messages received on a specific date
-        messages_received_20130730 = imbox.messages(date__on=datetime.date(2013, 7, 30))
+        inbox_messages_received_on_date = imbox.messages(date__on=datetime.date(2018, 7, 30))
+
+        # Messages from a specific folder
+        messages_from_folder = imbox.messages(folder='Social')
 
         # Messages whose subjects contain a string
-        messages_subject_christmas = imbox.messages(subject='Christmas')
+        inbox_messages_subject_christmas = imbox.messages(subject='Christmas')
 
         # Messages from a specific folder
         messages_in_folder_social = imbox.messages(folder='Social')
 
-        for uid, message in all_messages:
+        for uid, message in all_inbox_messages:
         # Every message is an object with the following keys
 
             message.sent_from
@@ -132,7 +142,7 @@ Usage
 
         # mark the message as read
         imbox.mark_seen(uid)
-        
+
 
 
 Changelog
