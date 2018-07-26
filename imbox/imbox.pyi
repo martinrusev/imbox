@@ -1,11 +1,8 @@
 import datetime
 from email._policybase import Policy
-from imaplib import IMAP4, IMAP4_SSL
 from inspect import Traceback
 from ssl import SSLContext
-from typing import Optional, Union, List, Tuple, Generator
-
-from imbox.parser import Struct
+from typing import Optional, Union, Tuple, List
 
 
 class Imbox:
@@ -32,27 +29,3 @@ class Imbox:
     def messages(self, **kwargs: Union[bool, str, datetime.date]) -> 'Messages': ...
 
     def folders(self) -> Tuple[str, List[bytes]]: ...
-
-
-class Messages:
-
-    def __init__(self,
-                 connection: Union[IMAP4, IMAP4_SSL],
-                 parser_policy: Policy,
-                 **kwargs: Union[bool, str, datetime.date]) -> None: ...
-
-    def _fetch_email(self, uid: bytes) -> 'Struct': ...
-
-    def _query_uids(self, **kwargs: Union[bool, str, datetime.date]) -> List[bytes]: ...
-
-    def _fetch_email_list(self) -> Generator[Tuple[bytes, 'Struct']]: ...
-
-    def __repr__(self) -> str: ...
-
-    def __iter__(self) -> Generator[Tuple[bytes, 'Struct']]: ...
-
-    def __next__(self) -> 'Messages': ...
-
-    def __len__(self) -> int: ...
-
-    def __getitem__(self, index) -> Union['Struct', List['Struct']]: ...
