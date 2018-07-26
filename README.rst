@@ -63,6 +63,9 @@ Usage
 
         # Messages from a specific folder
         messages_from_folder = imbox.messages(folder='Social')
+        
+         # Messages whose subjects contain a string
+        messages_subject_christmas = imbox.messages(subject='Christmas')
 
 
 
