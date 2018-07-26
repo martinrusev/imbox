@@ -8,6 +8,8 @@ logger = logging.getLogger(__name__)
 
 class Messages:
 
+    folder_lookup = {}
+
     def __init__(self,
                  connection,
                  parser_policy,
