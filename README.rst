@@ -7,7 +7,7 @@ Imbox - Python IMAP for Humans
    :alt: Build Status
 
 
-Python library for reading IMAP mailboxes and converting email content to machine readable data
+   Python library for reading IMAP mailboxes and converting email content to machine readable data
 
 Requirements
 ------------
@@ -21,7 +21,7 @@ Installation
 ``pip install imbox``
 
 
-Usage 
+Usage
 -----
 
 .. code:: python
@@ -36,41 +36,38 @@ Usage
             ssl=True,
             ssl_context=None,
             starttls=False) as imbox:
+
         # Get all folders
         status, folders_with_additional_info = imbox.folders()
 
-        # Gets all messages
+        # Gets all messages from the inbox
         all_messages = imbox.messages()
 
         # Unread messages
         unread_messages = imbox.messages(unread=True)
 
-        # Flagged messages
-        flagged_messages = imbox.messages(flagged=True)
-
-        # Un-flagged messages
-        unflagged_messages = imbox.messages(unflagged=True)
-
         # Messages sent FROM
-        messages_from_martin = imbox.messages(sent_from='martin@amon.cx')
+        messages_from = imbox.messages(sent_from='sender@example.org')
 
         # Messages sent TO
-        messages_to_martin = imbox.messages(sent_to='martin@amon.cx')
+        messages_to = imbox.messages(sent_to='receiver@example.org')
 
         # Messages received before specific date
-        messages_received_before_20130731 = imbox.messages(date__lt=datetime.date(2013, 7, 31))
+        messages_received_before = imbox.messages(date__lt=datetime.date(2018, 7, 31))
 
         # Messages received after specific date
-        messages_received_after_20130730 = imbox.messages(date__gt=datetime.date(2013, 7, 30))
+        messages_received_after = imbox.messages(date__gt=datetime.date(2018, 7, 30))
 
         # Messages received on a specific date
-        messages_received_20130730 = imbox.messages(date__on=datetime.date(2013, 7, 30))
-
-        # Messages whose subjects contain a string
-        messages_subject_christmas = imbox.messages(subject='Christmas')
+        messages_received_on_date = imbox.messages(date__on=datetime.date(2018, 7, 30))
 
         # Messages from a specific folder
-        messages_in_folder_social = imbox.messages(folder='Social')
+        messages_from_folder = imbox.messages(folder='Social')
+
+         # Messages whose subjects contain a string
+        messages_subject_christmas = imbox.messages(subject='Christmas')
+
+
 
         for uid, message in all_messages:
         # Every message is an object with the following keys
@@ -132,7 +129,7 @@ Usage
 
         # mark the message as read
         imbox.mark_seen(uid)
-        
+
 
 
 Changelog
@@ -157,3 +154,4 @@ On Ubuntu, you can install several python versions with:
     sudo add-apt-repository ppa:deadsnakes/ppa
     sudo apt update
     sudo apt install python3.X
+
