@@ -3,11 +3,11 @@ Imbox - Python IMAP for Humans
 
 
 .. image:: https://travis-ci.org/martinrusev/imbox.svg?branch=master
-   :target: https://travis-ci.org/martinrusev/imbox
+    :target: https://travis-ci.org/martinrusev/imbox
    :alt: Build Status
 
 
-Python library for reading IMAP mailboxes and converting email content to machine readable data
+    Python library for reading IMAP mailboxes and converting email content to machine readable data
 
 Requirements
 ------------
@@ -21,7 +21,7 @@ Installation
 ``pip install imbox``
 
 
-Usage 
+Usage
 -----
 
 .. code:: python
@@ -36,7 +36,7 @@ Usage
             ssl=True,
             ssl_context=None,
             starttls=False) as imbox:
-        
+
         # Get all folders
         status, folders_with_additional_info = imbox.folders()
 
@@ -63,10 +63,9 @@ Usage
 
         # Messages from a specific folder
         messages_from_folder = imbox.messages(folder='Social')
-        
+
          # Messages whose subjects contain a string
         messages_subject_christmas = imbox.messages(subject='Christmas')
-
 
 
         for uid, message in all_messages:
@@ -129,7 +128,7 @@ Usage
 
         # mark the message as read
         imbox.mark_seen(uid)
-        
+
 
 
 Changelog
