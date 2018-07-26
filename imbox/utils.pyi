@@ -1,0 +1,6 @@
+from typing import Optional, Union
+
+
+def str_encode(value: Union[str, bytes], encoding: Optional[str], errors: str) -> str: ...
+
+def str_decode(value: Union[str, bytes], encoding: Optional[str], errors: str) -> Union[str, bytes]: ...
