@@ -73,9 +73,6 @@ Usage
         # Messages received on a specific date
         inbox_messages_received_on_date = imbox.messages(date__on=datetime.date(2018, 7, 30))
 
-        # Messages from a specific folder
-        messages_from_folder = imbox.messages(folder='Social')
-
         # Messages whose subjects contain a string
         inbox_messages_subject_christmas = imbox.messages(subject='Christmas')
 
