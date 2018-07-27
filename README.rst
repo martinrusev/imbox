@@ -52,6 +52,12 @@ Usage
         # Un-flagged messages
         inbox_unflagged_messages = imbox.messages(unflagged=True)
 
+        # Flagged messages
+        flagged_messages = imbox.messages(flagged=True)
+
+        # Un-flagged messages
+        unflagged_messages = imbox.messages(unflagged=True)
+
         # Messages sent FROM
         inbox_messages_from = imbox.messages(sent_from='sender@example.org')
 
@@ -73,6 +79,8 @@ Usage
         # Messages whose subjects contain a string
         inbox_messages_subject_christmas = imbox.messages(subject='Christmas')
 
+        # Messages from a specific folder
+        messages_in_folder_social = imbox.messages(folder='Social')
 
         for uid, message in all_inbox_messages:
         # Every message is an object with the following keys
