@@ -1,14 +1,18 @@
+import imaplib
+
 from imbox.imap import ImapTransport
 from imbox.messages import Messages
 
 import logging
 
-from imbox.vendors import GmailMessages, hostname_vendorname_dict
+from imbox.vendors import GmailMessages, hostname_vendorname_dict, name_authentication_string_dict
 
 logger = logging.getLogger(__name__)
 
 
 class Imbox:
+
+    authentication_error_message = None
 
     def __init__(self, hostname, username=None, password=None, ssl=True,
                  port=None, ssl_context=None, policy=None, starttls=False,
@@ -21,10 +25,20 @@ class Imbox:
         self.username = username
         self.password = password
         self.parser_policy = policy
-        self.connection = self.server.connect(username, password)
+        self.vendor = vendor or hostname_vendorname_dict.get(self.hostname)
+
+        if self.vendor is not None:
+            self.authentication_error_message = name_authentication_string_dict.get(self.vendor)
+
+        try:
+            self.connection = self.server.connect(username, password)
+        except imaplib.IMAP4.error as e:
+            if self.authentication_error_message is None:
+                raise
+            raise imaplib.IMAP4.error(self.authentication_error_message + '\n' + str(e))
+
         logger.info("Connected to IMAP Server with user {username} on {hostname}{ssl}".format(
             hostname=hostname, username=username, ssl=(" over SSL" if ssl or starttls else "")))
-        self.vendor = vendor or hostname_vendorname_dict.get(self.hostname)
 
     def __enter__(self):
         return self
@@ -62,18 +76,18 @@ class Imbox:
     def messages(self, **kwargs):
         folder = kwargs.get('folder', False)
 
+        messages_class = Messages
+
+        if self.vendor == 'gmail':
+            messages_class = GmailMessages
+
         if folder:
-            self.connection.select(folder)
+            self.connection.select(messages_class.folder_lookup.get((folder.lower())) or folder)
             msg = " from folder '{}'".format(folder)
         else:
             msg = " from inbox"
 
         logger.info("Fetch list of messages{}".format(msg))
-
-        messages_class = Messages
-
-        if self.vendor == 'gmail':
-            messages_class = GmailMessages
 
         return messages_class(connection=self.connection,
                               parser_policy=self.parser_policy,
