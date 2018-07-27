@@ -1,22 +1,31 @@
+## 0.9.6 [unreleased]
+
+IMPROVEMENTS:
+
+ * Type hints for every method and function ([#136](https://github.com/martinrusev/imbox/pull/136)) Contributed by @zevaverbach
+ * Move all code out of __init__.py and into a separate module ([#130](https://github.com/martinrusev/imbox/pull/130)) Contributed by @zevaverbach
+ * Enchance `messages' generator: ([#129](https://github.com/martinrusev/imbox/pull/129)) Contributed by @zevaverbach
+
+
 ## 0.9.5 (5 December 2017)
 
 IMPROVEMENTS:
 
- * `date__on` support: ([#109](https://github.com/martinrusev/imbox/pull/109))
- * Starttls support: ([#108](https://github.com/martinrusev/imbox/pull/108))
- * Mark emails as flagged/starred: ([#107](https://github.com/martinrusev/imbox/pull/107))
- * Messages filter can use date objects instead of stringified dates: ([#104](https://github.com/martinrusev/imbox/pull/104))
- * Fix attachment parsing when a semicolon character ends the Content-Disposition line: ([#100](https://github.com/martinrusev/imbox/pull/100))
- * Parsing - UnicecodeDecodeError() fixes: ([#96](https://github.com/martinrusev/imbox/pull/96))
- * Imbox() `with` support: ([#92](https://github.com/martinrusev/imbox/pull/92))
+ * `date__on` support: ([#109](https://github.com/martinrusev/imbox/pull/109)) Contributed by @balsagoth
+ * Starttls support: ([#108](https://github.com/martinrusev/imbox/pull/108)) Contributed by @balsagoth
+ * Mark emails as flagged/starred: ([#107](https://github.com/martinrusev/imbox/pull/107)) Contributed by @memanikantan
+ * Messages filter can use date objects instead of stringified dates: ([#104](https://github.com/martinrusev/imbox/pull/104)) Contributed by @sblondon
+ * Fix attachment parsing when a semicolon character ends the Content-Disposition line: ([#100](https://github.com/martinrusev/imbox/pull/100)) Contributed by @sblondon
+ * Parsing - UnicecodeDecodeError() fixes: ([#96](https://github.com/martinrusev/imbox/pull/96)) Contributed by @am0z
+ * Imbox() `with` support: ([#92](https://github.com/martinrusev/imbox/pull/92)) Contributed by @sblondon
 
 
 ## 0.9 (18 September 2017)
 
 IMPROVEMENTS:
 
- * Permissively Decode Emails: ([#78](https://github.com/martinrusev/imbox/pull/78))
- * "With" statement for automatic cleanup/logout ([#92](https://github.com/martinrusev/imbox/pull/92))
+ * Permissively Decode Emails: ([#78](https://github.com/martinrusev/imbox/pull/78)) Contributed by @AdamNiederer
+ * "With" statement for automatic cleanup/logout ([#92](https://github.com/martinrusev/imbox/pull/92)) Contributed by @sblondon
  
 
 
@@ -24,7 +33,7 @@ IMPROVEMENTS:
 
 IMPROVEMENTS:
 
- * Add support for Python 3.3+  Parsing policies: ([#75](https://github.com/martinrusev/imbox/pull/75))
+ * Add support for Python 3.3+  Parsing policies: ([#75](https://github.com/martinrusev/imbox/pull/75)) Contributed by @bhtucker
  
 BACKWARDS INCOMPATIBILITIES / NOTES:
 
@@ -35,4 +44,4 @@ BACKWARDS INCOMPATIBILITIES / NOTES:
 
 IMPROVEMENTS:
 
- * ssl_context: Check SSLContext for IMAP4_SSL connections  ([#69](https://github.com/martinrusev/imbox/pull/69))
+ * ssl_context: Check SSLContext for IMAP4_SSL connections  ([#69](https://github.com/martinrusev/imbox/pull/69)) Contributed by @dmth
