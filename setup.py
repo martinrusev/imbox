@@ -19,7 +19,7 @@ setup(
     author_email='martin@amon.cx',
     url='https://github.com/martinrusev/imbox',
     license='MIT',
-    packages=['imbox'],
+    packages=['imbox', 'imbox.vendors'],
     package_dir={'imbox': 'imbox'},
     zip_safe=False,
     classifiers=(
