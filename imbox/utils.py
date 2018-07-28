@@ -3,7 +3,10 @@ logger = logging.getLogger(__name__)
 
 
 def str_encode(value='', encoding=None, errors='strict'):
-    logger.debug("Encode str {} with and errors {}".format(value, encoding, errors))
+    logger.debug("Encode str {value} with encoding {encoding} and errors {errors}".format(
+        value=value,
+        encoding=encoding,
+        errors=errors))
     return str(value, encoding, errors)
 
 
