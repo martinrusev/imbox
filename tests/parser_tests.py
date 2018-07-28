@@ -274,6 +274,44 @@ R0lGODlhAQABAPAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==
 --____NOIBTUQXSYRVOOAFLCHY____--
 """
 
+raw_email_encoded_encoding_charset_contains_a_minus = b"""Delivered-To: <receiver@example.org>
+Return-Path: <sender@example.org>
+Message-ID: <74836CF6FF9B1965927DE7EE8A087483@NXOFGRQFQW2>
+From: <sender@example.org>
+To: <sender@example.org>
+Subject: Salut, mon cher.
+Date: 30 May 2018 22:47:37 +0200
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_000_0038_01D3F85C.02934C4A"
+
+------=_NextPart_000_0038_01D3F85C.02934C4A
+Content-Type: text/plain;
+	charset="cp-850"
+Content-Transfer-Encoding: quoted-printable
+
+spam here
+
+
+cliquez ici
+------=_NextPart_000_0038_01D3F85C.02934C4A
+Content-Type: text/html;
+	charset="cp-850"
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META http-equiv=3DContent-Type content=3D"text/html; charset=3Dcp-850">
+<META content=3D"MSHTML 6.00.2900.2456" name=3DGENERATOR>
+<STYLE></STYLE>
+</HEAD>
+<BODY bgColor=3D#ffffff>
+spam here<br>
+<br>
+<a href=3D"http://spammer-url"><b>cliquez =
+ici</b></a></br></BODY></HTML>
+------=_NextPart_000_0038_01D3F85C.02934C4A--
+"""
 
 class TestParser(unittest.TestCase):
 
@@ -323,6 +361,12 @@ class TestParser(unittest.TestCase):
         self.assertEqual(71, attachment['size'])
         self.assertEqual('abc.xyz', attachment['filename'])
         self.assertTrue(attachment['content'])
+
+    def test_parse_email_accept_if_declared_charset_contains_a_minus_character(self):
+        parsed_email = parse_email(raw_email_encoded_encoding_charset_contains_a_minus)
+        self.assertEqual("Salut, mon cher.", parsed_email.subject)
+        self.assertTrue(parsed_email.body['plain'])
+        self.assertTrue(parsed_email.body['html'])
 
     # TODO - Complete the test suite
     def test_decode_mail_header(self):

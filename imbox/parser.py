@@ -126,6 +126,8 @@ def decode_content(message):
     charset = message.get_content_charset('utf-8')
     try:
         return content.decode(charset, 'ignore')
+    except LookupError:
+        return content.decode(charset.replace("-", ""), 'ignore')
     except AttributeError:
         return content
 
