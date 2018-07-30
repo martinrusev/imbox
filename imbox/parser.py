@@ -140,8 +140,6 @@ def fetch_email_by_uid(uid, connection, parser_policy):
 
     email_object = parse_email(raw_email, policy=parser_policy)
     flags = parse_flags(raw_headers.decode())
-    if len(flags) > 0:
-        print(type(flags[0]))
     email_object.__dict__['flags'] = flags
 
     return email_object
