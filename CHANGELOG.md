@@ -2,6 +2,7 @@
 
 IMPROVEMENTS:
 
+ * Vendors package, adding provider specific functionality ([#139](https://github.com/martinrusev/imbox/pull/139)) -  Contributed by @zevaverbach
  * Type hints for every method and function ([#136](https://github.com/martinrusev/imbox/pull/136)) -  Contributed by @zevaverbach
  * Move all code out of __init__.py and into a separate module ([#130](https://github.com/martinrusev/imbox/pull/130)) - Contributed by @zevaverbach
  * Enchance `messages' generator: ([#129](https://github.com/martinrusev/imbox/pull/129)) - Contributed by @zevaverbach
