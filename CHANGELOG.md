@@ -1,4 +1,4 @@
-## 0.9.6 (16 August 2018)
+## 0.9.6 (14 August 2018)
 
 IMPROVEMENTS:
 
