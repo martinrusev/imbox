@@ -76,6 +76,9 @@ Usage
         # Messages whose subjects contain a string
         inbox_messages_subject_christmas = imbox.messages(subject='Christmas')
 
+        # Messages whose UID is greater than 1050
+        inbox_messages_subject_christmas = imbox.messages(uid__range='1050:*')
+
         # Messages from a specific folder
         messages_in_folder_social = imbox.messages(folder='Social')
 

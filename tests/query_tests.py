@@ -48,3 +48,7 @@ class TestQuery(unittest.TestCase):
     def test_date__on(self):
         res = build_search_query(date__on=date(2014, 1, 1))
         self.assertEqual(res, '(ON "01-Jan-2014")')
+
+    def test_uid__range(self):
+        res = build_search_query(uid__range='1000:*')
+        self.assertEqual(res, '(UID 1000:*)')

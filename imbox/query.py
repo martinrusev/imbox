@@ -23,6 +23,7 @@ def build_search_query(**kwargs):
     date__lt = kwargs.get('date__lt', False)
     date__on = kwargs.get('date__on', False)
     subject = kwargs.get('subject')
+    uid__range = kwargs.get('uid__range')
 
     query = []
 
@@ -52,6 +53,9 @@ def build_search_query(**kwargs):
 
     if subject is not None:
         query.append('(SUBJECT "%s")' % subject)
+
+    if uid__range:
+        query.append('(UID %s)' % uid__range)
 
     if query:
         logger.debug("IMAP query: {}".format(" ".join(query)))
