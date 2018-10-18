@@ -1,6 +1,7 @@
 import datetime
 import logging
 
+from imbox.query import build_search_query
 from imbox.parser import fetch_email_by_uid
 
 
@@ -11,6 +12,7 @@ class Messages:
 
     IMAP_ATTRIBUTE_LOOKUP = {
         'unread': '(UNSEEN)',
+        'flagged': '(FLAGGED)',
         'unflagged': '(UNFLAGGED)',
         'sent_from': '(FROM "{}")',
         'sent_to': '(TO "{}")',
@@ -18,7 +20,7 @@ class Messages:
         'date__lt': '(BEFORE "{}")',
         'date__on': '(ON "{}")',
         'subject': '(SUBJECT "{}")',
-        'uid_range': '(UID {})',
+        'uid__range': '(UID {})',
     }
 
     FOLDER_LOOKUP = {}
@@ -41,24 +43,11 @@ class Messages:
                                   parser_policy=self.parser_policy)
 
     def _query_uids(self, **kwargs):
-        query_ = self._build_search_query(**kwargs)
+        query_ = build_search_query(self.IMAP_ATTRIBUTE_LOOKUP, **kwargs)
         _, data = self.connection.uid('search', None, query_)
         if data[0] is None:
             return []
         return data[0].split()
-
-    def _build_search_query(self, **kwargs):
-        query = []
-        for name, value in kwargs.items():
-            if value is not None:
-                if isinstance(value, datetime.date):
-                    value = value.strftime('%d-%b-%Y')
-                query.append(self.IMAP_ATTRIBUTE_LOOKUP[name].format(value))
-
-        if query:
-            return " ".join(query)
-
-        return "(ALL)"
 
     def _fetch_email_list(self):
         for uid in self._uid_list:
