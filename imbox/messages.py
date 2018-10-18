@@ -18,6 +18,7 @@ class Messages:
         'date__lt': '(BEFORE "{}")',
         'date__on': '(ON "{}")',
         'subject': '(SUBJECT "{}")',
+        'uid_range': '(UID {})',
     }
 
     FOLDER_LOOKUP = {}
