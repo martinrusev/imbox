@@ -6,7 +6,7 @@ class GmailMessages(Messages):
                                     'https://myaccount.google.com/apppasswords')
     hostname = 'imap.gmail.com'
     name = 'gmail'
-    folder_lookup = {
+    FOLDER_LOOKUP = {
 
         'all_mail': '"[Gmail]/All Mail"',
         'all': '"[Gmail]/All Mail"',
@@ -19,11 +19,12 @@ class GmailMessages(Messages):
         'spam': '"[Gmail]/Spam"',
         'starred': '"[Gmail]/Starred"',
         'trash': '"[Gmail]/Trash"',
-
     }
 
     def __init__(self,
                  connection,
                  parser_policy,
                  **kwargs):
+
+        self.IMAP_ATTRIBUTE_LOOKUP['subject'] = '(X-GM-RAW "{}")'
         super().__init__(connection, parser_policy, **kwargs)

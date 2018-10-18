@@ -1,14 +1,26 @@
-from imbox.parser import fetch_email_by_uid
-from imbox.query import build_search_query
-
+import datetime
 import logging
+
+from imbox.parser import fetch_email_by_uid
+
 
 logger = logging.getLogger(__name__)
 
 
 class Messages:
 
-    folder_lookup = {}
+    IMAP_ATTRIBUTE_LOOKUP = {
+        'unread': '(UNSEEN)',
+        'unflagged': '(UNFLAGGED)',
+        'sent_from': '(FROM "{}")',
+        'sent_to': '(TO "{}")',
+        'date__gt': '(SINCE "{}")',
+        'date__lt': '(BEFORE "{}")',
+        'date__on': '(ON "{}")',
+        'subject': '(SUBJECT "{}")',
+    }
+
+    FOLDER_LOOKUP = {}
 
     def __init__(self,
                  connection,
@@ -28,11 +40,24 @@ class Messages:
                                   parser_policy=self.parser_policy)
 
     def _query_uids(self, **kwargs):
-        query_ = build_search_query(**kwargs)
-        message, data = self.connection.uid('search', None, query_)
+        query_ = self._build_search_query(**kwargs)
+        _, data = self.connection.uid('search', None, query_)
         if data[0] is None:
             return []
         return data[0].split()
+
+    def _build_search_query(self, **kwargs):
+        query = []
+        for name, value in kwargs.items():
+            if value is not None:
+                if isinstance(value, datetime.date):
+                    value = value.strftime('%d-%b-%Y')
+                query.append(self.IMAP_ATTRIBUTE_LOOKUP[name].format(value))
+
+        if query:
+            return " ".join(query)
+
+        return "(ALL)"
 
     def _fetch_email_list(self):
         for uid in self._uid_list:

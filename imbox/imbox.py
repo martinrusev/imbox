@@ -28,14 +28,16 @@ class Imbox:
         self.vendor = vendor or hostname_vendorname_dict.get(self.hostname)
 
         if self.vendor is not None:
-            self.authentication_error_message = name_authentication_string_dict.get(self.vendor)
+            self.authentication_error_message = name_authentication_string_dict.get(
+                self.vendor)
 
         try:
             self.connection = self.server.connect(username, password)
         except imaplib.IMAP4.error as e:
             if self.authentication_error_message is None:
                 raise
-            raise imaplib.IMAP4.error(self.authentication_error_message + '\n' + str(e))
+            raise imaplib.IMAP4.error(
+                self.authentication_error_message + '\n' + str(e))
 
         logger.info("Connected to IMAP Server with user {username} on {hostname}{ssl}".format(
             hostname=hostname, username=username, ssl=(" over SSL" if ssl or starttls else "")))
@@ -61,15 +63,18 @@ class Imbox:
         self.connection.uid('STORE', uid, '+FLAGS', '(\\Flagged)')
 
     def delete(self, uid):
-        logger.info("Mark UID {} with \\Deleted FLAG and expunge.".format(int(uid)))
+        logger.info(
+            "Mark UID {} with \\Deleted FLAG and expunge.".format(int(uid)))
         self.connection.expunge()
 
     def copy(self, uid, destination_folder):
-        logger.info("Copy UID {} to {} folder".format(int(uid), str(destination_folder)))
+        logger.info("Copy UID {} to {} folder".format(
+            int(uid), str(destination_folder)))
         return self.connection.uid('COPY', uid, destination_folder)
 
     def move(self, uid, destination_folder):
-        logger.info("Move UID {} to {} folder".format(int(uid), str(destination_folder)))
+        logger.info("Move UID {} to {} folder".format(
+            int(uid), str(destination_folder)))
         if self.copy(uid, destination_folder):
             self.delete(uid)
 
@@ -82,7 +87,8 @@ class Imbox:
             messages_class = GmailMessages
 
         if folder:
-            self.connection.select(messages_class.folder_lookup.get((folder.lower())) or folder)
+            self.connection.select(
+                messages_class.FOLDER_LOOKUP.get((folder.lower())) or folder)
             msg = " from folder '{}'".format(folder)
         else:
             msg = " from inbox"
