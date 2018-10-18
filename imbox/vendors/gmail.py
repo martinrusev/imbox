@@ -26,5 +26,10 @@ class GmailMessages(Messages):
                  parser_policy,
                  **kwargs):
 
-        self.IMAP_ATTRIBUTE_LOOKUP['subject'] = '(X-GM-RAW "{}")'
+        self.IMAP_ATTRIBUTE_LOOKUP = {**self.IMAP_ATTRIBUTE_LOOKUP, **{'subject': '(X-GM-RAW "{}")',
+                                                                       'label': '(X-GM-LABELS "{}")',
+                                                                       'raw': '(X-GM-RAW "{}")',
+                                                                       }
+                                      }
+
         super().__init__(connection, parser_policy, **kwargs)

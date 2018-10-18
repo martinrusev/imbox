@@ -90,6 +90,7 @@ class Imbox:
             self.connection.select(
                 messages_class.FOLDER_LOOKUP.get((folder.lower())) or folder)
             msg = " from folder '{}'".format(folder)
+            del kwargs['folder']
         else:
             msg = " from inbox"
 
