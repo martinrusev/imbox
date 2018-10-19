@@ -60,7 +60,8 @@ def get_mail_addresses(message, header_name):
     for index, (address_name, address_email) in enumerate(addresses):
         addresses[index] = {'name': decode_mail_header(address_name),
                             'email': address_email}
-        logger.debug("{} Mail address in message: <{}> {}".format(header_name.upper(), address_name, address_email))
+        logger.debug("{} Mail address in message: <{}> {}".format(
+            header_name.upper(), address_name, address_email))
     return addresses
 
 
@@ -111,7 +112,8 @@ def parse_attachment(message_part):
                     name, value = decode_param(param)
 
                     if 'file' in name:
-                        attachment['filename'] = value[1:-1] if value.startswith('"') else value
+                        attachment['filename'] = value[1:-
+                                                       1] if value.startswith('"') else value
 
                     if 'create-date' in name:
                         attachment['create-date'] = value
@@ -163,9 +165,11 @@ def parse_email(raw_email, policy=None):
         email_parse_kwargs = {}
 
     try:
-        email_message = email.message_from_string(raw_email, **email_parse_kwargs)
+        email_message = email.message_from_string(
+            raw_email, **email_parse_kwargs)
     except UnicodeEncodeError:
-        email_message = email.message_from_string(raw_email.encode('utf-8'), **email_parse_kwargs)
+        email_message = email.message_from_string(
+            raw_email.encode('utf-8'), **email_parse_kwargs)
     maintype = email_message.get_content_maintype()
     parsed_email = {'raw_email': raw_email}
 
@@ -187,7 +191,7 @@ def parse_email(raw_email, policy=None):
                 content = decode_content(part)
 
             is_inline = content_disposition is None \
-                        or content_disposition.startswith("inline")
+                or content_disposition.startswith("inline")
             if content_type == "text/plain" and is_inline:
                 body['plain'].append(content)
             elif content_type == "text/html" and is_inline:

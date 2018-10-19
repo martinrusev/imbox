@@ -1,4 +1,5 @@
 from imbox.messages import Messages
+from imbox.vendors.helpers import merge_two_dicts
 
 
 class GmailMessages(Messages):
@@ -6,7 +7,7 @@ class GmailMessages(Messages):
                                     'https://myaccount.google.com/apppasswords')
     hostname = 'imap.gmail.com'
     name = 'gmail'
-    folder_lookup = {
+    FOLDER_LOOKUP = {
 
         'all_mail': '"[Gmail]/All Mail"',
         'all': '"[Gmail]/All Mail"',
@@ -19,11 +20,20 @@ class GmailMessages(Messages):
         'spam': '"[Gmail]/Spam"',
         'starred': '"[Gmail]/Starred"',
         'trash': '"[Gmail]/Trash"',
+    }
 
+    GMAIL_IMAP_ATTRIBUTE_LOOKUP_DIFF = {
+        'subject': '(X-GM-RAW "subject:\'{}\'")',
+        'label': '(X-GM-LABELS "{}")',
+        'raw': '(X-GM-RAW "{}")'
     }
 
     def __init__(self,
                  connection,
                  parser_policy,
                  **kwargs):
+
+        self.IMAP_ATTRIBUTE_LOOKUP = merge_two_dicts(self.IMAP_ATTRIBUTE_LOOKUP,
+                                                     self.GMAIL_IMAP_ATTRIBUTE_LOOKUP_DIFF)
+
         super().__init__(connection, parser_policy, **kwargs)

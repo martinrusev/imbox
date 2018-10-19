@@ -77,10 +77,14 @@ Usage
         inbox_messages_subject_christmas = imbox.messages(subject='Christmas')
 
         # Messages whose UID is greater than 1050
-        inbox_messages_subject_christmas = imbox.messages(uid__range='1050:*')
+        inbox_messages_uids_greater_than_1050 = imbox.messages(uid__range='1050:*')
 
         # Messages from a specific folder
         messages_in_folder_social = imbox.messages(folder='Social')
+
+        # Some of Gmail's IMAP Extensions are supported (label and raw):
+        all_messages_with_an_attachment_from_martin = imbox.messages(folder='all', raw='from:martin@amon.cx has:attachment')
+        all_messages_labeled_finance = imbox.messages(folder='all', label='finance')
 
         for uid, message in all_inbox_messages:
         # Every message is an object with the following keys
