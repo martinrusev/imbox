@@ -74,6 +74,10 @@ class TestQuery(unittest.TestCase):
         res = build_search_query(IMAP_ATTRIBUTE_LOOKUP, uid__range='1000:*')
         self.assertEqual(res, '(UID 1000:*)')
 
+    def test_text(self):
+        res = build_search_query(IMAP_ATTRIBUTE_LOOKUP, text='mail body')
+        self.assertEqual(res, '(TEXT "mail body")')
+
     def test_gmail_raw(self):
         res = build_search_query(GMAIL_ATTRIBUTE_LOOKUP, raw='has:attachment subject:"hey"')
         self.assertEqual(res, '(X-GM-RAW "has:attachment subject:\'hey\'")')
