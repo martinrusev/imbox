@@ -86,17 +86,19 @@ Usage
         all_messages_with_an_attachment_from_martin = imbox.messages(folder='all', raw='from:martin@amon.cx has:attachment')
         all_messages_labeled_finance = imbox.messages(folder='all', label='finance')
 
-        for uid, message in all_inbox_messages:
-        # Every message is an object with the following keys
+        for uid, message in reversed(all_inbox_messages): # With 'reversed' we start from the most recent email
+        # Every message is an object with the following keys and sub-keys
 
-            message.sent_from
-            message.sent_to
+            message.sent_from.['name']
+            message.sent_from.['email']
+            message.sent_to.['name']
+            message.sent_to.['email']
             message.subject
             message.headers
             message.message_id
             message.date
-            message.body.plain
-            message.body.html
+            message.body.['plain']
+            message.body.['html']
             message.attachments
 
         # To check all available keys
