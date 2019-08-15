@@ -89,16 +89,16 @@ Usage
         for uid, message in reversed(all_inbox_messages): # With 'reversed' we start from the most recent email
         # Every message is an object with the following keys and sub-keys
 
-            message.sent_from.['name']
-            message.sent_from.['email']
-            message.sent_to.['name']
-            message.sent_to.['email']
+            message.sent_from[0]['name']
+            message.sent_from[0]['email']
+            message.sent_to[0]['name']
+            message.sent_to[0]['email']
             message.subject
             message.headers
             message.message_id
             message.date
-            message.body.['plain']
-            message.body.['html']
+            message.body[0]['plain']
+            message.body[0]['html']
             message.attachments
 
         # To check all available keys
