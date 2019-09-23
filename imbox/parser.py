@@ -101,18 +101,16 @@ def parse_attachment(message_part):
             attachment = {
                 'content-type': message_part.get_content_type(),
                 'size': len(file_data),
-                'content': io.BytesIO(file_data)
+                'content': io.BytesIO(file_data),
+                'filename': ""
             }
-            filename = message_part.get_param('name')
-            if filename:
-                attachment['filename'] = filename
 
             for param in dispositions[1:]:
                 if param:
                     name, value = decode_param(param)
 
                     if 'file' in name:
-                        attachment['filename'] = value[1:-
+                        attachment['filename'] += value[1:-
                                                        1] if value.startswith('"') else value
 
                     if 'create-date' in name:
