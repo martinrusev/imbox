@@ -101,7 +101,8 @@ def parse_attachment(message_part):
             attachment = {
                 'content-type': message_part.get_content_type(),
                 'size': len(file_data),
-                'content': io.BytesIO(file_data)
+                'content': io.BytesIO(file_data),
+                'content-id': message_part.get("Content-ID", None)
             }
             filename = message_part.get_param('name')
             if filename:
