@@ -1,3 +1,11 @@
+## 0.9.7 (03 May 2020)
+
+IMPROVEMENTS:
+
+* Gmail: IMAP extension searches label and raw are not supported.
+* Searches in mail bodies and UID ranges are now supported.
+* Attachments have a Content-ID now (#174)
+
 ## 0.9.6 (14 August 2018)
 
 IMPROVEMENTS:
