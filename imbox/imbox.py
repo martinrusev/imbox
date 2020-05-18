@@ -65,6 +65,7 @@ class Imbox:
     def delete(self, uid):
         logger.info(
             "Mark UID {} with \\Deleted FLAG and expunge.".format(int(uid)))
+        self.connection.uid('STORE', uid, '+FLAGS', '(\\Deleted)')
         self.connection.expunge()
 
     def copy(self, uid, destination_folder):
