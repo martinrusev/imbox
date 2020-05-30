@@ -113,8 +113,12 @@ def parse_attachment(message_part):
                     name, value = decode_param(param)
 
                     if 'file' in name:
-                        attachment['filename'] = value[1:-
-                                                       1] if value.startswith('"') else value
+                        if str(name).endswith("*0"):
+                            attachment['filename'] = value[1:-
+                                                           1] if value.startswith('"') else value
+                        else:
+                            attachment['filename'] += value[1:-
+                                                            1] if value.startswith('"') else value
 
                     if 'create-date' in name:
                         attachment['create-date'] = value
