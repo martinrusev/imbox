@@ -108,21 +108,24 @@ def parse_attachment(message_part):
             if filename:
                 attachment['filename'] = filename
 
+            filename_parts = []
             for param in dispositions[1:]:
                 if param:
                     name, value = decode_param(param)
 
-                    if 'file' in name:
-                        if str(name).endswith("*0"):
-                            attachment['filename'] = value[1:-
-                                                           1] if value.startswith('"') else value
+                    # Check for split filename
+                    s_name = name.split("*")
+                    if s_name[0] == 'filename':
+                        # If this is a split file name - use the number after the * as an index to insert this part
+                        if len(s_name) > 1:
+                            filename_parts.insert(int(s_name[1]),value[1:-1] if value.startswith('"') else value)
                         else:
-                            attachment['filename'] += value[1:-
-                                                            1] if value.startswith('"') else value
+                            filename_parts.insert(0,value[1:-1] if value.startswith('"') else value)
 
                     if 'create-date' in name:
                         attachment['create-date'] = value
 
+            attachment['filename'] = "".join(filename_parts)
             return attachment
 
     return None
