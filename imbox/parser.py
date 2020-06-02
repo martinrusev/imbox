@@ -2,6 +2,7 @@ import imaplib
 import io
 import re
 import email
+import chardet
 import base64
 import quopri
 import sys
@@ -137,7 +138,10 @@ def decode_content(message):
     try:
         return content.decode(charset, 'ignore')
     except LookupError:
-        return content.decode(charset.replace("-", ""), 'ignore')
+        encoding = chardet.detect(content).get('encoding')
+        if encoding:
+            return content.decode(encoding, 'ignore')
+        return content
     except AttributeError:
         return content
 
