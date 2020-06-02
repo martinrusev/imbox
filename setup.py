@@ -9,6 +9,7 @@ version = imbox.__version__
 def read(filename):
     return open(os.path.join(os.path.dirname(__file__), filename)).read()
 
+
 setup(
     name='imbox',
     version=version,
@@ -21,6 +22,9 @@ setup(
     license='MIT',
     packages=['imbox', 'imbox.vendors'],
     package_dir={'imbox': 'imbox'},
+    install_requires=[
+        'chardet',
+    ],
     zip_safe=False,
     classifiers=(
         'Programming Language :: Python',
