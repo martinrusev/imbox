@@ -25,6 +25,7 @@ setup(
     install_requires=[
         'chardet',
     ],
+    python_requires='>=3.3',
     zip_safe=False,
     classifiers=(
         'Programming Language :: Python',
