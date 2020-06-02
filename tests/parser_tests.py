@@ -274,6 +274,59 @@ R0lGODlhAQABAPAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==
 --____NOIBTUQXSYRVOOAFLCHY____--
 """
 
+raw_email_with_long_filename_attachment = b"""Delivered-To: receiver@example.com
+Return-Path: <sender@example.com>
+Mime-Version: 1.0
+Date: Wed, 22 Mar 2017 15:21:55 -0500
+Message-ID: <58D29693.192A.0075.1@wimort.com>
+Subject: Re: Reaching Out About Peoples Home Equity
+From: sender@example.com
+To: receiver@example.com
+Content-Type: multipart/alternative; boundary="____NOIBTUQXSYRVOOAFLCHY____"
+
+
+--____NOIBTUQXSYRVOOAFLCHY____
+Content-Type: text/plain; charset=iso-8859-15
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline;
+	modification-date="Wed, 22 Mar 2017 15:21:55 -0500"
+
+Hello Chloe
+
+--____NOIBTUQXSYRVOOAFLCHY____
+Content-Type: multipart/related; boundary="____XTSWHCFJMONXSVGPVDLY____"
+
+
+--____XTSWHCFJMONXSVGPVDLY____
+Content-Type: text/html; charset=iso-8859-15
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline;
+	modification-date="Wed, 22 Mar 2017 15:21:55 -0500"
+
+<HTML xmlns=3D"http://www.w3.org/1999/xhtml">
+<BODY>
+<DIV>Hello Chloe</DIV>
+</BODY>
+</HTML>
+--____XTSWHCFJMONXSVGPVDLY____
+Content-Type: application/octet-stream; name="abc.xyz"
+Content-Description: abcefghijklmnopqrstuvwxyz01234567890abcefghijklmnopqrstuvwxyz01234567890abcefghijklmnopqrstuvwxyz01234567890.xyz
+Content-Disposition: attachment; filename*0="abcefghijklmnopqrstuvwxyz01234567890abcefghijklmnopqrstuvwxyz01234567890abce"; filename*1="fghijklmnopqrstuvwxyz01234567890.xyz";
+Content-Transfer-Encoding: base64
+
+R0lGODlhHgHCAPf/AIOPr9GvT7SFcZZjVTEuMLS1tZKUlJN0Znp4eEA7PV1aWvz8+8V6Zl1BNYxX
+HvOZ1/zmOd95agUEADs=
+--____XTSWHCFJMONXSVGPVDLY____
+Content-ID: <VFXVGHAGXNMI.36b3148cbf284ba18d35bdd8386ac266>
+Content-Type: image/xxx
+Content-Transfer-Encoding: base64
+
+R0lGODlhAQABAPAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==
+--____XTSWHCFJMONXSVGPVDLY____--
+
+--____NOIBTUQXSYRVOOAFLCHY____--
+"""
+
 raw_email_encoded_encoding_charset_contains_a_minus = b"""Delivered-To: <receiver@example.org>
 Return-Path: <sender@example.org>
 Message-ID: <74836CF6FF9B1965927DE7EE8A087483@NXOFGRQFQW2>
@@ -360,6 +413,15 @@ class TestParser(unittest.TestCase):
         self.assertEqual('application/octet-stream', attachment['content-type'])
         self.assertEqual(71, attachment['size'])
         self.assertEqual('abc.xyz', attachment['filename'])
+        self.assertTrue(attachment['content'])
+
+    def test_parse_attachment_with_long_filename(self):
+        parsed_email = parse_email(raw_email_with_long_filename_attachment)
+        self.assertEqual(1, len(parsed_email.attachments))
+        attachment = parsed_email.attachments[0]
+        self.assertEqual('application/octet-stream', attachment['content-type'])
+        self.assertEqual(71, attachment['size'])
+        self.assertEqual('abcefghijklmnopqrstuvwxyz01234567890abcefghijklmnopqrstuvwxyz01234567890abcefghijklmnopqrstuvwxyz01234567890.xyz', attachment['filename'])
         self.assertTrue(attachment['content'])
 
     def test_parse_email_accept_if_declared_charset_contains_a_minus_character(self):
