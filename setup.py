@@ -1,9 +1,13 @@
 from setuptools import setup
 import os
 
-import imbox
 
-version = imbox.__version__
+# Get version without importing, which avoids dependency issues
+def get_version():
+    import re
+    with open('imbox/version.py') as version_file:
+        return re.search(r"""__version__\s+=\s+(['"])(?P<version>.+?)\1""",
+                         version_file.read()).group('version')
 
 
 def read(filename):
@@ -12,7 +16,7 @@ def read(filename):
 
 setup(
     name='imbox',
-    version=version,
+    version=get_version(),
     description="Python IMAP for Human beings",
     long_description=read('README.rst'),
     keywords='email, IMAP, parsing emails',
@@ -27,13 +31,13 @@ setup(
     ],
     python_requires='>=3.3',
     zip_safe=False,
-    classifiers=(
+    classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
-    ),
+    ],
     test_suite='tests',
 )
