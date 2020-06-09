@@ -106,9 +106,6 @@ def parse_attachment(message_part):
                 'content-id': message_part.get("Content-ID", None)
             }
             filename = message_part.get_param('name')
-            if filename:
-                attachment['filename'] = filename
-
             filename_parts = []
             for param in dispositions[1:]:
                 if param:
