@@ -112,7 +112,7 @@ def parse_attachment(message_part):
                     name, value = decode_param(param)
 
                     # Check for split filename
-                    s_name = name.split("*")
+                    s_name = name.rstrip('*').split("*")
                     if s_name[0] == 'filename':
                         # If this is a split file name - use the number after the * as an index to insert this part
                         if len(s_name) > 1:
