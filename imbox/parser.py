@@ -70,17 +70,25 @@ def decode_param(param):
     values = v.split('\n')
     value_results = []
     for value in values:
-        match = re.search(r'=\?((?:\w|-)+)\?([QB])\?(.+)\?=', value)
+        match = re.findall(r'=\?((?:\w|-)+)\?([QB])\?(.+?)\?=', value)
         if match:
-            encoding, type_, code = match.groups()
-            if type_ == 'Q':
-                value = quopri.decodestring(code)
-            elif type_ == 'B':
-                value = base64.decodebytes(code.encode())
-            value = str_encode(value, encoding)
+            for encoding, type_, code in match:
+                if type_ == 'Q':
+                    value = quopri.decodestring(code)
+                elif type_ == 'B':
+                    value = code.encode()
+                    missing_padding = len(value) % 4
+
+                    if missing_padding:
+                        value += b"=" * (4 - missing_padding)
+
+                value = str_encode(value, encoding)
+
             value_results.append(value)
+
             if value_results:
                 v = ''.join(value_results)
+
     logger.debug("Decoded parameter {} - {}".format(name, v))
     return name, v
 
