@@ -251,10 +251,7 @@ def parse_email(raw_email, policy=None):
                                             'Value': value})
 
     if parsed_email.get('date'):
-        timetuple = email.utils.parsedate(parsed_email['date'])
-        parsed_date = datetime.fromtimestamp(time.mktime(timetuple)) \
-            if timetuple else None
-        parsed_email['parsed_date'] = parsed_date
+        parsed_email['parsed_date'] = email.utils.parsedate_to_datetime(parsed_email['date'])
 
     logger.info("Downloaded and parsed mail '{}' with {} attachments".format(
         parsed_email.get('subject'), len(parsed_email.get('attachments'))))
