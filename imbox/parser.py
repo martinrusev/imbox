@@ -5,7 +5,6 @@ import email
 import chardet
 import base64
 import quopri
-import sys
 import time
 from datetime import datetime
 from email.header import decode_header
@@ -155,7 +154,8 @@ def fetch_email_by_uid(uid, connection, parser_policy):
     message, data = connection.uid('fetch', uid, '(BODY.PEEK[] FLAGS)')
     logger.debug("Fetched message for UID {}".format(int(uid)))
 
-    raw_headers, raw_email = data[0]
+    raw_headers = data[0][0] + data[1]
+    raw_email = data[0][1]
 
     email_object = parse_email(raw_email, policy=parser_policy)
     flags = parse_flags(raw_headers.decode())
@@ -168,8 +168,7 @@ def parse_flags(headers):
     """Copied from https://github.com/girishramnani/gmail/blob/master/gmail/message.py"""
     if len(headers) == 0:
         return []
-    if sys.version_info[0] == 3:
-        headers = bytes(headers, "ascii")
+    headers = bytes(headers, "ascii")
     return list(imaplib.ParseFlags(headers))
 
 
