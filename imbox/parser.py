@@ -5,7 +5,6 @@ import email
 import chardet
 import base64
 import quopri
-import sys
 import time
 from datetime import datetime
 from email.header import decode_header
@@ -168,8 +167,7 @@ def parse_flags(headers):
     """Copied from https://github.com/girishramnani/gmail/blob/master/gmail/message.py"""
     if len(headers) == 0:
         return []
-    if sys.version_info[0] == 3:
-        headers = bytes(headers, "ascii")
+    headers = bytes(headers, "ascii")
     return list(imaplib.ParseFlags(headers))
 
 
