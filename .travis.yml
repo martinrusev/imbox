@@ -1,9 +1,0 @@
-language: python
-python:
-  - "3.4"
-  - "3.5"
-  - "3.6"
-  - "3.7"
-install:
-  - python setup.py -q install
-script: nosetests -v
