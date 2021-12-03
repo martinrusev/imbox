@@ -112,7 +112,6 @@ def parse_attachment(message_part):
                 'content': io.BytesIO(file_data),
                 'content-id': message_part.get("Content-ID", None)
             }
-            filename = message_part.get_param('name')
             filename_parts = []
             for param in dispositions[1:]:
                 if param:
