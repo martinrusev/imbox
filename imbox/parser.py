@@ -114,7 +114,7 @@ def parse_attachment(message_part):
             }
             filename_parts = []
             for param in dispositions[1:]:
-                if param:
+                if param and '=' in param:
                     name, value = decode_param(param)
 
                     # Check for split filename
