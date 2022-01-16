@@ -1,4 +1,6 @@
+import datetime
 import logging
+from imaplib import Time2Internaldate
 logger = logging.getLogger(__name__)
 
 
@@ -14,3 +16,10 @@ def str_decode(value='', encoding=None, errors='strict'):
         return value.decode(encoding or 'utf-8', errors=errors)
     else:
         raise TypeError("Cannot decode '{}' object".format(value.__class__))
+
+
+def date_to_date_text(date):
+    """Return a date in the RFC 3501 date-text syntax"""
+    tzutc = datetime.timezone.utc
+    dt = datetime.datetime.combine(date, datetime.time.min, tzutc)
+    return Time2Internaldate(dt)[1:12]
