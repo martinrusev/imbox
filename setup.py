@@ -11,14 +11,15 @@ def get_version():
 
 
 def read(filename):
-    return open(os.path.join(os.path.dirname(__file__), filename)).read()
+    with open(os.path.join(os.path.dirname(__file__), filename)) as f:
+        return f.read()
 
 
 setup(
     name='imbox',
     version=get_version(),
     description="Python IMAP for Human beings",
-    long_description=read('README.rst'),
+    long_description=read('README.md'),
     keywords='email, IMAP, parsing emails',
     author='Martin Rusev',
     author_email='martin@amon.cx',
