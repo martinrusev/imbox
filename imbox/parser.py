@@ -93,13 +93,33 @@ def decode_param(param):
     return name, v
 
 
+def parse_content_disposition(content_disposition):
+    # Split content disposition on semicolon except when inside a string
+    in_quote = False
+    str_start = 0
+    ret = []
+
+    for i in range(len(content_disposition)):
+        if content_disposition[i] == ';' and not in_quote:
+            ret.append(content_disposition[str_start:i])
+            str_start = i+1
+        elif content_disposition[i] == '"' or content_disposition[i] == "'":
+            in_quote = not in_quote
+
+    if str_start < len(content_disposition):
+        ret.append(content_disposition[str_start:])
+
+    return ret
+
+
+
 def parse_attachment(message_part):
     # Check again if this is a valid attachment
     content_disposition = message_part.get("Content-Disposition", None)
     if content_disposition is not None and not message_part.is_multipart():
         dispositions = [
             disposition.strip()
-            for disposition in content_disposition.split(";")
+            for disposition in parse_content_disposition(content_disposition)
             if disposition.strip()
         ]
 
