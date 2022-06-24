@@ -242,6 +242,12 @@ def parse_email(raw_email, policy=None):
         payload = decode_content(email_message)
         body['plain'].append(payload)
 
+    elif maintype == 'application':
+            if email_message.get_content_subtype() == 'pdf':
+                attachment = parse_attachment(email_message)
+                if attachment:
+                    attachments.append(attachment)
+
     parsed_email['attachments'] = attachments
 
     parsed_email['body'] = body
