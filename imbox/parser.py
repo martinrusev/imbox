@@ -82,6 +82,8 @@ def decode_param(param):
                     if missing_padding:
                         value += b"=" * (4 - missing_padding)
 
+                    value = base64.b64decode(value)
+
                 value = str_encode(value, encoding)
 
             value_results.append(value)
@@ -239,6 +241,12 @@ def parse_email(raw_email, policy=None):
     elif maintype == 'text':
         payload = decode_content(email_message)
         body['plain'].append(payload)
+
+    elif maintype == 'application':
+            if email_message.get_content_subtype() == 'pdf':
+                attachment = parse_attachment(email_message)
+                if attachment:
+                    attachments.append(attachment)
 
     parsed_email['attachments'] = attachments
 

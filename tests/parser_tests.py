@@ -366,6 +366,39 @@ ici</b></a></br></BODY></HTML>
 ------=_NextPart_000_0038_01D3F85C.02934C4A--
 """
 
+raw_email_attachment_only = """Delivered-To: johndoe@gmail.com
+X-Originating-Email: [martin@amon.cx]
+Message-ID: <test1@example.com>
+Return-Path: martin@amon.cx
+Date: Tue, 30 Jul 2013 15:56:29 +0300
+From: Martin Rusev <martin@amon.cx>
+MIME-Version: 1.0
+To: John Doe <johndoe@gmail.com>
+Subject: Test email - only pdf in body
+Content-Type: application/pdf;
+	name="=?utf-8?B?YV9sb25nX2ZpbGVuYW1lX3dpdGhfc3BlY2lhbF9jaGFyX8O2w6Rf?=
+	=?utf-8?B?LTAxX28ucGRm?="
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+	filename="=?utf-8?B?YV9sb25nX2ZpbGVuYW1lX3dpdGhfc3BlY2lhbF9jaGFyX8O2w6Rf?=
+	=?utf-8?B?LTAxX28ucGRm?="
+
+JVBERi0xLjQKJcOiw6PDj8OTCjUgMCBvYmoKPDwKL0xlbmd0aCAxCj4+CnN0cmVhbQogCmVuZHN0
+cmVhbQplbmRvYmoKNCAwIG9iago8PAovVHlwZSAvUGFnZQovTWVkaWFCb3ggWzAgMCA2MTIgNzky
+XQovUmVzb3VyY2VzIDw8Cj4+Ci9Db250ZW50cyA1IDAgUgovUGFyZW50IDIgMCBSCj4+CmVuZG9i
+agoyIDAgb2JqCjw8Ci9UeXBlIC9QYWdlcwovS2lkcyBbNCAwIFJdCi9Db3VudCAxCj4+CmVuZG9i
+agoxIDAgb2JqCjw8Ci9UeXBlIC9DYXRhbG9nCi9QYWdlcyAyIDAgUgo+PgplbmRvYmoKMyAwIG9i
+ago8PAovQ3JlYXRvciAoUERGIENyZWF0b3IgaHR0cDovL3d3dy5wZGYtdG9vbHMuY29tKQovQ3Jl
+YXRpb25EYXRlIChEOjIwMTUwNzAxMTEyNDQ3KzAyJzAwJykKL01vZERhdGUgKEQ6MjAyMjA2MDcx
+ODM2MDIrMDInMDAnKQovUHJvZHVjZXIgKDMtSGVpZ2h0c1wyMjIgUERGIE9wdGltaXphdGlvbiBT
+aGVsbCA2LjAuMC4wIFwoaHR0cDovL3d3dy5wZGYtdG9vbHMuY29tXCkpCj4+CmVuZG9iagp4cmVm
+CjAgNgowMDAwMDAwMDAwIDY1NTM1IGYKMDAwMDAwMDIyNiAwMDAwMCBuCjAwMDAwMDAxNjkgMDAw
+MDAgbgowMDAwMDAwMjc1IDAwMDAwIG4KMDAwMDAwMDA2NSAwMDAwMCBuCjAwMDAwMDAwMTUgMDAw
+MDAgbgp0cmFpbGVyCjw8Ci9TaXplIDYKL1Jvb3QgMSAwIFIKL0luZm8gMyAwIFIKL0lEIFs8MUMz
+NTAwQ0E5RjcyMzJCOTdFMEVGM0Y3ODlFOEI3RjI+IDwyNTRDOEQxNTNGNjU1RDQ5OTQ1RUFENjhE
+ODAxRTAxMT5dCj4+CnN0YXJ0eHJlZgo1MDUKJSVFT0Y=
+"""
+
 class TestParser(unittest.TestCase):
 
     def test_parse_email(self):
@@ -422,6 +455,15 @@ class TestParser(unittest.TestCase):
         self.assertEqual('application/octet-stream', attachment['content-type'])
         self.assertEqual(71, attachment['size'])
         self.assertEqual('abcefghijklmnopqrstuvwxyz01234567890abcefghijklmnopqrstuvwxyz01234567890abcefghijklmnopqrstuvwxyz01234567890.xyz', attachment['filename'])
+        self.assertTrue(attachment['content'])
+    
+    def test_parse_email_single_attachment(self):
+        parsed_email = parse_email(raw_email_attachment_only)
+        self.assertEqual(1, len(parsed_email.attachments))
+        attachment = parsed_email.attachments[0]
+        self.assertEqual('application/pdf', attachment['content-type'])
+        self.assertEqual(773, attachment['size'])
+        self.assertEqual('a_long_filename_with_special_char_öä_-01_o.pdf', attachment['filename'])
         self.assertTrue(attachment['content'])
 
     def test_parse_email_accept_if_declared_charset_contains_a_minus_character(self):
