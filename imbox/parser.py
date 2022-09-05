@@ -114,7 +114,6 @@ def parse_content_disposition(content_disposition):
     return ret
 
 
-
 def parse_attachment(message_part):
     # Check again if this is a valid attachment
     content_disposition = message_part.get("Content-Disposition", None)
@@ -152,6 +151,11 @@ def parse_attachment(message_part):
                         attachment['create-date'] = value
 
             attachment['filename'] = "".join(filename_parts)
+
+            # Decode filename if the type of encoding is MIME encoded-word。
+            # eg: '=?UTF-8?b?5YaZ55yfMjAyMl8wOF8yMC56aXA=?='
+            attachment['filename'] = decode_mail_header(attachment['filename'])
+
             return attachment
 
     return None
