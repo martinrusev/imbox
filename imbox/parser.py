@@ -198,19 +198,25 @@ def parse_flags(headers):
 
 
 def parse_email(raw_email, policy=None):
-    if isinstance(raw_email, bytes):
-        raw_email = str_encode(raw_email, 'utf-8', errors='ignore')
     if policy is not None:
         email_parse_kwargs = dict(policy=policy)
     else:
         email_parse_kwargs = {}
 
-    try:
-        email_message = email.message_from_string(
+    # Should first get content charset then str_encode with charset.
+    if isinstance(raw_email, bytes):
+        email_message = email.message_from_bytes(
             raw_email, **email_parse_kwargs)
-    except UnicodeEncodeError:
-        email_message = email.message_from_string(
-            raw_email.encode('utf-8'), **email_parse_kwargs)
+        charset = email_message.get_content_charset('utf-8')
+        raw_email = str_encode(raw_email, charset, errors='ignore')
+    else:
+        try:
+            email_message = email.message_from_string(
+                raw_email, **email_parse_kwargs)
+        except UnicodeEncodeError:
+            email_message = email.message_from_string(
+                raw_email.encode('utf-8'), **email_parse_kwargs)
+
     maintype = email_message.get_content_maintype()
     parsed_email = {'raw_email': raw_email}
 
