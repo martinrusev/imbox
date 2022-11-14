@@ -86,10 +86,10 @@ def decode_param(param):
 
                 value = str_encode(value, encoding)
 
-            value_results.append(value)
+                value_results.append(value)
 
-            if value_results:
-                v = ''.join(value_results)
+    if value_results:
+        v = ''.join(value_results)
 
     logger.debug("Decoded parameter {} - {}".format(name, v))
     return name, v
