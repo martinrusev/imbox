@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "imbox"
+version = "0.9.9"
+description = ""
+authors = ["Martin Rusev <martin@amon.cx>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+chardet = "^5.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

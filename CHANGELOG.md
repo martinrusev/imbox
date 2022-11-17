@@ -1,3 +1,26 @@
+## 0.9.9 (17 November 2022)
+
+### What's Changed
+
+* Add query uid__range by @skulltech in https://github.com/martinrusev/imbox/pull/153
+* fix substring search of subjects in Gmail, add support for some Gmail extended IMAP by @zevaverbach in https://github.com/martinrusev/imbox/pull/155
+* Support filter message by mail body by @daassh in https://github.com/martinrusev/imbox/pull/166
+* Attachments now getting Content-ID by @Anderseta in https://github.com/martinrusev/imbox/pull/174
+* Update parser.py in https://github.com/martinrusev/imbox/pull/192
+* Avoiding the error - ValueError: invalid literal for int() with base 10 by @Anderseta in https://github.com/martinrusev/imbox/pull/201
+* fix false exception on unknown encoding #202 by @kapalex in https://github.com/martinrusev/imbox/pull/203
+* Fix binascii.Error: Incorrect padding by @Anderseta in https://github.com/martinrusev/imbox/pull/204
+* Preserve timezone info in date parsing by @AT0myks in https://github.com/martinrusev/imbox/pull/205
+* Fix ignored headers + unnecessary major version check by @AT0myks in https://github.com/martinrusev/imbox/pull/206
+* Local variable 'filename' value is not used by @tveronesi in https://github.com/martinrusev/imbox/pull/211
+* Date handling improvement and various fixes by @AT0myks in https://github.com/martinrusev/imbox/pull/218
+* Fix crash when semicolon present in attachment name by @nicknytko in https://github.com/martinrusev/imbox/pull/219
+* Base64 decode param and recognize single file mails as attachment by @engelant in https://github.com/martinrusev/imbox/pull/224
+* [Fix] parse_attachment > cannot parse name by @jimmi2051 in https://github.com/martinrusev/imbox/pull/228
+* Should first get content charset then str_encode with charset. by @sangkaka in https://github.com/martinrusev/imbox/pull/231
+* fix append and join of param parts by @oberix in https://github.com/martinrusev/imbox/pull/232
+
+
 ## 0.9.8 (02 June 2020)
 
 IMPROVEMENTS:
@@ -43,7 +66,7 @@ IMPROVEMENTS:
 
  * Permissively Decode Emails: ([#78](https://github.com/martinrusev/imbox/pull/78)) - Contributed by @AdamNiederer
  * "With" statement for automatic cleanup/logout ([#92](https://github.com/martinrusev/imbox/pull/92)) - Contributed by @sblondon
- 
+
 
 
 ## 0.8.6 (6 December 2016)
@@ -51,7 +74,7 @@ IMPROVEMENTS:
 IMPROVEMENTS:
 
  * Add support for Python 3.3+  Parsing policies: ([#75](https://github.com/martinrusev/imbox/pull/75)) - Contributed by @bhtucker
- 
+
 BACKWARDS INCOMPATIBILITIES / NOTES:
 
   * Remove support for Python 2.7
