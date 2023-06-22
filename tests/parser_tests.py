@@ -3,6 +3,7 @@ from imbox.parser import *
 
 import os
 import sys
+from imbox.parser import parse_email
 if sys.version_info.minor < 3:
     SMTP = False
 else:

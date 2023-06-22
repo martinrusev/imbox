@@ -1,5 +1,8 @@
 from imbox.messages import Messages
 from imbox.vendors.helpers import merge_two_dicts
+import imbox.messages
+import imbox.vendors.helpers
+from typing import Any, Dict
 
 
 class GmailMessages(Messages):
