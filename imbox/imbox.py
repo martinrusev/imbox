@@ -88,8 +88,10 @@ class Imbox:
             messages_class = GmailMessages
 
         if folder:
-            self.connection.select(
+            status, data = self.connection.select(
                 messages_class.FOLDER_LOOKUP.get((folder.lower())) or folder)
+            if status != "OK":
+                raise imaplib.IMAP4.error(data[-1])
             msg = " from folder '{}'".format(folder)
             del kwargs['folder']
         else:
