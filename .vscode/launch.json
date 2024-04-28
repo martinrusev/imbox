@@ -1,0 +1,43 @@
+{
+    // Pro informace o možných atributech použijte technologii IntelliSense.
+    // Umístěním ukazatele myši zobrazíte popisy existujících atributů.
+    // Další informace najdete tady: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Attach to Edge",
+            "port": 9222,
+            "request": "attach",
+            "type": "msedge",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            "args": [
+                "generator"
+            ],
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "name": "Yeoman generator",
+            "program": "${workspaceFolder}/node_modules/yo/lib/cli.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "request": "launch",
+            "name": "Launch Program",
+            "type": "node",
+            "program": "${workspaceFolder}/main.ts",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "deno",
+            "runtimeArgs": [
+                "run",
+                "--inspect-brk",
+                "--allow-all"
+            ],
+            "attachSimplePort": 9229
+        }
+    ]
+}
