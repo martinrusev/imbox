@@ -7,7 +7,7 @@ import base64
 import quopri
 import time
 from datetime import datetime
-from email.header import decode_header
+from email.header import decode_header, Header
 from imbox.utils import str_encode, str_decode
 
 import logging
@@ -55,6 +55,17 @@ def get_mail_addresses(message, header_name):
     Retrieve all email addresses from one message header.
     """
     headers = [h for h in message.get_all(header_name, [])]
+    
+    clean_headers = []
+    # method message.get_all returns Header objects if it finds encoding errors
+    # but next method email.utils.getaddresses() don't work with Header objects,
+    # so we need to convert them to strings replacing bad chars with ???
+    for h in headers:
+        if isinstance(h, Header):
+            h = h.__str__().encode('ascii','replace').decode()
+        clean_headers.append(h)
+    headers = clean_headers
+
     addresses = email.utils.getaddresses(headers)
 
     for index, (address_name, address_email) in enumerate(addresses):
@@ -119,6 +130,11 @@ def parse_attachment(message_part):
     # Check again if this is a valid attachment
     content_disposition = message_part.get("Content-Disposition", None)
     if content_disposition is not None and not message_part.is_multipart():
+
+        # if content_dispositon is type header converto to string
+        if isinstance(content_disposition, Header):
+            content_disposition = str(content_disposition)
+
         dispositions = [
             disposition.strip()
             for disposition in parse_content_disposition(content_disposition)
@@ -232,6 +248,11 @@ def parse_email(raw_email, policy=None):
             content_type = part.get_content_type()
             part_maintype = part.get_content_maintype()
             content_disposition = part.get('Content-Disposition', None)
+
+            # if content_disposition is type Header then convert to string
+            if isinstance(content_disposition, Header):
+                content_disposition = str(content_disposition)
+
             if content_disposition or not part_maintype == "text":
                 content = part.get_payload(decode=True)
             else:
