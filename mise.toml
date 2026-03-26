@@ -1,0 +1,5 @@
+[tasks.test]
+run = [
+    'uv sync --extra dev',
+    'uv run pytest',
+]

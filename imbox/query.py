@@ -1,6 +1,6 @@
 import datetime
 
-from imbox.utils import date_to_date_text
+from .utils import date_to_date_text
 
 
 def build_search_query(imap_attribute_lookup, **kwargs):

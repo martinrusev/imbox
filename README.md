@@ -7,7 +7,7 @@ to machine readable data
 
 ## Requirements
 
-Python (3.6, 3.7, 3.8, 3.9)
+Python (3.11, 3.12, 3.13)
 
 ## Installation
 

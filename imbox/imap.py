@@ -1,13 +1,11 @@
-from imaplib import IMAP4, IMAP4_SSL
-
 import logging
 import ssl as pythonssllib
+from imaplib import IMAP4, IMAP4_SSL
 
 logger = logging.getLogger(__name__)
 
 
 class ImapTransport:
-
     def __init__(self, hostname, port=None, ssl=True, ssl_context=None, starttls=False):
         self.hostname = hostname
 
@@ -22,8 +20,9 @@ class ImapTransport:
 
         if starttls:
             self.server.starttls()
-        logger.debug("Created IMAP4 transport for {host}:{port}"
-                     .format(host=self.hostname, port=self.port))
+        logger.debug(
+            f"Created IMAP4 transport for {self.hostname}:{self.port}",
+        )
 
     def list_folders(self):
         logger.debug("List all folders in mailbox")
@@ -32,6 +31,7 @@ class ImapTransport:
     def connect(self, username, password):
         self.server.login(username, password)
         self.server.select()
-        logger.debug("Logged into server {} and selected mailbox 'INBOX'"
-                     .format(self.hostname))
+        logger.debug(
+            f"Logged into server {self.hostname} and selected mailbox 'INBOX'",
+        )
         return self.server

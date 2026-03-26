@@ -7,5 +7,4 @@ name_authentication_string_dict = {vendor.name: vendor.authentication_error_mess
 
 __all__ = [v.__name__ for v in vendors]
 
-__all__ += ['hostname_vendorname_dict',
-            'name_authentication_string_dict']
+__all__ += ["hostname_vendorname_dict", "name_authentication_string_dict"]

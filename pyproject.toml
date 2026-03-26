@@ -1,15 +1,153 @@
-[tool.poetry]
+[project]
 name = "imbox"
-version = "0.9.9"
-description = ""
-authors = ["Martin Rusev <martin@amon.cx>"]
+version = "0.10.0"
+description = "Library for reading IMAP mailboxes and converting email content to machine readable data"
+authors = [
+    {"name"= "Martin Rusev", "email"= "martin@amon.cx"}
+]
 readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "chardet>=7.3.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.7"
-chardet = "^5.0.0"
+[project.optional-dependencies]
+dev = [
+    "build",
+    "pytest>=9.0.2",
+    "mypy>=1.10.0",
+    "black>=25.1.0",
+    "pytest-recording",
+    "ruff",
+    "mypy>=1.17.1",
+    "ruff>=0.1.0"
+]
 
+
+# Black configuration
+[tool.black]
+line-length = 120
+target-version = ['py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.mypy_cache
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+# MyPy configuration (can also be in mypy.ini)
+[tool.mypy]
+python_version = "3.12"
+exclude = ['\.pyi$']
+
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+disallow_untyped_decorators = false
+
+# Pytest configuration
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+# Bandit configuration
+[tool.bandit]
+exclude_dirs = ["tests"]
+skips = ["B101"]
+
+[tool.ruff]
+line-length = 120
+target-version = 'py312'
+exclude = [
+    ".git",
+    ".git-rewrite",
+    ".mypy_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    ".pytest_cache",
+    "__pycache__",
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+
+[tool.ruff.lint]
+ignore = [
+  'B006', # Learn Python yo!
+  'C408',  # Unnecessary dict/list call
+  'COM819',  # Trailing commas is da bomb
+  'E731',  # Do not assign to lambda
+  'ERA001', 'T201', # comment code, prints are lax during development
+  'G004', # Logging format string should not use f-string
+  'RET503', # No explicit return None (all the other rules are about removing unnecessary things like this)
+  'RUF012', # Mutable class attributes should be annotated with typing.ClassVar
+  'S311', # Standard pseudo-random generators are not suitable for security/cryptographic purposes
+  'S101', # Use of assert detected
+  'SIM108', # don't like ternary operator
+  'SIM300', # Yoda is wiser than you!
+  'TRY003',  # Avoid long messages outside of exception class
+  'TRY301',  # Abstract raise garbage
+  ]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E501"]  # Line too long in test fixtures with raw email data
+select = [
+  'A',  # flake8-builtins
+  'ASYNC', # https://docs.astral.sh/ruff/rules/#flake8-async-async
+  'B',  # flake8-bugbear
+  'BLE', # flake8-blind-except
+  'C4',  # unnecessary comprehensions, map()
+  'COM',  # flake8-commas
+  'DTZ', # flake8-datetimez
+  'E',  # pycodestyle
+  'ERA',  # No commented out code
+  'F',  # pyflakes
+  'FLY',  # flynt
+  'G',  # flake8-logging-format
+  'I',  # isort
+  'ICN', # https://github.com/joaopalmeiro/flake8-import-conventions
+  'ISC', # https://pypi.org/project/flake8-implicit-str-concat/
+  'LOG', # flake8-logging
+  'PERF', # perflint
+  'PIE', # https://pypi.org/project/flake8-pie/
+  'PLC',  # Pylint conventions
+  'PLE',  # Pylint error
+  'PLW',  # Pylint warnings
+  'PT',  # https://pypi.org/project/flake8-pytest-style/
+  'PTH',  # flake8 use pathlib
+  'RET', # https://pypi.org/project/flake8-return/
+  'RUF',  # Ruff rules
+  'S',  # https://docs.astral.sh/ruff/rules/#flake8-bandit-s
+  'SIM',  # https://pypi.org/project/flake8-simplify/
+  'T',  # flake8-debugger
+  'TRY',  # tryceratops
+  'UP',  # pyupgrade
+  'W',  # pycodestyle
+  ]
+
+
+[tool.setuptools.packages.find]
+where = ["imbox"]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

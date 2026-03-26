@@ -1,9 +1,6 @@
-from typing import List, Dict, Optional
-
 from imbox.messages import Messages
 
-vendors: List[Messages]
+vendors: list[Messages]
 
-hostname_vendorname_dict: Dict[str, str]
-name_authentication_string_dict: Dict[str, Optional[str]]
-
+hostname_vendorname_dict: dict[str, str]
+name_authentication_string_dict: dict[str, str | None]

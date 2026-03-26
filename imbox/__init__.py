@@ -1,3 +1,3 @@
-from imbox.imbox import Imbox
+from .imbox import Imbox
 
-__all__ = ['Imbox']
+__all__ = ["Imbox"]
