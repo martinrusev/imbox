@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Imbox Tests
+name: Imbox Test & Publish
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -32,6 +32,19 @@ jobs:
     - name: Test with pytest
       run: |
         uv run pytest -v
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    - name: Install uv
+      run: pip install uv
+    - name: Install dependencies
+      run: uv sync --extra dev
     - name: Build a binary wheel and a source tarball
       run: uv build
     - name: Store the distribution packages
@@ -46,6 +59,7 @@ jobs:
       Publish Python 🐍 distribution 📦 to PyPI
     if: startsWith(github.ref, 'refs/tags/')  # only publish to PyPI on tag pushes
     needs:
+    - test
     - build
     runs-on: ubuntu-latest
     environment:
