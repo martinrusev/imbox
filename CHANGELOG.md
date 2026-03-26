@@ -1,3 +1,10 @@
+## 0.10.0 (26 March 2026)
+
+* Support for Python 3.11, 3.12 & 3.13
+* Drop support for Python 3.7, 3.8 & 3.9
+* Switch to pytest
+* Switch to uv
+
 ## 0.9.9 (17 November 2022)
 
 ### What's Changed
