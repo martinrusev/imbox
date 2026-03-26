@@ -18,9 +18,9 @@ dev = [
     "mypy>=1.10.0",
     "black>=25.1.0",
     "pytest-recording",
-    "ruff",
     "mypy>=1.17.1",
-    "ruff>=0.1.0"
+    "ruff>=0.1.0",
+    "pre-commit",
 ]
 
 
