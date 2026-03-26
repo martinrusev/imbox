@@ -25,7 +25,7 @@ jobs:
       run: pip install uv
     - name: Install dependencies
       run: |
-        uv sync --dev
+        uv sync --extra dev
     - name: Lint with pre-commit
       run: |
         uv run pre-commit run --all-files
