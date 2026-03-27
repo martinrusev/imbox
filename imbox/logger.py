@@ -27,11 +27,13 @@ def setup_logger(name: str = "imbox") -> logging.Logger:
     log_level = getattr(logging, settings.log_level, logging.INFO)
     logger.setLevel(log_level)
 
-    # Create formatter - structured for Kubernetes log aggregation
-    formatter = logging.Formatter(
-        fmt="%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-    )
+    if settings.log_output_type == "default":
+        formatter = logging.Formatter(
+            fmt="%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+        )
+    else:
+        formatter = logging.Formatter(fmt="%(message)s")
 
     # Console handler (stdout)
     console_handler = logging.StreamHandler()

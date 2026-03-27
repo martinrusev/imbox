@@ -1,12 +1,12 @@
 import imaplib
-import logging
 
+from .logger import get_logger
 from .imap import ImapTransport
 from .settings import Config
 from .messages import Messages
 from .vendors import GmailMessages, hostname_vendorname_dict, name_authentication_string_dict
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 class Imbox:

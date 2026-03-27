@@ -1,28 +1,64 @@
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Any
+
 import base64
 import email
 import imaplib
 import io
-import logging
 import quopri
 import re
 from email.header import decode_header
 
 import chardet
 
+from .logger import get_logger
 from .utils import str_decode, str_encode
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
-class Struct:
-    def __init__(self, **entries):
-        self.__dict__.update(entries)
+@dataclass
+class ParsedEmail:
+    """Dataclass representing a parsed email. Can be populated incrementally."""
 
-    def keys(self):
-        return self.__dict__.keys()
+    # Raw content
+    raw_email: str = ""
 
-    def __repr__(self):
-        return str(self.__dict__)
+    # Body content
+    body: dict[str, list[str]] = field(default_factory=lambda: {"plain": [], "html": []})
+
+    # Attachments
+    attachments: list[dict[str, Any]] = field(default_factory=list)
+
+    # Email headers
+    sent_from: list[dict[str, str]] = field(default_factory=list)
+    sent_to: list[dict[str, str]] = field(default_factory=list)
+    cc: list[dict[str, str]] = field(default_factory=list)
+    bcc: list[dict[str, str]] = field(default_factory=list)
+
+    # Core fields
+    subject: str = ""
+    date: str = ""
+    message_id: str = ""
+    parsed_date: datetime | None = None
+
+    # Additional headers
+    headers: list[dict[str, str]] = field(default_factory=list)
+
+
+@dataclass
+class EmailObject:
+    parsed: ParsedEmail
+    uid: int
+    flags: list[tuple[str, ...]]
+
+    def to_dict(self):
+        return {
+            "uid": self.uid,
+            "flags": self.flags,
+            "parsed": self.parsed.__dict__,
+        }
 
 
 def decode_mail_header(value, default_charset="us-ascii"):
@@ -168,20 +204,6 @@ def decode_content(message):
         return content
 
 
-def fetch_email_by_uid(uid, connection, parser_policy):
-    message, data = connection.uid("fetch", uid, "(BODY.PEEK[] FLAGS)")
-    logger.debug(f"Fetched message for UID {int(uid)}")
-
-    raw_headers = data[0][0] + data[1]
-    raw_email = data[0][1]
-
-    email_object = parse_email(raw_email, policy=parser_policy)
-    flags = parse_flags(raw_headers.decode())
-    email_object.__dict__["flags"] = flags
-
-    return email_object
-
-
 def parse_flags(headers):
     """Copied from https://github.com/girishramnani/gmail/blob/master/gmail/message.py"""
     if len(headers) == 0:
@@ -208,7 +230,11 @@ def parse_email(raw_email, policy=None):
             email_message = email.message_from_string(raw_email.encode("utf-8"), **email_parse_kwargs)
 
     maintype = email_message.get_content_maintype()
-    parsed_email = {"raw_email": raw_email}
+
+    # Create an empty ParsedEmail and populate it incrementally
+    parsed_email = ParsedEmail()
+
+    parsed_email.raw_email = raw_email
 
     body = {
         "plain": [],
@@ -247,32 +273,32 @@ def parse_email(raw_email, policy=None):
             if attachment:
                 attachments.append(attachment)
 
-    parsed_email["attachments"] = attachments
+    parsed_email.attachments = attachments
+    parsed_email.body = body
 
-    parsed_email["body"] = body
     email_dict = dict(email_message.items())
 
-    parsed_email["sent_from"] = get_mail_addresses(email_message, "from")
-    parsed_email["sent_to"] = get_mail_addresses(email_message, "to")
-    parsed_email["cc"] = get_mail_addresses(email_message, "cc")
-    parsed_email["bcc"] = get_mail_addresses(email_message, "bcc")
+    parsed_email.sent_from = get_mail_addresses(email_message, "from")
+    parsed_email.sent_to = get_mail_addresses(email_message, "to")
+    parsed_email.cc = get_mail_addresses(email_message, "cc")
+    parsed_email.bcc = get_mail_addresses(email_message, "bcc")
 
     value_headers_keys = ["subject", "date", "message-id"]
     key_value_header_keys = ["received-spf", "mime-version", "x-spam-status", "x-spam-score", "content-type"]
 
-    parsed_email["headers"] = []
+    parsed_email.headers = []
     for key, value in email_dict.items():
         if key.lower() in value_headers_keys:
             valid_key_name = key.lower().replace("-", "_")
-            parsed_email[valid_key_name] = decode_mail_header(value)
+            setattr(parsed_email, valid_key_name, decode_mail_header(value))
 
         if key.lower() in key_value_header_keys:
-            parsed_email["headers"].append({"Name": key, "Value": value})
+            parsed_email.headers.append({"Name": key, "Value": value})
 
-    if parsed_email.get("date"):
-        parsed_email["parsed_date"] = email.utils.parsedate_to_datetime(parsed_email["date"])
+    if parsed_email.date:
+        parsed_email.parsed_date = email.utils.parsedate_to_datetime(parsed_email.date)
 
-    subject = parsed_email.get("subject")
-    attachment_count = len(parsed_email.get("attachments"))
-    logger.info(f"Downloaded and parsed mail '{subject}' with {attachment_count} attachments")
-    return Struct(**parsed_email)
+    subject = parsed_email.subject
+    attachment_count = len(parsed_email.attachments)
+    logger.debug(f"Downloaded and parsed mail '{subject}' with {attachment_count} attachments")
+    return parsed_email

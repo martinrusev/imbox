@@ -1,21 +1,9 @@
-from dataclasses import dataclass
-import logging
+from .logger import get_logger
 
-from .parser import fetch_email_by_uid
+from .parser import EmailObject, parse_email, parse_flags
 from .query import build_search_query
 
-logger = logging.getLogger(__name__)
-
-
-@dataclass
-class Message:
-    uid: str
-    email: dict
-    sent_from: list
-    sent_to: list
-    subject: str
-    date: str
-    body: dict
+logger = get_logger(__name__)
 
 
 class Messages:
@@ -43,8 +31,23 @@ class Messages:
 
         logger.debug(f"Fetch all messages for UID in {self._uid_list}")
 
+    def fetch_email_by_uid(self, uid):
+        _, data = self.connection.uid("fetch", uid, "(BODY.PEEK[] FLAGS)")
+        logger.debug(f"Fetched message for UID {int(uid)}")
+
+        raw_headers = data[0][0] + data[1]
+        raw_email = data[0][1]
+
+        email = EmailObject(
+            uid=int(uid),
+            parsed=parse_email(raw_email, policy=self.parser_policy),
+            flags=parse_flags(raw_headers.decode()),
+        )
+
+        return email
+
     def _fetch_email(self, uid):
-        return fetch_email_by_uid(uid=uid, connection=self.connection, parser_policy=self.parser_policy)
+        return self.fetch_email_by_uid(uid=uid)
 
     def _query_uids(self, **kwargs):
         query_ = build_search_query(self.IMAP_ATTRIBUTE_LOOKUP, **kwargs)
@@ -70,6 +73,9 @@ class Messages:
 
     def __len__(self):
         return len(self._uid_list)
+
+    def to_dict(self):
+        return {uid: self._fetch_email(uid).to_dict() for uid in self._uid_list}
 
     def __getitem__(self, index):
         uids = self._uid_list[index]

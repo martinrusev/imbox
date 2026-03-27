@@ -1,10 +1,10 @@
 import datetime
+from typing import Any
 
 import click
 
 from .logger import get_logger
-from .settings import settings, Config
-from .commands import messages_run
+from .commands import messages_run, folders_run
 
 logger = get_logger(__name__)
 
@@ -104,7 +104,7 @@ def messages(
     """Fetch messages from IMAP server with filtering options."""
 
     # Build filter kwargs
-    filters = {}
+    filters: dict[str, Any] = {}
     if unread:
         filters["unread"] = True
     if flagged:
@@ -136,76 +136,6 @@ def messages(
 
 
 @cli.command(name="folders")
-@click.option(
-    "--hostname",
-    default=None,
-    help="IMAP server hostname (default: from IMBOX_IMAP_URL env var).",
-)
-@click.option(
-    "--username",
-    default=None,
-    help="IMAP username/email (default: from IMBOX_USERNAME env var).",
-)
-@click.option(
-    "--password",
-    default=None,
-    help="IMAP password (default: from IMBOX_PASSWORD env var).",
-)
-@click.option(
-    "--ssl/--no-ssl",
-    default=None,
-    help="Enable SSL for IMAP connection (default: true).",
-)
-@click.option(
-    "--ssl-context",
-    default=None,
-    help="SSL context for IMAP connection.",
-)
-@click.option(
-    "--starttls/--no-starttls",
-    default=None,
-    help="Enable STARTTLS for IMAP connection (default: false).",
-)
-@click.option(
-    "--port",
-    type=int,
-    default=None,
-    help="IMAP port (default: 993).",
-)
-def folders(
-    hostname: str | None,
-    username: str | None,
-    password: str | None,
-    ssl: bool | None,
-    ssl_context: str | None,
-    starttls: bool | None,
-    port: int | None,
-) -> None:
+def folders() -> None:
     """List all folders on the IMAP server."""
-    from .imbox import Imbox
-
-    hostname = hostname or settings.imbox_imap_url
-    username = username or settings.imbox_username
-    password = password or settings.imbox_password
-    ssl = ssl if ssl is not None else settings.imbox_ssl
-    ssl_context = ssl_context or settings.imbox_ssl_context
-    starttls = starttls if starttls is not None else settings.imbox_starttls
-    port = port or settings.imbox_port
-
-    logger.info(f"Connecting to IMAP server: {hostname}")
-
-    # Build config object
-    config = Config(
-        username=username,
-        password=password,
-        imap_url=hostname,
-        ssl=ssl,
-        ssl_context=ssl_context,
-        starttls=starttls,
-        port=port,
-    )
-
-    with Imbox(config=config, policy=None) as imbox:
-        status, folders_list = imbox.folders()
-        for folder in folders_list:
-            click.echo(folder)
+    folders_run()

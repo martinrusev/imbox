@@ -5,6 +5,7 @@ Handles both hardcoded values and environment variables.
 
 import os
 from dataclasses import dataclass
+from enum import Enum
 
 
 def str_to_bool(value: str) -> bool:
@@ -21,6 +22,11 @@ class Config:
     ssl_context: str
     starttls: bool
     port: int = 993
+
+
+class LogOutputType(Enum):
+    clean = "clean"
+    default = "default"
 
 
 class Settings:
@@ -61,11 +67,33 @@ class Settings:
         """IMAP port."""
         return int(os.getenv("IMBOX_PORT", 993))
 
+    # Output
+    @property
+    def output_folder(self) -> str:
+        """Output folder for downloaded messages."""
+        return os.getenv("OUTPUT_FOLDER", "output")
+
+    @property
+    def output(self) -> bool:
+        """Enable output."""
+        return str_to_bool(os.getenv("OUTPUT", "false"))
+
+    @property
+    def output_filename(self) -> str:
+        """Enable output."""
+        return os.getenv("OUTPUT_FILENAME", "imbox_results.json")
+
     # Environment-based settings
     @property
     def debug(self) -> bool:
         """Enable debug mode."""
         return str_to_bool(os.getenv("DEBUG", "false"))
+
+    @property
+    def log_output_type(self) -> LogOutputType:
+        """How much information to output to the console."""
+        value = os.getenv("LOG_OUTPUT_TYPE", "default")
+        return LogOutputType(value)
 
     @property
     def log_level(self) -> str:
