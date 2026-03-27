@@ -4,6 +4,18 @@
 
 Python library for reading IMAP mailboxes and converting email content to machine readable data
 
+## Table of Contents
+
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [CLI Usage](#cli-usage)
+  - [Running with uv](#running-with-uv)
+  - [Configuration](#configuration)
+  - [Messages Command](#messages-command)
+  - [Folders Command](#folders-command)
+  - [Debugging](#debugging)
+- [Usage (Python Library)](#usage-python-library)
+
 ## Requirements
 
 Python (3.11, 3.12, 3.13)
