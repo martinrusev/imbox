@@ -79,7 +79,7 @@ class Messages:
 
         for uid in self._uid_list:
             email = self._fetch_email(uid)
-            result[uid] = email.filtered()
+            result[int(uid)] = email.filtered()
 
         return result
 

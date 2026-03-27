@@ -1,5 +1,5 @@
 from pathlib import Path
-
+import json
 from .logger import get_logger
 from .settings import settings
 from .messages import Messages
@@ -35,15 +35,14 @@ def save_to_json(
 
     logger.info(messsages.to_dict_filtered())
 
-    # try:
-    #     filepath.write_text(
-    #         json.dumps(messsages.to_dict(), indent=2, ensure_ascii=False),
-    #         encoding="utf-8",
-    #     )
+    try:
+        filepath.write_text(
+            json.dumps(messsages.to_dict_filtered(), indent=2, ensure_ascii=False),
+            encoding="utf-8",
+        )
 
-    #     logger.info("Results saved to: %s", filepath)
-    #     return str(filepath)
+        logger.info("Results saved to: %s", filepath)
 
-    # except OSError:
-    #     logger.exception("Failed to save results to %s", filepath)
-    #     raise
+    except OSError:
+        logger.exception("Failed to save results to %s", filepath)
+        raise

@@ -50,16 +50,24 @@ class ParsedEmail:
 
 @dataclass
 class EmailObject:
+    """Dataclass representing an email object with parsed content and metadata."""
+
     parsed: ParsedEmail
     uid: int
-    flags: list[tuple[str, ...]]
+    flags: list[bytes]
+
+    def flags_utf8(self) -> list[str]:
+        """Return a list of flags as UTF-8 strings."""
+        return [flag.decode("utf-8") for flag in self.flags]
 
     def filtered(self):
+        """Return a filtered version of the email object based on settings.output_fields."""
         parsed = self.parsed.__dict__
         valid_fields = list(ParsedEmail.__annotations__.keys())
+
         result = {
             "uid": self.uid,
-            "flags": self.flags,
+            "flags": self.flags_utf8(),
         }
 
         if settings.output_fields and settings.output_fields != [""]:

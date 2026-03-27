@@ -87,3 +87,8 @@ logs/
 
 # Ruff
 .ruff_cache/
+
+
+# Output 
+output/
+*.json
