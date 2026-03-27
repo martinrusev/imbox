@@ -33,8 +33,6 @@ def save_to_json(
 
     logger.info(f"Saving results to {filepath}")
 
-    logger.info(messsages.to_dict_filtered())
-
     try:
         filepath.write_text(
             json.dumps(messsages.to_dict_filtered(), indent=2, ensure_ascii=False),
