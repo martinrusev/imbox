@@ -80,8 +80,16 @@ class Settings:
 
     @property
     def output_filename(self) -> str:
-        """Enable output."""
+        """Filename for output."""
         return os.getenv("OUTPUT_FILENAME", "imbox_results.json")
+
+    @property
+    def output_fields(self) -> list[str]:
+        """Fields to include in output. Returns empty list if not configured."""
+        fields_str = os.getenv("OUTPUT_FIELDS", "").strip()
+        if not fields_str:
+            return []
+        return [field.strip() for field in fields_str.split(",") if field.strip()]
 
     # Environment-based settings
     @property

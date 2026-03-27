@@ -1,7 +1,4 @@
-import json
-from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
 
 from .logger import get_logger
 from .settings import settings
@@ -36,7 +33,7 @@ def save_to_json(
 
     logger.info(f"Saving results to {filepath}")
 
-    logger.info(messsages.to_dict())
+    logger.info(messsages.to_dict_filtered())
 
     # try:
     #     filepath.write_text(

@@ -74,8 +74,14 @@ class Messages:
     def __len__(self):
         return len(self._uid_list)
 
-    def to_dict(self):
-        return {uid: self._fetch_email(uid).to_dict() for uid in self._uid_list}
+    def to_dict_filtered(self):
+        result = {}
+
+        for uid in self._uid_list:
+            email = self._fetch_email(uid)
+            result[uid] = email.filtered()
+
+        return result
 
     def __getitem__(self, index):
         uids = self._uid_list[index]

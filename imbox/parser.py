@@ -14,6 +14,7 @@ import chardet
 
 from .logger import get_logger
 from .utils import str_decode, str_encode
+from .settings import settings
 
 logger = get_logger(__name__)
 
@@ -53,12 +54,24 @@ class EmailObject:
     uid: int
     flags: list[tuple[str, ...]]
 
-    def to_dict(self):
-        return {
+    def filtered(self):
+        parsed = self.parsed.__dict__
+        valid_fields = list(ParsedEmail.__annotations__.keys())
+        result = {
             "uid": self.uid,
             "flags": self.flags,
-            "parsed": self.parsed.__dict__,
         }
+
+        if settings.output_fields and settings.output_fields != [""]:
+            invalid_fields = [field for field in settings.output_fields if field not in valid_fields]
+            if invalid_fields:
+                raise ValueError(f"Invalid output fields: {invalid_fields}. Valid fields are: {valid_fields}")
+            filtered = {field: parsed[field] for field in settings.output_fields}
+            result["fields"] = filtered
+        else:
+            result["fields"] = parsed
+
+        return result
 
 
 def decode_mail_header(value, default_charset="us-ascii"):
