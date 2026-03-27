@@ -1,9 +1,21 @@
+from dataclasses import dataclass
 import logging
 
 from .parser import fetch_email_by_uid
 from .query import build_search_query
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class Message:
+    uid: str
+    email: dict
+    sent_from: list
+    sent_to: list
+    subject: str
+    date: str
+    body: dict
 
 
 class Messages:

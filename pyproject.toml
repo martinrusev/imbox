@@ -23,6 +23,9 @@ dev = [
     "pre-commit>=4.5.0",
 ]
 
+[project.scripts]
+imbox = "imbox.cli:cli"
+
 
 # Black configuration
 [tool.black]
@@ -146,7 +149,8 @@ select = [
 
 
 [tool.setuptools.packages.find]
-where = ["imbox"]
+where = ["."]
+include = ["imbox*"]
 
 [build-system]
 requires = ["setuptools"]

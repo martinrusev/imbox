@@ -1,4 +1,4 @@
-# Imbox - Python IMAP for Humans
+# Imbox - Python IMAP Library for Agentic Workflow
 
 ![workflow](https://github.com/martinrusev/imbox/actions/workflows/python-app.yml/badge.svg)
 
@@ -8,6 +8,7 @@ to machine readable data
 ## Requirements
 
 Python (3.11, 3.12, 3.13)
+
 
 ## Installation
 
@@ -34,13 +35,7 @@ with Imbox('imap.gmail.com',
     all_inbox_messages = imbox.messages()
 
     # Unread messages
-    unread_inbox_messages = imbox.messages(unread=True)
-
-    # Flagged messages
-    inbox_flagged_messages = imbox.messages(flagged=True)
-
-    # Un-flagged messages
-    inbox_unflagged_messages = imbox.messages(unflagged=True)
+    unread_messages = imbox.messages(unread=True)
 
     # Flagged messages
     flagged_messages = imbox.messages(flagged=True)
@@ -55,13 +50,13 @@ with Imbox('imap.gmail.com',
     inbox_messages_to = imbox.messages(sent_to='receiver@example.org')
 
     # Messages received before specific date
-    inbox_messages_received_before = imbox.messages(date__lt=datetime.date(2018, 7, 31))
+    inbox_messages_received_before = imbox.messages(date__lt=datetime.date(2026, 7, 31))
 
     # Messages received after specific date
-    inbox_messages_received_after = imbox.messages(date__gt=datetime.date(2018, 7, 30))
+    inbox_messages_received_after = imbox.messages(date__gt=datetime.date(2026, 7, 30))
 
     # Messages received on a specific date
-    inbox_messages_received_on_date = imbox.messages(date__on=datetime.date(2018, 7, 30))
+    inbox_messages_received_on_date = imbox.messages(date__on=datetime.date(2026, 7, 30))
 
     # Messages whose subjects contain a string
     inbox_messages_subject_christmas = imbox.messages(subject='Christmas')

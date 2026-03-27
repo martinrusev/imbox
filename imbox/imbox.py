@@ -2,6 +2,7 @@ import imaplib
 import logging
 
 from .imap import ImapTransport
+from .settings import Config
 from .messages import Messages
 from .vendors import GmailMessages, hostname_vendorname_dict, name_authentication_string_dict
 
@@ -13,21 +14,23 @@ class Imbox:
 
     def __init__(
         self,
-        hostname,
-        username=None,
-        password=None,
-        ssl=True,
-        port=None,
-        ssl_context=None,
+        config: Config,
         policy=None,
-        starttls=False,
         vendor=None,
     ):
-        self.server = ImapTransport(hostname, ssl=ssl, port=port, ssl_context=ssl_context, starttls=starttls)
+        self.server = ImapTransport(
+            config.imap_url,
+            ssl=config.ssl,
+            port=config.port,
+            ssl_context=None,
+            starttls=config.starttls,
+        )
 
-        self.hostname = hostname
-        self.username = username
-        self.password = password
+        self.hostname = config.imap_url
+        self.username = config.username
+        self.password = config.password
+        self.ssl = config.ssl
+        self.starttls = config.starttls
         self.parser_policy = policy
         self.vendor = vendor or hostname_vendorname_dict.get(self.hostname)
 
@@ -35,7 +38,7 @@ class Imbox:
             self.authentication_error_message = name_authentication_string_dict.get(self.vendor)
 
         try:
-            self.connection = self.server.connect(username, password)
+            self.connection = self.server.connect(self.username, self.password)
         except imaplib.IMAP4.error as e:
             if self.authentication_error_message is None:
                 raise
@@ -43,9 +46,9 @@ class Imbox:
                 self.authentication_error_message + "\n" + str(e),
             ) from e
 
-        ssl_info = " over SSL" if ssl or starttls else ""
+        ssl_info = " over SSL" if self.ssl or self.starttls else ""
         logger.info(
-            f"Connected to IMAP Server with user {username} on {hostname}{ssl_info}",
+            f"Connected to IMAP Server with user {self.username} on {self.hostname}{ssl_info}",
         )
 
     def __enter__(self):
