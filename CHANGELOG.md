@@ -1,3 +1,7 @@
+## 0.10.1 (31 March 2026)
+
+* Force push a pypi release
+
 ## 0.10.0 (26 March 2026)
 
 * Support for Python 3.11, 3.12 & 3.13
