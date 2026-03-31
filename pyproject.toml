@@ -1,6 +1,6 @@
 [project]
 name = "imbox"
-version = "0.10.0"
+version = "0.10.1"
 description = "Library for reading IMAP mailboxes and converting email content to machine readable data"
 authors = [
     {"name"= "Martin Rusev", "email"= "martin@amon.cx"}
