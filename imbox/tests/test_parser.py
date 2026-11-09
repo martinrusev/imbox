@@ -5,7 +5,7 @@ from typing import Any
 
 import pytest
 
-from imbox.parser import get_mail_addresses, parse_email
+from imbox.parser import get_mail_addresses, parse_content_disposition, parse_email
 
 SMTP: Any = None
 if sys.version_info.minor >= 3:
@@ -13,6 +13,43 @@ if sys.version_info.minor >= 3:
 
 
 TEST_DIR = Path(__file__).parent.resolve()
+
+
+@pytest.mark.parametrize(
+    "filename",
+    [
+        '"Bob\'s; report.txt"',
+        "Bob's.txt",
+        r'"report\"; final.txt"',
+        r'"report\\"',
+        r'"report\\\"; final.txt"',
+        '"report; final.txt"',
+    ],
+)
+def test_content_disposition_quoted_parameters(filename):
+    header = f"attachment; filename={filename}; size=7;"
+    assert parse_content_disposition(header) == ["attachment", f" filename={filename}", " size=7"]
+
+
+@pytest.mark.parametrize("filename", ["Bob's; report.txt", "Bob's.txt"])
+def test_parse_email_attachment_with_apostrophe(filename):
+    raw = f"""MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="test-boundary"
+
+--test-boundary
+Content-Type: application/octet-stream
+Content-Disposition: attachment; filename="{filename}"; size=7
+Content-Transfer-Encoding: base64
+
+cGF5bG9hZA==
+--test-boundary--
+"""
+    parsed = parse_email(raw)
+    assert len(parsed.attachments) == 1
+    attachment = parsed.attachments[0]
+    assert attachment["filename"] == filename
+    assert attachment["content"].getvalue() == b"payload"
+    assert attachment["size"] == 7
 
 
 # Test data fixtures

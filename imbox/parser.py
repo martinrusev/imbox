@@ -149,17 +149,22 @@ def decode_param(param):
 
 
 def parse_content_disposition(content_disposition):
-    # Split content disposition on semicolon except when inside a string
+    # Only unescaped double quotes delimit MIME quoted strings.
     in_quote = False
+    escaped = False
     str_start = 0
     ret = []
 
-    for i in range(len(content_disposition)):
-        if content_disposition[i] == ";" and not in_quote:
+    for i, char in enumerate(content_disposition):
+        if escaped:
+            escaped = False
+        elif char == "\\" and in_quote:
+            escaped = True
+        elif char == '"':
+            in_quote = not in_quote
+        elif char == ";" and not in_quote:
             ret.append(content_disposition[str_start:i])
             str_start = i + 1
-        elif content_disposition[i] == '"' or content_disposition[i] == "'":
-            in_quote = not in_quote
 
     if str_start < len(content_disposition):
         ret.append(content_disposition[str_start:])
