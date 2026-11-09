@@ -1,3 +1,5 @@
+import imaplib
+
 from .logger import get_logger
 
 from .parser import EmailObject, parse_email, parse_flags
@@ -51,7 +53,9 @@ class Messages:
 
     def _query_uids(self, **kwargs):
         query_ = build_search_query(self.IMAP_ATTRIBUTE_LOOKUP, **kwargs)
-        _, data = self.connection.uid("search", None, query_)
+        status, data = self.connection.uid("search", None, query_)
+        if status != "OK":
+            raise imaplib.IMAP4.error(data[-1])
         if data[0] is None:
             return []
         return data[0].split()
