@@ -81,7 +81,8 @@ class Imbox:
 
     def move(self, uid, destination_folder):
         logger.info(f"Move UID {int(uid)} to {destination_folder!s} folder")
-        if self.copy(uid, destination_folder):
+        status, _ = self.copy(uid, destination_folder)
+        if status == "OK":
             self.delete(uid)
 
     def messages(self, **kwargs):
