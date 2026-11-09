@@ -9,6 +9,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "chardet>=7.3.0",
+    "click>=8.0",
 ]
 
 [project.optional-dependencies]

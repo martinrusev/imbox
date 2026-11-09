@@ -48,6 +48,14 @@ jobs:
       run: uv sync --extra dev
     - name: Build a binary wheel and a source tarball
       run: uv build
+    - name: Smoke test the installed CLI without development dependencies
+      run: |
+        uv venv "$RUNNER_TEMP/imbox-smoke"
+        uv pip install --python "$RUNNER_TEMP/imbox-smoke/bin/python" dist/*.whl
+        cd "$RUNNER_TEMP"
+        "$RUNNER_TEMP/imbox-smoke/bin/imbox" --help
+        "$RUNNER_TEMP/imbox-smoke/bin/imbox" messages --help
+        "$RUNNER_TEMP/imbox-smoke/bin/imbox" folders --help
     - name: Store the distribution packages
       uses: actions/upload-artifact@v5
       with:

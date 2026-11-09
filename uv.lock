@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.11"
 
 [[package]]
@@ -145,10 +145,11 @@ wheels = [
 
 [[package]]
 name = "imbox"
-version = "0.10.0"
+version = "0.10.1"
 source = { editable = "." }
 dependencies = [
     { name = "chardet" },
+    { name = "click" },
 ]
 
 [package.optional-dependencies]
@@ -167,6 +168,7 @@ requires-dist = [
     { name = "black", marker = "extra == 'dev'", specifier = ">=25.1.0" },
     { name = "build", marker = "extra == 'dev'" },
     { name = "chardet", specifier = ">=7.3.0" },
+    { name = "click", specifier = ">=8.0" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.10.0" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.17.1" },
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=4.5.0" },
